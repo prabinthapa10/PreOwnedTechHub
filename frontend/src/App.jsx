@@ -1,10 +1,8 @@
 import React from "react";
-import Home from "./components/Home";
-import Button from "./components/ui/Button";
-import SignUpForm from "./components/SignUpForm";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LoginForm from "./components/LoginForm";
-
+import Home from "./pages/Home";
+import SignUpForm from "./pages/SignUpForm";
+import LoginForm from "./pages/LoginForm";
 export default function App() {
   return (
     <div>

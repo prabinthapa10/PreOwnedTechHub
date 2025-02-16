@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import CloseButton from "./ui/CloseButton";
 import axios from "axios";
+import { Link } from "react-router-dom";
+import Button from "../components/Button";
 
 export default function SignUpForm({ setShowLogin, setIsSignUpFormVisible }) {
   // State to store form data
@@ -12,7 +13,7 @@ export default function SignUpForm({ setShowLogin, setIsSignUpFormVisible }) {
     address: "",
     gender: "",
     password: "",
-    confirmPassword: "", // Ensure it's included in state
+    confirmPassword: "",
   });
 
   // Handle form submission
@@ -56,7 +57,6 @@ export default function SignUpForm({ setShowLogin, setIsSignUpFormVisible }) {
     <div>
       {/* Signup Box */}
       <div className="bg-white p-8 rounded w-[500px] h-[650px] border-2 flex flex-col space-y-3 items-center shadow-2xl">
-        <CloseButton close={() => setIsSignUpFormVisible(false)} />
         <h1 className="text-4xl font-bold mb-4">Sign Up Form</h1>
         <form
           onSubmit={handleSubmit}
@@ -138,18 +138,16 @@ export default function SignUpForm({ setShowLogin, setIsSignUpFormVisible }) {
               setFormData({ ...formData, confirmPassword: e.target.value })
             }
           />
-          <button type="submit">Sign Up</button>
+          <Button name="Sign Up" />
         </form>
-        <p className="mt-4">
-          Already have an account?{" "}
-          <a
-            href="#"
-            onClick={() => setShowLogin(true)}
-            className="text-blue-500 hover:underline"
-          >
-            Login
-          </a>
-        </p>
+        <div>
+          <p className="mt-[20px]">
+            Already have an account?
+            <a className="text-customPurple cursor-pointer">
+              <Link to="/login">Log In</Link>
+            </a>
+          </p>
+        </div>
       </div>
     </div>
   );

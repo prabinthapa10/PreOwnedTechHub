@@ -26,3 +26,8 @@ class RegisterSerializers(serializers.ModelSerializer):
             gender=validated_data['gender']
         )
         return user
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['email', 'first_name', 'last_name', 'phone_number', 'address', 'gender', 'added_date']

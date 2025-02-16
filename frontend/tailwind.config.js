@@ -8,7 +8,10 @@ module.exports = {
         hoverPurple: "#9A71D8",
       },
       fontSize: { base: "16px" },
-      fontFamily: { sans: ["Roboto", "sans-serif"] },
+      fontFamily: {
+        avantgarde: ["AvantGardeBold", "sans-serif"],
+        acehsoft: ["AcehSoft", "sans-serif"],
+      },
     },
   },
   plugins: [],

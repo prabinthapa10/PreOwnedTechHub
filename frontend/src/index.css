@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 body {
-  @apply bg-customBg font-sans text-base;
+  @apply bg-customBg font-acehsoft text-base;
 }
