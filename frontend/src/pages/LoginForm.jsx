@@ -53,7 +53,7 @@ export default function LoginForm() {
       <Navbar />
       <div className="flex flex-col pt-[50px] items-center h-screen bg-gray-200">
         {/* login box */}
-        <div className="bg-white p-8 rounded w-[500px] h-[500px] border-2 flex flex-col space-y-3 items-center shadow-2xl">
+        <div className="bg-white p-8 rounded w-[500px] h-[500px] flex flex-col space-y-3 items-center shadow-2xl">
           <h1 className="text-4xl font-bold mb-[30px]">Login Form</h1>
           <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
             <div>
@@ -86,7 +86,7 @@ export default function LoginForm() {
                 className="border-b-2"
               />
             </div>
-              <Button name="Login" className="w-full" />
+            <Button name="Login" className="w-full" />
           </form>
           <div>
             <p className="mt-[20px]">

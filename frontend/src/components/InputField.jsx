@@ -12,7 +12,7 @@ function InputField({ id, label, placeHolder, type, value, onChange, className }
         placeholder={placeHolder}
         value={value}
         onChange={onChange}
-        className={`px-2 py-1 bg-transparent outline-none ${className}`}
+        className={`px-2 py-1 bg-transparent outline-none border-[#e5e7eb] ${className}`}
       />
     </div>
   );

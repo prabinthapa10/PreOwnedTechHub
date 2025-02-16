@@ -5,3 +5,6 @@
 body {
   @apply bg-customBg font-acehsoft text-base;
 }
+* {
+  border-color: black;
+}
