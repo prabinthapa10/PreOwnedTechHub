@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Button from "../components/Button";
+import Navbar from "../components/Navbar";
+import InputField from "../components/InputField";
 
 export default function SignUpForm({ setShowLogin, setIsSignUpFormVisible }) {
   // State to store form data
@@ -55,98 +57,108 @@ export default function SignUpForm({ setShowLogin, setIsSignUpFormVisible }) {
 
   return (
     <div>
+      <Navbar />
       {/* Signup Box */}
-      <div className="bg-white p-8 rounded w-[500px] h-[650px] border-2 flex flex-col space-y-3 items-center shadow-2xl">
-        <h1 className="text-4xl font-bold mb-4">Sign Up Form</h1>
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col space-y-4 w-full"
-        >
-          <div className="flex justify-between space-x-2">
-            <input
-              name="firstName"
-              size="medium"
-              placeholder="First Name"
-              value={formData.firstName}
+      <div className="flex justify-center pt-[10px]">
+        <div className="bg-white p-5 rounded w-[500px] h-[630px] flex flex-col space-y-3 items-center shadow-2xl">
+          <h1 className="text-4xl font-bold mb-4">Sign Up Form</h1>
+          <form onSubmit={handleSubmit} className="flex flex-col w-full">
+            <div className="flex justify-between space-x-2">
+              <InputField
+                id="firstName"
+                placeHolder="First Name"
+                type="text"
+                value={formData.firstName}
+                onChange={(e) =>
+                  setFormData({ ...formData, firstName: e.target.value })
+                }
+                className="border p-2 rounded w-full"
+              />
+              <InputField
+                id="lastName"
+                placeHolder="Last Name"
+                type="text"
+                value={formData.lastName}
+                onChange={(e) =>
+                  setFormData({ ...formData, lastName: e.target.value })
+                }
+                className="border p-2 rounded w-full"
+              />
+            </div>
+            <InputField
+              id="email"
+              placeHolder="Email"
+              type="email"
+              value={formData.email}
               onChange={(e) =>
-                setFormData({ ...formData, firstName: e.target.value })
+                setFormData({ ...formData, email: e.target.value })
               }
+              className="border p-2 rounded w-full"
             />
-            <input
-              name="lastName"
-              size="medium"
-              placeholder="Last Name"
-              value={formData.lastName}
+            <InputField
+              id="phoneNumber"
+              placeHolder="Phone Number"
+              type="tel"
+              value={formData.phoneNumber}
               onChange={(e) =>
-                setFormData({ ...formData, lastName: e.target.value })
+                setFormData({ ...formData, phoneNumber: e.target.value })
               }
+              className="border p-2 rounded w-full"
             />
+            <InputField
+              id="address"
+              placeHolder="Address"
+              type="text"
+              value={formData.address}
+              onChange={(e) =>
+                setFormData({ ...formData, address: e.target.value })
+              }
+              className="border p-2 rounded w-full"
+            />
+            <select
+              name="gender"
+              value={formData.gender}
+              onChange={(e) =>
+                setFormData({ ...formData, gender: e.target.value })
+              }
+              className="border mx-[10px] p-2 rounded w-[95%]"
+            >
+              <option value="" disabled>
+                Select Gender
+              </option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+            <InputField
+              id="password"
+              placeHolder="Password"
+              type="password"
+              value={formData.password}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
+              className="border p-2 rounded w-full"
+            />
+            <InputField
+              id="confirmPassword"
+              placeHolder="Confirm Password"
+              type="password"
+              value={formData.confirmPassword}
+              onChange={(e) =>
+                setFormData({ ...formData, confirmPassword: e.target.value })
+              }
+              className="border p-2 rounded w-full"
+            />
+            <Button name="Sign Up" />
+          </form>
+          <div>
+            <p className="mt-[20px]">
+              Already have an account?
+              <a className="text-customPurple cursor-pointer">
+                <Link to="/login">Log In</Link>
+              </a>
+            </p>
           </div>
-          <input
-            name="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={(e) =>
-              setFormData({ ...formData, email: e.target.value })
-            }
-          />
-          <input
-            name="phoneNumber"
-            placeholder="Phone Number"
-            value={formData.phoneNumber}
-            onChange={(e) =>
-              setFormData({ ...formData, phoneNumber: e.target.value })
-            }
-          />
-          <input
-            name="address"
-            placeholder="Address"
-            value={formData.address}
-            onChange={(e) =>
-              setFormData({ ...formData, address: e.target.value })
-            }
-          />
-          <select
-            name="gender"
-            value={formData.gender}
-            onChange={(e) =>
-              setFormData({ ...formData, gender: e.target.value })
-            }
-            className="border p-2 rounded"
-          >
-            <option value="" disabled>
-              Select Gender
-            </option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-          </select>
-          <input
-            name="password"
-            type="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={(e) =>
-              setFormData({ ...formData, password: e.target.value })
-            }
-          />
-          <input
-            name="confirmPassword"
-            type="password"
-            placeholder="Confirm Password"
-            value={formData.confirmPassword}
-            onChange={(e) =>
-              setFormData({ ...formData, confirmPassword: e.target.value })
-            }
-          />
-          <Button name="Sign Up" />
-        </form>
-        <div>
-          <p className="mt-[20px]">
-            Already have an account?
-            <a className="text-customPurple cursor-pointer">
-              <Link to="/login">Log In</Link>
-            </a>
-          </p>
         </div>
       </div>
     </div>

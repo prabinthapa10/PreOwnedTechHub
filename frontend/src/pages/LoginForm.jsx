@@ -15,8 +15,6 @@ export default function LoginForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Email:", email);
-    console.log("Password:", password);
 
     try {
       // Send login request to the backend
@@ -31,7 +29,21 @@ export default function LoginForm() {
         localStorage.setItem("access_token", response.data.access_token);
         console.log("Access token:", response.data.access_token);
         alert("Login successful!");
-        navigate("/");
+
+        const profileResponse = await axios.get(
+          "http://127.0.0.1:8000/api/profile/",
+          {
+            headers: { Authorization: `Bearer ${response.data.access_token}` },
+          }
+        );
+        const userProfile = profileResponse.data;
+        console.log("User Profile:", userProfile);
+
+        if (!userProfile.first_name) {
+          navigate("/admin-dashboard"); // Redirect admin
+        } else {
+          navigate("/"); // Redirect regular users to homepage
+        }
 
         // Optionally, you can store the refresh token as well
         localStorage.setItem("refresh_token", response.data.refresh_token);

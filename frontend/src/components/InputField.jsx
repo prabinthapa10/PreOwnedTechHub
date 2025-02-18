@@ -1,18 +1,29 @@
 import React from "react";
 
-function InputField({ id, label, placeHolder, type, value, onChange, className }) {
+function InputField({
+  id,
+  label,
+  placeHolder,
+  type,
+  value,
+  onChange,
+  className,
+}) {
   return (
     <div className="p-3">
-      <label className="text-gray-700 font-semibold mr-4" htmlFor={id}>
-        {label}
-      </label>
+      {label ? (
+        <label className="text-gray-700 font-semibold mr-4" htmlFor={id}>
+          {label}
+        </label>
+      ) : null}
+
       <input
         id={id}
         type={type}
         placeholder={placeHolder}
         value={value}
         onChange={onChange}
-        className={`px-2 py-1 bg-transparent outline-none border-[#e5e7eb] ${className}`}
+        className={`px-2 py-1 bg-transparent outline-none h-[40px] border-[#e5e7eb] ${className}`}
       />
     </div>
   );
