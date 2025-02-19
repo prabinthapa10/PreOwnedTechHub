@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.contrib.auth.models import BaseUserManager
+import os
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -44,12 +45,27 @@ class User(AbstractUser):
         return self.email
 
 
+def product_image_upload_path(instance, filename):
+    category = instance.product_category.lower().replace(" ", "_")
+    return os.path.join("products", category, filename)
+
 class Product(models.Model):
     product_name = models.CharField(max_length=100)
     product_description = models.TextField()
     product_price = models.DecimalField(max_digits=10, decimal_places=2)
-    # product_image = models.ImageField(upload_to="products/")
-    product_category = models.CharField(max_length=100, choices=[('Smartphone', 'Smartphone'), ('Laptop', 'Laptop'), ('Tablet', 'Tablet'), ('Smartwatch', 'Smartwatch')])
+    
+    # Set a default image
+    product_image = models.ImageField(upload_to=product_image_upload_path, default="products/default.jpg")
+    
+    product_category = models.CharField(
+        max_length=100, 
+        choices=[
+            ("Smartphone", "Smartphone"),
+            ("Laptop", "Laptop"),
+            ("Tablet", "Tablet"),
+            ("Smartwatch", "Smartwatch"),
+        ]
+    )
     product_brand = models.CharField(max_length=100)
     product_condition = models.CharField(max_length=100)
     added_date = models.DateTimeField(auto_now=True)
