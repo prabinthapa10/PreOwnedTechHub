@@ -8,7 +8,7 @@ export default function AddProduct() {
   const [productName, setProductName] = useState("");
   const [productDescription, setProductDescription] = useState("");
   const [productPrice, setProductPrice] = useState("");
-  const [productImage, setProductImage] = useState("");
+  const [productImage, setProductImage] = useState(null);
   const [productCategory, setProductCategory] = useState("Laptop");
   const [productBrand, setProductBrand] = useState("");
   const [productCondition, setProductCondition] = useState("");
@@ -39,6 +39,7 @@ export default function AddProduct() {
     formData.append("description", productDescription);
     formData.append("price", productPrice);
     formData.append("category", productCategory);
+    formData.append("image", productImage);
     formData.append("brand", productBrand);
     formData.append("condition", productCondition);
     formData.append("stock", productStock);
@@ -105,7 +106,7 @@ export default function AddProduct() {
       <input
         type="file"
         accept="image/*"
-        onChange={(e) => setProductImage(e.target.files[0])} // Store the file object
+        onChange={(e) => setProductImage(e.target.files[0])}
         className="block w-full p-2 border rounded"
       />
       <InputField
