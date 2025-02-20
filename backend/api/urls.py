@@ -9,4 +9,5 @@ urlpatterns = [
     path('profile/', ProfileView.as_view()),
     path('user_list/', UserListView.as_view()),
     path('add_product/', ProductView.as_view()),
+    path('product_list/', ProductView.as_view()),
 ]

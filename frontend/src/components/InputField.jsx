@@ -23,7 +23,7 @@ function InputField({
         placeholder={placeHolder}
         value={value}
         onChange={onChange}
-        className={`px-2 py-1 bg-transparent outline-none h-[40px] border-[#e5e7eb] ${className}`}
+        className={`px-2 py-1 bg-transparent outline-none h-[40px] bg-white border-[#e5e7eb] ${className}`}
       />
     </div>
   );

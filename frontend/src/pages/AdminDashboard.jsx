@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 function AdminDashboard() {
   const [activeDiv, setActiveDiv] = useState("profileDetails");
   const [users, setUsers] = useState([]);
+  const [products, setProducts] = useState([]);
 
   const linkList = [
     { id: "dashboardDetails", label: "Dashboard" },
@@ -58,13 +59,35 @@ function AdminDashboard() {
       })
         .then((response) => response.json())
         .then((data) => {
-          setUsers(data); // Set users state
+          setUsers(data);
+        })
+        .catch((error) => console.error("Error fetching users:", error));
+    } else {
+      console.log("No access token found.");
+    }
+
+    // fetch products
+    if (token) {
+      fetch("http://127.0.0.1:8000/api/product_list/", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setProducts(data); // Set users state
         })
         .catch((error) => console.error("Error fetching users:", error));
     } else {
       console.log("No access token found.");
     }
   }, []);
+
+
+  const handleAddProduct = () => {
+    navigate("/add_product");
+  };
 
   return (
     <div className="flex flex-col">
@@ -133,7 +156,59 @@ function AdminDashboard() {
             </div>
           )}
           {activeDiv === "productDetails" && (
-            <div className="text-xl font-semibold">Product Details</div>
+            <div className="text-purple-700 text-xl font-semibold">
+              <h1 className="text-3xl p-6">Product</h1>
+              <p className="text-red text-xl bg-customBg px-6 py-3 mx-5">
+                Product Details
+              </p>
+            <div onClick={handleAddProduct}><Button name={'Add Product'}/></div>
+
+              <div className=" mx-[20px]">
+                <table className="w-full border-collapse mt-5 mx- border-2 text-black">
+                  <thead>
+                    <tr className="bg-customBg">
+                      <th className="border-2 px-4 py-2">S.No</th>
+                      <th className="border-2 px-4 py-2">Email</th>
+                      <th className="border-2 px-4 py-2">First Name</th>
+                      <th className="border-2 px-4 py-2">Last Name</th>
+                      <th className="border-2 px-4 py-2">Gender</th>
+                      <th className="border-2 px-4 py-2">Phone Number</th>
+                      <th className="border-2 px-4 py-2">Address</th>
+                      <th className="border-2 px-4 py-2">Added Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {products.map((product, index) => (
+                      <tr
+                        key={index}
+                        className="border border-purple-500 text-center"
+                      >
+                        <td className="border-2 px-4 py-2">{index + 1}</td>
+                        <td className="border-2 px-4 py-2">{product.email}</td>
+                        <td className="border-2 px-4 py-2">
+                          {product.product_name || "-"}
+                        </td>
+                        <td className="border-2 px-4 py-2">
+                          {product.product_description || "-"}
+                        </td>
+                        <td className="border-2 px-4 py-2">
+                          {product.product_price || "-"}
+                        </td>
+                        <td className="border-2 px-4 py-2">
+                          {product.product_category || "-"}
+                        </td>
+                        <td className="border-2 px-4 py-2">
+                          {product.product_brand || "-"}
+                        </td>
+                        <td className="border-2 px-4 py-2">
+                          {product.product_condition || "-"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           )}
           {activeDiv === "categorieDetails" && (
             <div className="text-purple-700 text-xl font-semibold">

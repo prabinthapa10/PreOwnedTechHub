@@ -46,29 +46,48 @@ class User(AbstractUser):
 
 
 def product_image_upload_path(instance, filename):
-    category = instance.product_category.lower().replace(" ", "_")
+    category = instance.category.lower().replace(" ", "_")
     return os.path.join("products", category, filename)
 
 class Product(models.Model):
-    product_name = models.CharField(max_length=100)
-    product_description = models.TextField()
-    product_price = models.DecimalField(max_digits=10, decimal_places=2)
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
     
-    # Set a default image
-    product_image = models.ImageField(upload_to=product_image_upload_path, default="products/default.jpg")
+    image = models.ImageField(upload_to=product_image_upload_path, default="products/default.jpg")
     
-    product_category = models.CharField(
+    category = models.CharField(
         max_length=100, 
         choices=[
             ("Smartphone", "Smartphone"),
             ("Laptop", "Laptop"),
             ("Tablet", "Tablet"),
-            ("Smartwatch", "Smartwatch"),
-        ]
+        ],
+        default="Laptop"
     )
-    product_brand = models.CharField(max_length=100)
-    product_condition = models.CharField(max_length=100)
-    added_date = models.DateTimeField(auto_now=True)
+    brand = models.CharField(max_length=100)
+    condition = models.CharField(max_length=100,        
+        choices=[
+            ("New", "New"),
+            ("Used - Like New", "Used - Like New"),
+            ("Used - Good", "Used - Good"),
+             ("Used - Fair", "Used - Fair"),
+        ],
+        default="New")
+    stock = models.PositiveIntegerField(default=0)
+    date = models.DateTimeField(auto_now=True)
+
+    processor = models.CharField(max_length=255, blank=True, null=True)
+    ram = models.CharField(max_length=50, blank=True, null=True)
+    storage = models.CharField(max_length=50, blank=True, null=True)
+    battery = models.CharField(max_length=50, blank=True, null=True)
+    screen_size = models.CharField(max_length=20, blank=True, null=True)
+    operating_system = models.CharField(max_length=100, blank=True, null=True)
+
+    camera = models.CharField(max_length=50, blank=True, null=True)
+    sim_slots = models.CharField(max_length=20, blank=True, null=True)
+
+    gpu = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return self.product_name
