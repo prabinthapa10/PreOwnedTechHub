@@ -6,6 +6,7 @@ module.exports = {
         customBg: "#F5F5F5",
         customPurple: "#B58FF1",
         hoverPurple: "#9A71D8",
+        customGray: "#C4C4C4",
       },
       fontSize: { base: "16px" },
       fontFamily: {
