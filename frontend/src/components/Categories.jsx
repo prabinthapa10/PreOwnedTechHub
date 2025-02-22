@@ -14,7 +14,7 @@ function Categories() {
       <div className="flex justify-center space-x-[80px] mt-8">
         {image.map((src) => (
           <>
-            <div className="bg-white rounded-2xl w-[150px] ">
+            <div className="bg-white rounded-2xl w-[150px] transition-transform duration-300 transform hover:scale-105 hover:shadow-2xl">
               <img
                 className="w-full h-full object-cover border border-white rounded-2xl"
                 src={src.src}

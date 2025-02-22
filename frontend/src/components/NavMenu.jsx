@@ -6,7 +6,7 @@ function NavMenu() {
     <div className="flex bg-customGray h-[50px] items-center font-bold ">
       <ul className="flex justify-evenly w-[70%]">
         <li>
-          <MenuIcon />
+          <MenuIcon style={{ fontSize: 30 }}  />
         </li>
         <li>All Categories</li>
         <li>Home</li>

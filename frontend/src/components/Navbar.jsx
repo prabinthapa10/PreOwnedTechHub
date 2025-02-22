@@ -53,9 +53,11 @@ function Navbar() {
           <img src="/images/logo/logo.png" className="h-[70px]" alt="" />
         </Link>
 
-        <h1 className="font-avantgarde font-bold text-3xl text-center">
-          Pre Owned Tech Hub
-        </h1>
+        <Link to={"/"}>
+          <h1 className="font-avantgarde font-bold text-3xl text-center">
+            Pre Owned Tech Hub
+          </h1>
+        </Link>
         {/* serch bar */}
         <input
           className="w-[600px] h-[40px] bg-customBg rounded-lg p-4 focus:outline-none"
@@ -74,7 +76,7 @@ function Navbar() {
             className="flex items-center space-x-2 cursor-pointer "
             onClick={() => setOpenDropdown(!openDropdown)}
           >
-            <PersonIcon />
+            <PersonIcon style={{ fontSize: 30 }} />
             {profile ? (
               <span className={`text-xl w-[100px] text-center`}>
                 {profile.first_name} {profile.last_name}
@@ -102,7 +104,7 @@ function Navbar() {
         </div>
 
         {/* cart items */}
-        <AddShoppingCartIcon />
+        <AddShoppingCartIcon style={{ fontSize: 30 }} />
       </div>
     </div>
   );
