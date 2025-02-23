@@ -4,7 +4,7 @@ from .models import User, Product
 from .serializers import RegisterSerializers, UserSerializer, ProductSerializer
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated, IsAdminUser,  AllowAny
 
 
 class RegisterView(APIView):
@@ -63,7 +63,12 @@ class UserListView(APIView):
 
 
 class ProductView(APIView):
-    permission_classes = [IsAdminUser]
+
+    # permission for admin 
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            return [IsAdminUser()] 
+        return [AllowAny()] 
 
     def get(self, request):
         products = Product.objects.all()

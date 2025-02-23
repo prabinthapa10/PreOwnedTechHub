@@ -44,7 +44,7 @@ function AdminDashboard() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    navigate("/login");
+    navigate("/");
   };
 
   useEffect(() => {
@@ -83,7 +83,6 @@ function AdminDashboard() {
       console.log("No access token found.");
     }
   }, []);
-
 
   const handleAddProduct = () => {
     navigate("/add_product");
@@ -161,20 +160,21 @@ function AdminDashboard() {
               <p className="text-red text-xl bg-customBg px-6 py-3 mx-5">
                 Product Details
               </p>
-            <div onClick={handleAddProduct}><Button name={'Add Product'}/></div>
+              <div onClick={handleAddProduct}>
+                <Button name={"Add Product"} />
+              </div>
 
               <div className=" mx-[20px]">
                 <table className="w-full border-collapse mt-5 mx- border-2 text-black">
                   <thead>
                     <tr className="bg-customBg">
                       <th className="border-2 px-4 py-2">S.No</th>
-                      <th className="border-2 px-4 py-2">Email</th>
-                      <th className="border-2 px-4 py-2">First Name</th>
-                      <th className="border-2 px-4 py-2">Last Name</th>
-                      <th className="border-2 px-4 py-2">Gender</th>
-                      <th className="border-2 px-4 py-2">Phone Number</th>
-                      <th className="border-2 px-4 py-2">Address</th>
-                      <th className="border-2 px-4 py-2">Added Date</th>
+                      <th className="border-2 px-4 py-2">Name</th>
+                      <th className="border-2 px-4 py-2">Description</th>
+                      <th className="border-2 px-4 py-2">Price</th>
+                      <th className="border-2 px-4 py-2">Category</th>
+                      <th className="border-2 px-4 py-2">Brand</th>
+                      <th className="border-2 px-4 py-2">Condition</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -184,24 +184,23 @@ function AdminDashboard() {
                         className="border border-purple-500 text-center"
                       >
                         <td className="border-2 px-4 py-2">{index + 1}</td>
-                        <td className="border-2 px-4 py-2">{product.email}</td>
                         <td className="border-2 px-4 py-2">
-                          {product.product_name || "-"}
+                          {product.name || "-"}
                         </td>
                         <td className="border-2 px-4 py-2">
-                          {product.product_description || "-"}
+                          {product.description || "-"}
                         </td>
                         <td className="border-2 px-4 py-2">
-                          {product.product_price || "-"}
+                          {product.price || "-"}
                         </td>
                         <td className="border-2 px-4 py-2">
-                          {product.product_category || "-"}
+                          {product.category || "-"}
                         </td>
                         <td className="border-2 px-4 py-2">
-                          {product.product_brand || "-"}
+                          {product.brand || "-"}
                         </td>
                         <td className="border-2 px-4 py-2">
-                          {product.product_condition || "-"}
+                          {product.condition || "-"}
                         </td>
                       </tr>
                     ))}

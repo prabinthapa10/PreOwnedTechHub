@@ -8,6 +8,11 @@ function ProductItems({ type }) {
     navigate("/specific_product");
   };
 
+  const addToCart = (e) => {
+    e.stopPropagation();
+    alert("Added successfully!");
+  };
+
   return (
     <>
       {type == "side" ? (
@@ -28,7 +33,7 @@ function ProductItems({ type }) {
             </div>
           </div>
           <div className="flex flex-col w-[60%]">
-            <div className="flex flex-col px-2 py-2 text-[13px] leading-tight">
+            <div className="flex flex-col px-2 py-2 text-[13px] leading-tight bg-gray-100 rounded-lg shadow-md">
               <span>
                 🎮 **High Performance:** AMD Ryzen 7 / Intel i7 12th-Gen
               </span>
@@ -38,7 +43,9 @@ function ProductItems({ type }) {
               <span>🎮 **RTX Graphics:** NVIDIA RTX 3050 / 3060 / 4060</span>
               <p className="mt-6">💰Price: NPR 100,000</p>
             </div>
-            <Button name="Add to Cart" className={"w-full rounded-none"} />
+            <div onClick={addToCart}>
+              <Button name="Add to Cart" className={"w-full rounded-none"} />
+            </div>
           </div>
         </div>
       ) : (
@@ -56,7 +63,7 @@ function ProductItems({ type }) {
               alt=""
             />
           </div>
-          <div className="w-[255px] mt-3 p-2 text-[13px] leading-tight">
+          <div className="w-[255px] mt-3 p-2 text-[13px] leading-tight bg-gray-100 rounded-lg shadow-md">
             <span>
               🎮 **High Performance:** AMD Ryzen 7 / Intel i7 12th-Gen
             </span>
@@ -67,7 +74,9 @@ function ProductItems({ type }) {
             <br />
             <p className="mt-6">💰Price: NPR 100,000</p>
           </div>
-          <Button name={"Add to cart"} className={"rounded-none w-full"} />
+          <div onClick={addToCart}>
+            <Button name={"Add to cart"} className={"rounded-none w-full"} />
+          </div>
         </div>
       )}
     </>

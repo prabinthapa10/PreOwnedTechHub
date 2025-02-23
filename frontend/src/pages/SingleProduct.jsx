@@ -4,9 +4,13 @@ import NavMenu from "../components/NavMenu";
 import Button from "../components/Button";
 import Footer from "../components/Footer";
 import ProductItems from "../components/ProductItems";
-import Title from "../components/Title"
+import Title from "../components/Title";
 
 function SingleProduct() {
+  const addToCart = (e) => {
+    e.stopPropagation();
+    alert("Added successfully!");
+  };
   return (
     <div className="bg-customBg">
       <Navbar />
@@ -82,18 +86,18 @@ function SingleProduct() {
               </span>
             </li>
           </ul>
-          <div className="mt-[10px]">
-            <Button name="Add to cart" />
+          <div onClick={addToCart}>
+            <Button name="Add to Cart" className={"w-full rounded-none"} />
           </div>
         </div>
       </div>
       <div className="m-auto mt-10">
-        <Title title="Similar Products"/>
-        <div className="flex justify-center gap-[100px] mt-10 h-[400px] bg-white w-[90%] m-auto pt-10">
-            <ProductItems/>
-            <ProductItems/>
-            <ProductItems/>
-            <ProductItems/>
+        <Title title="Similar Products" />
+        <div className="flex justify-center gap-[50px] mt-10 h-[400px] bg-white w-[90%] m-auto pt-10">
+          <ProductItems />
+          <ProductItems />
+          <ProductItems />
+          <ProductItems />
         </div>
       </div>
       <div className="mt-10">

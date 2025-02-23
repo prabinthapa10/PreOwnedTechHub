@@ -7,6 +7,9 @@ import Profile from "./pages/Profile";
 import AdminDashboard from "./pages/AdminDashboard";
 import AddProduct from "./pages/AddProduct";
 import SingleProduct from "./pages/SingleProduct";
+import CartPage from "./pages/CartPage";
+import Products from "./pages/Products";
+
 export default function App() {
   return (
     <div>
@@ -19,6 +22,8 @@ export default function App() {
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
           <Route path="/add_product" element={<AddProduct />} />
           <Route path="/specific_product" element={<SingleProduct />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/products" element={<Products />} />
         </Routes>
       </BrowserRouter>
     </div>

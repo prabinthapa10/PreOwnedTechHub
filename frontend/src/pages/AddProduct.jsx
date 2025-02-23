@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import InputField from "../components/InputField";
 import axios from "axios";
 import Button from "../components/Button";
+import { useNavigate } from "react-router-dom";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+
 export default function AddProduct() {
   const [token, setToken] = useState(null);
 
@@ -31,6 +34,9 @@ export default function AddProduct() {
     console.log("Token:", storedToken);
   }, []);
 
+  const handleChange = (e) => {
+    setProductCondition(e.target.value);
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -69,180 +75,198 @@ export default function AddProduct() {
     }
   };
 
-  return (
-    <form
-      onSubmit={handleSubmit}
-      className="space-y-4 p-4 border rounded shadow-md"
-    >
-      <InputField
-        id="name"
-        name="name"
-        label="Product Name"
-        type="text"
-        value={productName}
-        onChange={(e) => setProductName(e.target.value)}
-        placeHolder="Product Name"
-        className="block w-full p-2 border rounded"
-      />
-      <textarea
-        id="description"
-        name="description"
-        value={productDescription}
-        onChange={(e) => setProductDescription(e.target.value)}
-        placeholder="Product Description"
-        className="block w-full p-2 border rounded"
-        rows="4"
-      />
-      <InputField
-        id="price"
-        name="price"
-        label="Product Price"
-        type="text"
-        value={productPrice}
-        onChange={(e) => setProductPrice(Number(e.target.value))}
-        placeHolder="Product Price"
-        className="block w-full p-2 border rounded"
-      />
-      <input
-        type="file"
-        accept="image/*"
-        onChange={(e) => setProductImage(e.target.files[0])}
-        className="block w-full p-2 border rounded"
-      />
-      <InputField
-        id="category"
-        name="category"
-        label="Product Category"
-        type="text"
-        value={productCategory}
-        onChange={(e) => setProductCategory(e.target.value)}
-        placeHolder="Product Category"
-        className="block w-full p-2 border rounded"
-      />
-      <InputField
-        id="brand"
-        name="brand"
-        label="Product Brand"
-        type="text"
-        value={productBrand}
-        onChange={(e) => setProductBrand(e.target.value)}
-        placeHolder="Product Brand"
-        className="block w-full p-2 border rounded"
-      />
-      <InputField
-        id="condition"
-        name="condition"
-        label="Product Condition"
-        type="text"
-        value={productCondition}
-        onChange={(e) => setProductCondition(e.target.value)}
-        placeHolder="Product Condition"
-        className="block w-full p-2 border rounded"
-      />
-      <InputField
-        id="stock"
-        name="stock"
-        label="Stock"
-        type="text"
-        value={productStock}
-        onChange={(e) => setStock(Number(e.target.value))}
-        placeHolder="Stock"
-        className="block w-full p-2 border rounded"
-      />
-      <InputField
-        id="processor"
-        name="processor"
-        label="Processor"
-        type="text"
-        value={processor}
-        onChange={(e) => setProcessor(e.target.value)}
-        placeHolder="Processor"
-        className="block w-full p-2 border rounded"
-      />
-      <InputField
-        id="ram"
-        name="ram"
-        label="RAM"
-        type="text"
-        value={ram}
-        onChange={(e) => setRam(e.target.value)}
-        placeHolder="RAM"
-        className="block w-full p-2 border rounded"
-      />
-      <InputField
-        id="storage"
-        name="storage"
-        label="Storage"
-        type="text"
-        value={storage}
-        onChange={(e) => setStorage(e.target.value)}
-        placeHolder="Storage"
-        className="block w-full p-2 border rounded"
-      />
-      <InputField
-        id="battery"
-        name="battery"
-        label="Battery"
-        type="text"
-        value={battery}
-        onChange={(e) => setBattery(e.target.value)}
-        placeHolder="Battery"
-        className="block w-full p-2 border rounded"
-      />
+  const navigate = useNavigate();
+  const backButton = (e) => {
+    navigate("/admin-dashboard");
+  };
 
-      <InputField
-        id="screen_size"
-        name="screen_size"
-        label="Screen Size"
-        type="text"
-        value={screenSize}
-        onChange={(e) => setScreenSize(e.target.value)}
-        placeHolder="Screen Size"
-        className="block w-full p-2 border rounded"
-      />
-      <InputField
-        id="operating_system"
-        name="operating_system"
-        label="Operating System"
-        type="text"
-        value={operatingSystem}
-        onChange={(e) => setOperatingSystem(e.target.value)}
-        placeHolder="Operating System"
-        className="block w-full p-2 border rounded"
-      />
-      <InputField
-        id="camera"
-        name="camera"
-        label="Camera"
-        type="text"
-        value={camera}
-        onChange={(e) => setCamera(e.target.value)}
-        placeHolder="Camera"
-        className="block w-full p-2 border rounded"
-      />
-      <InputField
-        id="sim_slots"
-        name="sim_slots"
-        label="Sim Slots"
-        type="text"
-        value={simSlots}
-        onChange={(e) => setSimSlots(e.target.value)}
-        placeHolder="Sim Slots"
-        className="block w-full p-2 border rounded"
-      />
-      <InputField
-        id="gpu"
-        name="gpu"
-        label="GPU"
-        type="text"
-        value={gpu}
-        onChange={(e) => setGpu(e.target.value)}
-        placeHolder="GPU"
-        className="block w-full p-2 border rounded"
-      />
-      <div>
-        <Button />
+  const arrow = <ArrowBackIcon />;
+
+  return (
+    <>
+      <div onClick={backButton}>
+        <Button name={arrow} />
       </div>
-    </form>
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-4 p-4 border rounded shadow-md"
+      >
+        <InputField
+          id="name"
+          name="name"
+          label="Product Name"
+          type="text"
+          value={productName}
+          onChange={(e) => setProductName(e.target.value)}
+          placeHolder="Product Name"
+          className="block w-full p-2 border rounded"
+        />
+        <textarea
+          id="description"
+          name="description"
+          value={productDescription}
+          onChange={(e) => setProductDescription(e.target.value)}
+          placeholder="Product Description"
+          className="block w-full p-2 border rounded"
+          rows="4"
+        />
+        <InputField
+          id="price"
+          name="price"
+          label="Product Price"
+          type="text"
+          value={productPrice}
+          onChange={(e) => setProductPrice(Number(e.target.value))}
+          placeHolder="Product Price"
+          className="block w-full p-2 border rounded"
+        />
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => setProductImage(e.target.files[0])}
+          className="block w-full p-2 border rounded"
+        />
+        <select
+          id="category"
+          name="category"
+          value={productCategory}
+          onChange={handleChange}
+          className="block w-full p-2 border rounded"
+        >
+          <option value="Laptop">Laptop</option>
+          <option value="Smartphone">Smartphone</option>
+          <option value="Tablet">Tablet</option>
+          <option value="Accessories">Accessories</option>
+        </select>
+        <InputField
+          id="brand"
+          name="brand"
+          label="Product Brand"
+          type="text"
+          value={productBrand}
+          onChange={(e) => setProductBrand(e.target.value)}
+          placeHolder="Product Brand"
+          className="block w-full p-2 border rounded"
+        />
+
+        <select
+          id="condition"
+          name="condition"
+          value={productCondition}
+          onChange={handleChange}
+          className="block w-full p-2 border rounded"
+        >
+          <option value="New">New</option>
+          <option value="Used - Like New">Used - Like New</option>
+          <option value="Used - Good">Used - Good</option>
+          <option value="Used - Fair">Used - Fair</option>
+        </select>
+
+        <InputField
+          id="stock"
+          name="stock"
+          label="Stock"
+          type="text"
+          value={productStock}
+          onChange={(e) => setStock(Number(e.target.value))}
+          placeHolder="Stock"
+          className="block w-full p-2 border rounded"
+        />
+        <InputField
+          id="processor"
+          name="processor"
+          label="Processor"
+          type="text"
+          value={processor}
+          onChange={(e) => setProcessor(e.target.value)}
+          placeHolder="Processor"
+          className="block w-full p-2 border rounded"
+        />
+        <InputField
+          id="ram"
+          name="ram"
+          label="RAM"
+          type="text"
+          value={ram}
+          onChange={(e) => setRam(e.target.value)}
+          placeHolder="RAM"
+          className="block w-full p-2 border rounded"
+        />
+        <InputField
+          id="storage"
+          name="storage"
+          label="Storage"
+          type="text"
+          value={storage}
+          onChange={(e) => setStorage(e.target.value)}
+          placeHolder="Storage"
+          className="block w-full p-2 border rounded"
+        />
+        <InputField
+          id="battery"
+          name="battery"
+          label="Battery"
+          type="text"
+          value={battery}
+          onChange={(e) => setBattery(e.target.value)}
+          placeHolder="Battery"
+          className="block w-full p-2 border rounded"
+        />
+
+        <InputField
+          id="screen_size"
+          name="screen_size"
+          label="Screen Size"
+          type="text"
+          value={screenSize}
+          onChange={(e) => setScreenSize(e.target.value)}
+          placeHolder="Screen Size"
+          className="block w-full p-2 border rounded"
+        />
+        <InputField
+          id="operating_system"
+          name="operating_system"
+          label="Operating System"
+          type="text"
+          value={operatingSystem}
+          onChange={(e) => setOperatingSystem(e.target.value)}
+          placeHolder="Operating System"
+          className="block w-full p-2 border rounded"
+        />
+        <InputField
+          id="camera"
+          name="camera"
+          label="Camera"
+          type="text"
+          value={camera}
+          onChange={(e) => setCamera(e.target.value)}
+          placeHolder="Camera"
+          className="block w-full p-2 border rounded"
+        />
+        <InputField
+          id="sim_slots"
+          name="sim_slots"
+          label="Sim Slots"
+          type="text"
+          value={simSlots}
+          onChange={(e) => setSimSlots(e.target.value)}
+          placeHolder="Sim Slots"
+          className="block w-full p-2 border rounded"
+        />
+        <InputField
+          id="gpu"
+          name="gpu"
+          label="GPU"
+          type="text"
+          value={gpu}
+          onChange={(e) => setGpu(e.target.value)}
+          placeHolder="GPU"
+          className="block w-full p-2 border rounded"
+        />
+        <div>
+          <Button name="Add Product" />
+        </div>
+      </form>
+    </>
   );
 }

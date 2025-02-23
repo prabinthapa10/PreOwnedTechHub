@@ -60,7 +60,7 @@ function Navbar() {
         </Link>
         {/* serch bar */}
         <input
-          className="w-[600px] h-[40px] bg-customBg rounded-lg p-4 focus:outline-none"
+          className="w-[600px] h-[40px] bg-customBg rounded-sm p-4 focus:outline-none"
           placeholder="Search"
         />
         {/* login / profile */}
@@ -104,7 +104,9 @@ function Navbar() {
         </div>
 
         {/* cart items */}
-        <AddShoppingCartIcon style={{ fontSize: 30 }} />
+        <Link to="/cart">
+          <AddShoppingCartIcon style={{ fontSize: 30 }} />
+        </Link>
       </div>
     </div>
   );

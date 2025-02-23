@@ -149,7 +149,9 @@ SIMPLE_JWT = {
 
 AUTH_USER_MODEL = 'api.User'  
 
-#For static files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
+    BASE_DIR / "static"
 ]
