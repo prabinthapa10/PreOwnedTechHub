@@ -12,7 +12,7 @@ export default function AddProduct() {
   const [productDescription, setProductDescription] = useState("");
   const [productPrice, setProductPrice] = useState("");
   const [productImage, setProductImage] = useState(null);
-  const [productCategory, setProductCategory] = useState("Laptop");
+  const [productCategory, setProductCategory] = useState("");
   const [productBrand, setProductBrand] = useState("");
   const [productCondition, setProductCondition] = useState("");
   const [productStock, setStock] = useState("");
@@ -34,7 +34,10 @@ export default function AddProduct() {
     console.log("Token:", storedToken);
   }, []);
 
-  const handleChange = (e) => {
+  const handleChangeCategory = (e) => {
+    setProductCategory(e.target.value);
+  };
+  const handleChangeCondition = (e) => {
     setProductCondition(e.target.value);
   };
   const handleSubmit = async (e) => {
@@ -130,13 +133,12 @@ export default function AddProduct() {
           id="category"
           name="category"
           value={productCategory}
-          onChange={handleChange}
+          onChange={handleChangeCategory}
           className="block w-full p-2 border rounded"
         >
           <option value="Laptop">Laptop</option>
-          <option value="Smartphone">Smartphone</option>
-          <option value="Tablet">Tablet</option>
-          <option value="Accessories">Accessories</option>
+          <option value="Smartphone">Smartphone/Tablet</option>
+          <option value="Smartwatch">Smartwatch</option>
         </select>
         <InputField
           id="brand"
@@ -153,7 +155,7 @@ export default function AddProduct() {
           id="condition"
           name="condition"
           value={productCondition}
-          onChange={handleChange}
+          onChange={handleChangeCondition}
           className="block w-full p-2 border rounded"
         >
           <option value="New">New</option>

@@ -63,7 +63,6 @@ class UserListView(APIView):
 
 
 class ProductView(APIView):
-
     # permission for admin 
     def get_permissions(self):
         if self.request.method == 'POST':
@@ -81,3 +80,21 @@ class ProductView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class LaptopView(APIView): 
+    def get(self, request):
+        products = Product.objects.filter(category="Laptop")  
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class SmartPhonesView(APIView): 
+    def get(self, request):
+        products = Product.objects.filter(category="Smartphone")  
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class SmartwatchView(APIView): 
+    def get(self, request):
+        products = Product.objects.filter(category="Smartwatch")  
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

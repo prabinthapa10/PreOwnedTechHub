@@ -62,7 +62,7 @@ class Product(models.Model):
         choices=[
             ("Smartphone", "Smartphone"),
             ("Laptop", "Laptop"),
-            ("Tablet", "Tablet"),
+            ("Smartwatch", "Smartwatch"),
         ],
         default="Laptop"
     )

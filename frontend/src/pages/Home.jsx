@@ -8,6 +8,7 @@ import LatestProducts from "../components/LatestProducts";
 import Smartphone from "../components/Smartphone";
 import SmartWatch from "../components/SmartWatch";
 import Footer from "../components/Footer";
+import Laptop from "../components/Laptop";
 
 export default function Home() {
   return (
@@ -32,6 +33,9 @@ export default function Home() {
       </div>
       <div className="mt-10">
         <Smartphone />
+      </div>
+      <div className="mt-10">
+        <Laptop />
       </div>
       <div className="mt-10">
         <SmartWatch />
