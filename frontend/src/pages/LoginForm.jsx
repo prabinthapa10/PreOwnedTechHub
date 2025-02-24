@@ -8,6 +8,9 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 
+import { toast } from "react-toastify";
+import Toastify from "../components/Toastify";
+
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,7 +31,6 @@ export default function LoginForm() {
         // Store the access token in localStorage
         localStorage.setItem("access_token", response.data.access_token);
         console.log("Access token:", response.data.access_token);
-        alert("Login successful!");
 
         const profileResponse = await axios.get(
           "http://127.0.0.1:8000/api/profile/",
@@ -45,29 +47,25 @@ export default function LoginForm() {
           navigate("/"); // Redirect regular users to homepage
         }
 
-        // Optionally, you can store the refresh token as well
-        localStorage.setItem("refresh_token", response.data.refresh_token);
-
         // Clear form fields after successful login
         setEmail("");
         setPassword("");
-      } else {
-        alert("Invalid credentials!");
       }
     } catch (error) {
       console.error("Login Error:", error.response?.data || error.message);
-      alert("Login failed!");
+      toast.error("Invalid Cridentials");
     }
   };
 
   return (
     <>
+      <Toastify />
       <Navbar />
       <div className="flex flex-col pt-[50px] items-center h-screen bg-gray-200">
         {/* login box */}
         <div className="bg-white p-8 rounded w-[500px] h-[500px] flex flex-col space-y-3 items-center shadow-2xl">
           <h1 className="text-4xl font-bold mb-[30px]">Login Form</h1>
-          <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
+          <form className="flex flex-col space-y-4">
             <div>
               <InputField
                 id="email"
@@ -98,7 +96,9 @@ export default function LoginForm() {
                 className="border-b-2"
               />
             </div>
-            <Button name="Login" className="w-full" />
+            <div onClick={handleSubmit}>
+              <Button name="Login" className="w-full" />
+            </div>
           </form>
           <div>
             <p className="mt-[20px]">

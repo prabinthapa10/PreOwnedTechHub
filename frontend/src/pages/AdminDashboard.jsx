@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
+import Toastify from "../components/Toastify";
+import { toast } from "react-toastify";
 
 function AdminDashboard() {
   const [activeDiv, setActiveDiv] = useState("profileDetails");
@@ -48,6 +50,7 @@ function AdminDashboard() {
   };
 
   useEffect(() => {
+    toast.success("Success! Login successful.");
     const token = localStorage.getItem("access_token");
 
     if (token) {
@@ -90,6 +93,7 @@ function AdminDashboard() {
 
   return (
     <div className="flex flex-col">
+      <Toastify />
       {/* header */}
       <div className="flex justify-center items-center bg-customPurple">
         <div className="flex justify-between p-2 w-[95%] ">
