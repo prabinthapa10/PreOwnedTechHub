@@ -3,6 +3,7 @@ import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
 
 function ProductItems({
+  id,
   type,
   category,
   processor,
@@ -14,7 +15,7 @@ function ProductItems({
 }) {
   const navigate = useNavigate();
   const handleClick = (e) => {
-    navigate("/specific_product");
+    navigate(`/specific_product/${id}`);
   };
 
   const addToCart = (e) => {
@@ -100,7 +101,7 @@ function ProductItems({
         </div>
       ) : (
         // horizontal product
-        <div className="w-[255px] h-[330px] bg-white shadow-lg transition-transform duration-300 transform hover:scale-105 hover:shadow-2xl">
+        <div className="w-[255px] h-[330px] bg-white shadow-lg transition-transform duration-300 transform hover:scale-105 hover:shadow-2xl" onClick={handleClick}>
           <div>
             {condition == "New" ? (
               <div className="w-[50px] bg-[#ff0505] text-[11px]  text-center  rounded-sm">

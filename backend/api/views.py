@@ -98,3 +98,11 @@ class SmartwatchView(APIView):
         products = Product.objects.filter(category="Smartwatch")  
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class SpecificProduct(APIView):
+    def get(self, request, id):  
+        product = Product.objects.filter(id=id).first()  # Use `.first()` to get the first match or None
+        if not product:
+            return Response({"detail": "Product not found."}, status=status.HTTP_404_NOT_FOUND)
+        serializer = ProductSerializer(product) 
+        return Response(serializer.data, status=status.HTTP_200_OK)

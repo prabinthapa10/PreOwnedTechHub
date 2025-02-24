@@ -13,4 +13,6 @@ urlpatterns = [
     path('laptop_list/', LaptopView.as_view()),
     path('smartwatch_list/', SmartwatchView .as_view()),
     path('smartphone_list/', SmartPhonesView.as_view()),
+    path('specific_product/<int:id>/', SpecificProduct.as_view()),
+
 ]

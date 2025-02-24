@@ -8,9 +8,12 @@ function SmartWatch() {
   useEffect(() => {
     fetch("http://127.0.0.1:8000/api/smartwatch_list/")
       .then((response) => response.json())
-      .then((data) => setProducts(data))
-      .catch(() => {});
+      .then((data) => {
+        setProducts(data);
+      })
+      .catch((error) => console.error("Error fetching products:", error));
   }, []);
+
   return (
     <div>
       <Title title="Smart Watches" />
@@ -18,6 +21,7 @@ function SmartWatch() {
         <div className="flex flex-wrap mt-10 gap-10 justify-center">
           {products.slice(0, 6).map((product) => (
             <ProductItems
+              id={product.id}
               type="side"
               category={product.category}
               processor={product.processor}

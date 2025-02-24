@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import Title from "./Title";
 import ProductItems from "./ProductItems";
 
@@ -8,9 +8,12 @@ function Smartphone() {
   useEffect(() => {
     fetch("http://127.0.0.1:8000/api/smartphone_list/")
       .then((response) => response.json())
-      .then((data) => setProducts(data))
-      .catch(() => {});
+      .then((data) => {
+        setProducts(data);
+      })
+      .catch((error) => console.error("Error fetching products:", error));
   }, []);
+
   return (
     <div>
       <Title title="SmartPhones / Tablets" />
@@ -18,6 +21,7 @@ function Smartphone() {
         <div className="flex flex-wrap mt-10 gap-10 justify-center">
           {products.slice(1, 9).map((product) => (
             <ProductItems
+              id={product.id}
               category={product.category}
               processor={product.processor}
               screen_size={product.screen_size}

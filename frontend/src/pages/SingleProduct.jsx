@@ -1,27 +1,46 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import NavMenu from "../components/NavMenu";
 import Button from "../components/Button";
 import Footer from "../components/Footer";
 import ProductItems from "../components/ProductItems";
 import Title from "../components/Title";
+import { useParams } from "react-router-dom";
 
 function SingleProduct() {
+  const { id } = useParams();
+
   const addToCart = (e) => {
     e.stopPropagation();
     alert("Added successfully!");
   };
+
+  const [product, setProduct] = useState([]);
+  // for specific product
+  useEffect(() => {
+    fetch(`http://127.0.0.1:8000/api/specific_product/${id}/`)
+      .then((response) => response.json())
+      .then((data) => {
+        setProduct(data);
+      })
+      .catch((error) => console.error("Error fetching products:", error));
+  }, []);
+
+  // for similar product
+
   return (
     <div className="bg-customBg">
       <Navbar />
-      <NavMenu />
+      <div className="mt-1">
+        <NavMenu />s
+      </div>
       <div className="bg-white w-[90%] h-[550px] mt-10 m-auto flex justify-center ">
         {/* Left Box */}
         <div className="flex ">
           <div className="border w-[100px] h-[35%] mt-[30px] ">
             <ul className="">
               <li className="border-b p-3 text-gray-800 hover:bg-gray-200">
-                Hello
+                {product.name}
               </li>
               <li className="border-b p-3 text-gray-800 hover:bg-gray-200">
                 Hello
@@ -35,7 +54,7 @@ function SingleProduct() {
           <div className="h-[500px] mt-6 shadow-lg rounded-lg">
             <img
               className="object-cover h-[300px] "
-              src="/images/Laptops/Acer.png"
+              src={`http://127.0.0.1:8000/${product.image}`}
               alt="Laptop Image"
             />
           </div>
@@ -43,7 +62,7 @@ function SingleProduct() {
 
         {/* Right Box */}
         <div className="w-[60%] h-[500px] p-6 mt-6 shadow-lg rounded-lg ">
-          <h1 className="font-bold text-2xl mb-4 text-gray-800">
+          <h1 className="font-bold h-[90px] text-2xl mb-4 text-gray-800">
             Lenovo LOQ 15IRH8 (12th Gen Intel Core i5 12450H Processor | 8GB
             DDR5 RAM | 512GB SSD | NVIDIA GeForce RTX 2050 4GB Graphics Card |
             15.6-inch FHD 144Hz Display | 1 Year Warranty)
@@ -53,37 +72,29 @@ function SingleProduct() {
 
           <ul className="bg-gray-100 p-4 mt-6 rounded-lg shadow-md">
             <h3 className="text-xl font-semibold mb-3 text-gray-800">
-              Key Specifications: ASUS F15
+              Key Specifications: {product.name}
             </h3>
             <li className="flex items-center mb-2">
               <span className="text-sm font-medium text-gray-700 mr-2">🎮</span>
-              <span className="text-sm text-gray-700">
-                Intel Core i7-12700H Processor
-              </span>
+              <span className="text-sm text-gray-700">{product.processor}</span>
             </li>
             <li className="flex items-center mb-2">
               <span className="text-sm font-medium text-gray-700 mr-2">🖥️</span>
               <span className="text-sm text-gray-700">
-                15.6" FHD, 144Hz Display
+                {product.screen_size}
               </span>
             </li>
             <li className="flex items-center mb-2">
               <span className="text-sm font-medium text-gray-700 mr-2">🎮</span>
-              <span className="text-sm text-gray-700">
-                NVIDIA RTX 3050 Ti Graphics
-              </span>
+              <span className="text-sm text-gray-700">{product.gpu}</span>
             </li>
             <li className="flex items-center mb-2">
               <span className="text-sm font-medium text-gray-700 mr-2">🎮</span>
-              <span className="text-sm text-gray-700">
-                NVIDIA RTX 3050 Ti Graphics
-              </span>
+              <span className="text-sm text-gray-700">{product.gpu}</span>
             </li>
             <li className="flex items-center mb-2">
               <span className="text-sm font-medium text-gray-700 mr-2">💾</span>
-              <span className="text-sm text-gray-700">
-                16GB RAM | 512GB SSD
-              </span>
+              <span className="text-sm text-gray-700">{product.ram}</span>
             </li>
           </ul>
           <div onClick={addToCart}>

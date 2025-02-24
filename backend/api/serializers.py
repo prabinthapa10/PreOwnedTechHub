@@ -36,4 +36,4 @@ class UserSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ['name', 'description', 'price','image', 'category', 'brand', 'condition','stock','processor','ram','storage','battery','screen_size','operating_system','camera','sim_slots', 'gpu']
+        fields = ['id', 'name', 'description', 'price','image', 'category', 'brand', 'condition','stock','processor','ram','storage','battery','screen_size','operating_system','camera','sim_slots', 'gpu']

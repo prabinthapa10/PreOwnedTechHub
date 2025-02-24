@@ -8,9 +8,12 @@ function Laptop() {
   useEffect(() => {
     fetch("http://127.0.0.1:8000/api/laptop_list/")
       .then((response) => response.json())
-      .then((data) => setProducts(data))
-      .catch(() => {});
+      .then((data) => {
+        setProducts(data);
+      })
+      .catch((error) => console.error("Error fetching products:", error));
   }, []);
+
   return (
     <div>
       <Title title="Laptops" />
@@ -18,6 +21,7 @@ function Laptop() {
         {products.slice(0, 6).map((product) => (
           <ProductItems
             type="side"
+            id={product.id}
             category={product.category}
             processor={product.processor}
             screen_size={product.screen_size}
