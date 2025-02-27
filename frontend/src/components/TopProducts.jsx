@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import ProductItems from "./ProductItems";
-import Title from "./Title";
 
 function TopProducts() {
   const [products, setProducts] = useState([]);
@@ -16,7 +15,6 @@ function TopProducts() {
 
   return (
     <div>
-      <Title title="Top Products" />
       <div className="w-[90%] flex justify-center flex-wrap m-auto gap-3 mt-10">
         {products.slice(0, 6).map((product) => (
           <ProductItems

@@ -9,6 +9,7 @@ import Smartphone from "../components/Smartphone";
 import SmartWatch from "../components/SmartWatch";
 import Footer from "../components/Footer";
 import Laptop from "../components/Laptop";
+import Title from "../components/Title";
 
 export default function Home() {
   return (
@@ -26,19 +27,24 @@ export default function Home() {
         <Categories />
       </div>
       <div className="mt-10">
+        <Title title="Latest Products" />
         <LatestProducts />
       </div>
       <div className="mt-10">
+        <Title title="Top Products" />
         <TopProducts />
       </div>
       <div className="mt-10">
+        <Title title="Smartphone/Tablets" />
         <Smartphone />
       </div>
       <div className="mt-10">
-        <Laptop />
+        <Title title="Laptops" />
+        <Laptop itemType="side" numberOfItems="6" />
       </div>
       <div className="mt-10">
-        <SmartWatch />
+        <Title title="Smartwatch" />
+        <SmartWatch numberOfItems="8" />
       </div>
       <div className="mt-10">
         <Footer />

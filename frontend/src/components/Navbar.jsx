@@ -6,8 +6,6 @@ import PersonIcon from "@mui/icons-material/Person";
 function Navbar() {
   const [profile, setProfile] = useState(null);
   const [openDropdown, setOpenDropdown] = useState(false);
-  const [isActive, setisActive] = useState(false);
-  const navigate = useNavigate();
 
   const handleLogout = () => {
     // Remove the JWT token from localStorage
@@ -65,12 +63,7 @@ function Navbar() {
         />
         {/* login / profile */}
         <div
-          className={`flex justify-center items-center space-x-3 relative p-2 ${
-            isActive
-              ? "border-gray-500 shadow-md scale-505 rounded-md text-center bg-[#af65daba]"
-              : ""
-          }`}
-          onClick={() => setisActive(!isActive)}
+          className={"flex justify-center items-center space-x-3 relative p-2 "}
         >
           <div
             className="flex items-center space-x-2 cursor-pointer "

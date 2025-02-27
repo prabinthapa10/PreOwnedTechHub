@@ -91,3 +91,13 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+class ProductImage(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="images")
+    front_image = models.ImageField(upload_to=product_image_upload_path)
+    back_image = models.ImageField(upload_to=product_image_upload_path) 
+    side_image = models.ImageField(upload_to=product_image_upload_path) 
+    extra_image = models.ImageField(upload_to=product_image_upload_path) 
+
+    def __str__(self):
+        return f"image for {self.product.name}"

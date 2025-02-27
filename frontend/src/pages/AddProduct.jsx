@@ -4,9 +4,12 @@ import axios from "axios";
 import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import Toastify from "../components/Toastify";
+import { toast } from "react-toastify";
 
 export default function AddProduct() {
   const [token, setToken] = useState(null);
+  const [formErrors, setFormErrors] = useState({});
 
   const [productName, setProductName] = useState("");
   const [productDescription, setProductDescription] = useState("");
@@ -40,8 +43,32 @@ export default function AddProduct() {
   const handleChangeCondition = (e) => {
     setProductCondition(e.target.value);
   };
+
+  const validate = () => {
+    const errors = {};
+    if (!productName) errors.productName = "Product name is required.";
+    if (!productDescription)
+      errors.productDescription = "Description is required.";
+    if (!productPrice || isNaN(productPrice))
+      errors.productPrice = "Valid price is required.";
+    if (!productBrand) errors.productBrand = "Brand is required.";
+    if (!productStock || isNaN(productStock))
+      errors.productStock = "Valid stock quantity is required.";
+    return errors;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const errors = validate();
+    setFormErrors(errors);
+
+    if (Object.keys(errors).length > 0) {
+      toast.error("Error adding product. Please try again.");
+      return;
+    }
+
+    setIsSubmit(true);
 
     const formData = new FormData();
     formData.append("name", productName);
@@ -72,14 +99,14 @@ export default function AddProduct() {
           },
         }
       );
-      console.log("Product added:", response.data);
+      toast.success("Added Successfully");
     } catch (error) {
-      console.error("Error:", error.response?.data || error.message);
+      toast.error("Error adding product. Please try again.");
     }
   };
 
   const navigate = useNavigate();
-  const backButton = (e) => {
+  const backButton = () => {
     navigate("/admin-dashboard");
   };
 
@@ -87,6 +114,7 @@ export default function AddProduct() {
 
   return (
     <>
+      <Toastify />
       <div onClick={backButton}>
         <Button name={arrow} />
       </div>
@@ -104,6 +132,9 @@ export default function AddProduct() {
           placeHolder="Product Name"
           className="block w-full p-2 border rounded"
         />
+        {formErrors.productName && (
+          <p className="text-red-500">{formErrors.productName}</p>
+        )}
         <textarea
           id="description"
           name="description"
@@ -113,6 +144,9 @@ export default function AddProduct() {
           className="block w-full p-2 border rounded"
           rows="4"
         />
+        {formErrors.productDescription && (
+          <p className="text-red-500">{formErrors.productDescription}</p>
+        )}
         <InputField
           id="price"
           name="price"
@@ -123,12 +157,18 @@ export default function AddProduct() {
           placeHolder="Product Price"
           className="block w-full p-2 border rounded"
         />
+        {formErrors.productPrice && (
+          <p className="text-red-500">{formErrors.productPrice}</p>
+        )}
         <input
           type="file"
           accept="image/*"
           onChange={(e) => setProductImage(e.target.files[0])}
           className="block w-full p-2 border rounded"
         />
+        {formErrors.productImage && (
+          <p className="text-red-500">{formErrors.productImage}</p>
+        )}
         <select
           id="category"
           name="category"
@@ -140,6 +180,9 @@ export default function AddProduct() {
           <option value="Smartphone">Smartphone/Tablet</option>
           <option value="Smartwatch">Smartwatch</option>
         </select>
+        {formErrors.productCategory && (
+          <p className="text-red-500">{formErrors.productCategory}</p>
+        )}
         <InputField
           id="brand"
           name="brand"
@@ -150,7 +193,9 @@ export default function AddProduct() {
           placeHolder="Product Brand"
           className="block w-full p-2 border rounded"
         />
-
+        {formErrors.productBrand && (
+          <p className="text-red-500">{formErrors.productBrand}</p>
+        )}
         <select
           id="condition"
           name="condition"
@@ -163,7 +208,9 @@ export default function AddProduct() {
           <option value="Used - Good">Used - Good</option>
           <option value="Used - Fair">Used - Fair</option>
         </select>
-
+        {formErrors.productCondition && (
+          <p className="text-red-500">{formErrors.productCondition}</p>
+        )}
         <InputField
           id="stock"
           name="stock"
@@ -174,6 +221,9 @@ export default function AddProduct() {
           placeHolder="Stock"
           className="block w-full p-2 border rounded"
         />
+        {formErrors.productStock && (
+          <p className="text-red-500">{formErrors.productStock}</p>
+        )}
         <InputField
           id="processor"
           name="processor"
@@ -184,6 +234,9 @@ export default function AddProduct() {
           placeHolder="Processor"
           className="block w-full p-2 border rounded"
         />
+        {formErrors.processor && (
+          <p className="text-red-500">{formErrors.processor}</p>
+        )}
         <InputField
           id="ram"
           name="ram"
@@ -194,6 +247,7 @@ export default function AddProduct() {
           placeHolder="RAM"
           className="block w-full p-2 border rounded"
         />
+        {formErrors.ram && <p className="text-red-500">{formErrors.ram}</p>}
         <InputField
           id="storage"
           name="storage"
@@ -204,6 +258,9 @@ export default function AddProduct() {
           placeHolder="Storage"
           className="block w-full p-2 border rounded"
         />
+        {formErrors.storage && (
+          <p className="text-red-500">{formErrors.storage}</p>
+        )}
         <InputField
           id="battery"
           name="battery"
@@ -214,7 +271,9 @@ export default function AddProduct() {
           placeHolder="Battery"
           className="block w-full p-2 border rounded"
         />
-
+        {formErrors.battery && (
+          <p className="text-red-500">{formErrors.battery}</p>
+        )}
         <InputField
           id="screen_size"
           name="screen_size"
@@ -225,6 +284,9 @@ export default function AddProduct() {
           placeHolder="Screen Size"
           className="block w-full p-2 border rounded"
         />
+        {formErrors.screenSize && (
+          <p className="text-red-500">{formErrors.screenSize}</p>
+        )}
         <InputField
           id="operating_system"
           name="operating_system"
@@ -235,6 +297,9 @@ export default function AddProduct() {
           placeHolder="Operating System"
           className="block w-full p-2 border rounded"
         />
+        {formErrors.operatingSystem && (
+          <p className="text-red-500">{formErrors.operatingSystem}</p>
+        )}
         <InputField
           id="camera"
           name="camera"
@@ -245,6 +310,9 @@ export default function AddProduct() {
           placeHolder="Camera"
           className="block w-full p-2 border rounded"
         />
+        {formErrors.camera && (
+          <p className="text-red-500">{formErrors.camera}</p>
+        )}
         <InputField
           id="sim_slots"
           name="sim_slots"
@@ -255,6 +323,9 @@ export default function AddProduct() {
           placeHolder="Sim Slots"
           className="block w-full p-2 border rounded"
         />
+        {formErrors.simSlots && (
+          <p className="text-red-500">{formErrors.simSlots}</p>
+        )}
         <InputField
           id="gpu"
           name="gpu"
@@ -265,6 +336,7 @@ export default function AddProduct() {
           placeHolder="GPU"
           className="block w-full p-2 border rounded"
         />
+        {formErrors.gpu && <p className="text-red-500">{formErrors.gpu}</p>}
         <div>
           <Button name="Add Product" />
         </div>

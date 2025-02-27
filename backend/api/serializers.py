@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Product
+from .models import *
 
 User = get_user_model()
 
@@ -32,6 +32,11 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['email', 'first_name', 'last_name', 'phone_number', 'address', 'gender', 'added_date']
+
+class ProductImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductImage
+        fields = ['front_image', 'back_image', 'side_image', 'extra_image']
 
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:

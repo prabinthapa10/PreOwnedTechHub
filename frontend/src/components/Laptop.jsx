@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import ProductItems from "./ProductItems";
 import Title from "./Title";
 
-function Laptop() {
+function Laptop({ itemType, numberOfItems, className }) {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -15,12 +15,13 @@ function Laptop() {
   }, []);
 
   return (
-    <div>
-      <Title title="Laptops" />
-      <div className="w-[90%] flex justify-center flex-wrap m-auto gap-3 mt-10">
-        {products.slice(0, 6).map((product) => (
+    <div className="w-[90%] m-auto flex justify-center">
+      <div
+        className={`w-[90%] flex justify-center flex-wrap m-auto gap-3 mt-10 ${className}`}
+      >
+        {products.slice(0, numberOfItems).map((product) => (
           <ProductItems
-            type="side"
+            type={itemType}
             id={product.id}
             category={product.category}
             processor={product.processor}

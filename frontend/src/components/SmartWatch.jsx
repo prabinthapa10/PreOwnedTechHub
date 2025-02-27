@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import Title from "./Title";
 import ProductItems from "./ProductItems";
 
-function SmartWatch() {
+function SmartWatch({numberOfItems}) {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -16,13 +15,11 @@ function SmartWatch() {
 
   return (
     <div>
-      <Title title="Smart Watches" />
       <div className="w-[90%] m-auto flex justify-center">
         <div className="flex flex-wrap mt-10 gap-10 justify-center">
-          {products.slice(0, 6).map((product) => (
+          {products.slice(0, numberOfItems).map((product) => (
             <ProductItems
               id={product.id}
-              type="side"
               category={product.category}
               processor={product.processor}
               screen_size={product.screen_size}

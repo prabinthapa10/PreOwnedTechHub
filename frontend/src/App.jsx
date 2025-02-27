@@ -9,6 +9,9 @@ import AddProduct from "./pages/AddProduct";
 import SingleProduct from "./pages/SingleProduct";
 import CartPage from "./pages/CartPage";
 import Products from "./pages/Products";
+import SmartwatchPage from "./pages/SmartwatchPage";
+import LaptopPage from "./pages/LaptopPage";
+import SmartphonePage from "./pages/SmartphonePage";
 
 export default function App() {
   return (
@@ -24,6 +27,9 @@ export default function App() {
           <Route path="/specific_product/:id" element={<SingleProduct />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/products/laptop" element={<LaptopPage />} />
+          <Route path="/products/smartwatch" element={<SmartwatchPage />} />
+          <Route path="/products/phone" element={<SmartphonePage />} />
         </Routes>
       </BrowserRouter>
     </div>
