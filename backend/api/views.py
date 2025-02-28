@@ -81,9 +81,9 @@ class ProductView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    def delete(self, request, pk):
+    def delete(self, request, id):
         try:
-            product = Product.objects.get(pk=pk)
+            product = Product.objects.get(id = id)
             product.delete()
             return Response({"message": "Product deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
         except Product.DoesNotExist:
