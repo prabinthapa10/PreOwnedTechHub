@@ -91,6 +91,37 @@ function AdminDashboard() {
     navigate("/add_product");
   };
 
+  const handleDeleteProduct = async (productId) => {
+    const token = localStorage.getItem("access_token");
+
+    if (!token) {
+      toast.error("Unauthorized! Please log in.");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:8000/api/product_list/${productId}/`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 204) {
+        toast.success("Product deleted successfully.");
+        setProducts(products.filter((product) => product.id !== productId));
+      } else {
+        toast.error("Failed to delete product.");
+      }
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      toast.error("An error occurred while deleting the product.");
+    }
+  };
+
   return (
     <div className="flex flex-col">
       <Toastify />
@@ -109,7 +140,7 @@ function AdminDashboard() {
         </div>
       </div>
 
-      <div className="flex h-[100vh] ">
+      <div className="flex">
         {/* left box */}
         <div className="w-[20%]">
           <ul className="flex flex-col">
@@ -158,8 +189,9 @@ function AdminDashboard() {
               <div>Order Table</div>
             </div>
           )}
+          {/* Product table */}
           {activeDiv === "productDetails" && (
-            <div className="text-purple-700 text-xl font-semibold">
+            <div className="text-purple-700 text-xl ">
               <h1 className="text-3xl p-6">Product</h1>
               <p className="text-red text-xl bg-customBg px-6 py-3 mx-5">
                 Product Details
@@ -173,6 +205,7 @@ function AdminDashboard() {
                   <thead>
                     <tr className="bg-customBg">
                       <th className="border-2 px-4 py-2">S.No</th>
+                      <th className="border-2 px-4 py-2">ID</th>
                       <th className="border-2 px-4 py-2">Name</th>
                       <th className="border-2 px-4 py-2">Description</th>
                       <th className="border-2 px-4 py-2">Price</th>
@@ -206,6 +239,14 @@ function AdminDashboard() {
                         <td className="border-2 px-4 py-2">
                           {product.condition || "-"}
                         </td>
+                        <td className="border-2 px-4 py-2">
+                          <button
+                            onClick={() => handleDeleteProduct(product.id)}
+                            className="bg-red-500 text-white px-4 py-1 rounded-md hover:bg-red-700"
+                          >
+                            Delete
+                          </button>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -213,11 +254,13 @@ function AdminDashboard() {
               </div>
             </div>
           )}
+          {/* Categories table */}
           {activeDiv === "categorieDetails" && (
             <div className="text-purple-700 text-xl font-semibold">
               Categories Details
             </div>
           )}
+          {/* Customer table */}
           {activeDiv === "customerDetails" && (
             <div className="text-purple-700 text-xl font-semibold">
               <h1 className="text-3xl p-6">Cutomers</h1>
