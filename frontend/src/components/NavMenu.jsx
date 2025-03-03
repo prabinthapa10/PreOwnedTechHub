@@ -22,19 +22,6 @@ function NavMenu() {
         </li>
         <li>
           <NavLink
-            to="/products"
-            className={`${
-              isAllCategoriesActive
-                ? "font-bold border-b-2 border-customPurple"
-                : "hover:text-blue-950"
-            }`}
-          >
-            All Categories
-          </NavLink>
-        </li>
-
-        <li>
-          <NavLink
             to="/"
             className={({ isActive }) =>
               isActive
@@ -45,7 +32,6 @@ function NavMenu() {
             Home
           </NavLink>
         </li>
-
         {/* Shop - With Dropdown */}
         <li className="relative" onMouseOver={() => setIsOpen(true)}>
           <NavLink
@@ -55,11 +41,11 @@ function NavMenu() {
                 : "hover:text-blue-950"
             }`}
           >
-            Shop
+            All Categories
           </NavLink>
           {isOpen && (
             <ul
-              className="absolute left-0 mt-2 w-48 bg-white border rounded-lg shadow-lg z-20"
+              className="absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-20"
               onMouseLeave={() => setIsOpen(false)}
             >
               <li>
@@ -92,14 +78,27 @@ function NavMenu() {
 
         <li>
           <NavLink
-            to="/blog"
+            to="/products"
+            className={`${
+              isAllCategoriesActive
+                ? "font-bold border-b-2 border-customPurple"
+                : "hover:text-blue-950"
+            }`}
+          >
+            Shop
+          </NavLink>
+        </li>
+
+        <li>
+          <NavLink
+            to="/submit_product"
             className={({ isActive }) =>
               isActive
                 ? "font-bold border-b-2 border-customPurple"
                 : "hover:text-blue-950"
             }
           >
-            Blog
+            Submit Product
           </NavLink>
         </li>
         <li>

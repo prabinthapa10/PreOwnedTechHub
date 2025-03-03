@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react"; 
+import React, { useState, useEffect } from "react";
 import ProductItems from "./ProductItems";
+import Title from "./Title";
 
 function Smartphone() {
   const [products, setProducts] = useState([]);

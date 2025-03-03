@@ -3,12 +3,16 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import NavMenu from "../components/NavMenu";
 import SmartWatch from "../components/SmartWatch";
+import Title from "../components/Title";
 
 function SmartwatchPage() {
   return (
     <>
       <Navbar />
       <NavMenu />
+      <div>
+        <Title titleFor="page" title="Smart Watch" />
+      </div>
       <div>
         <SmartWatch />
       </div>

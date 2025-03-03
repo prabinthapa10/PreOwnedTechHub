@@ -2,9 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import PersonIcon from "@mui/icons-material/Person";
+import SearchIcon from "@mui/icons-material/Search";
+import Button from "../components/Button";
 
-function Navbar() {
+function Navbar({ setSearch, handleSearch }) {
   const [profile, setProfile] = useState(null);
+  const navigate = useNavigate();
   const [openDropdown, setOpenDropdown] = useState(false);
 
   const handleLogout = () => {
@@ -56,11 +59,18 @@ function Navbar() {
             Pre Owned Tech Hub
           </h1>
         </Link>
-        {/* serch bar */}
-        <input
-          className="w-[600px] h-[40px] bg-customBg rounded-sm p-4 focus:outline-none"
-          placeholder="Search"
-        />
+        {/* Search bar */}
+        <div className="flex items-center space-x-2">
+          <input
+            className="w-[500px] h-[40px] bg-customBg rounded-sm p-4 focus:outline-none transition-all duration-300 ease-in-out focus:ring-2 focus:ring-blue-500 focus:bg-white"
+            placeholder="Search"
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <div onClick={handleSearch}>
+            <Button name={<SearchIcon />} className="bg-blue" />
+          </div>
+        </div>
+
         {/* login / profile */}
         <div
           className={"flex justify-center items-center space-x-3 relative p-2 "}

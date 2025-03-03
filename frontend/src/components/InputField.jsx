@@ -17,14 +17,24 @@ function InputField({
         </label>
       ) : null}
 
-      <input
-        id={id}
-        type={type}
-        placeholder={placeHolder}
-        value={value}
-        onChange={onChange}
-        className={`px-2 py-1 bg-transparent outline-none h-[40px] bg-white border-[#e5e7eb] ${className}`}
-      />
+      {type === "textarea" ? (
+        <textarea
+          id={id}
+          placeholder={placeHolder}
+          value={value}
+          onChange={onChange}
+          className={`px-2 py-1 bg-transparent outline-none h-[100px] bg-white border-[#e5e7eb] ${className}`}
+        />
+      ) : (
+        <input
+          id={id}
+          type={type}
+          placeholder={placeHolder}
+          value={value}
+          onChange={onChange}
+          className={`px-2 py-1 bg-transparent outline-none h-[40px] bg-white border-[#e5e7eb] ${className}`}
+        />
+      )}
     </div>
   );
 }

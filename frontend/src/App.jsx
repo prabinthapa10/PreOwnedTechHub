@@ -12,6 +12,8 @@ import Products from "./pages/Products";
 import SmartwatchPage from "./pages/SmartwatchPage";
 import LaptopPage from "./pages/LaptopPage";
 import SmartphonePage from "./pages/SmartphonePage";
+import Contact from "./pages/Contact";
+import SubmtiProduct from "./pages/SubmitProduct";
 
 export default function App() {
   return (
@@ -30,6 +32,8 @@ export default function App() {
           <Route path="/products/laptop" element={<LaptopPage />} />
           <Route path="/products/smartwatch" element={<SmartwatchPage />} />
           <Route path="/products/phone" element={<SmartphonePage />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/submit_product" element={<SubmtiProduct />} />
         </Routes>
       </BrowserRouter>
     </div>

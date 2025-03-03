@@ -6,8 +6,11 @@ import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Toastify from "../components/Toastify";
 import { toast } from "react-toastify";
+import Footer from "../components/Footer";
+import NavMenu from "../components/NavMenu";
+import Navbar from "../components/Navbar";
 
-export default function AddProduct() {
+export default function SubmtiProduct() {
   const [token, setToken] = useState(null);
   const [formErrors, setFormErrors] = useState({});
 
@@ -68,7 +71,7 @@ export default function AddProduct() {
       return;
     }
 
-    // setIsSubmit(true);
+    setIsSubmit(true);
 
     const formData = new FormData();
     formData.append("name", productName);
@@ -110,18 +113,14 @@ export default function AddProduct() {
     navigate("/admin-dashboard");
   };
 
-  const arrow = <ArrowBackIcon />;
-
   return (
     <>
       <Toastify />
-      <div onClick={backButton}>
-        <Button name={arrow} />
+      <Navbar />
+      <div className="mt-1">
+        <NavMenu />
       </div>
-      <form
-        onSubmit={handleSubmit}
-        className="space-y-4 p-4 border rounded shadow-md"
-      >
+      <form className="w-[90%] m-auto p-4 rounded shadow-md mt-10">
         <InputField
           id="name"
           name="name"
@@ -174,7 +173,7 @@ export default function AddProduct() {
           name="category"
           value={productCategory}
           onChange={handleChangeCategory}
-          className="block w-full p-2 border rounded"
+          className="block w-full p-2 border rounded mt-5"
         >
           <option value="Laptop">Laptop</option>
           <option value="Smartphone">Smartphone/Tablet</option>
@@ -338,9 +337,12 @@ export default function AddProduct() {
         />
         {formErrors.gpu && <p className="text-red-500">{formErrors.gpu}</p>}
         <div>
-          <Button name="Add Product" />
+          <Button name="Submit Product" />
         </div>
       </form>
+      <div className="mt-10">
+        <Footer />
+      </div>
     </>
   );
 }

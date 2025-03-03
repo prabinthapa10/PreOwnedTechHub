@@ -5,7 +5,7 @@ from .serializers import RegisterSerializers, UserSerializer, ProductSerializer
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated, IsAdminUser,  AllowAny
-
+from django.db.models import Q
 
 class RegisterView(APIView):
     def post(self, request):
@@ -70,7 +70,14 @@ class ProductView(APIView):
         return [AllowAny()] 
 
     def get(self, request):
+        search_query = request.GET.get('search', '')
         products = Product.objects.all()
+
+        if search_query:
+            products = products.filter(
+                Q(name__icontains=search_query) | Q(description__icontains=search_query)
+            )
+
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
