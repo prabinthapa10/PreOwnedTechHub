@@ -7,7 +7,7 @@ import Title from "../components/Title";
 
 function LaptopPage() {
   return (
-    <div>
+    <div className="">
       <Navbar />
       <div className="mt-1">
         <NavMenu toActive="laptop" />
