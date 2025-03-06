@@ -71,12 +71,31 @@ class ProductView(APIView):
 
     def get(self, request):
         search_query = request.GET.get('search', '')
+        category = request.GET.getlist("category") 
+        min_price = request.GET.get("min_price")
+        max_price = request.GET.get("max_price")
+        brand_filter = request.GET.getlist("brand") 
+        condition_filter = request.GET.getlist("condition") 
         products = Product.objects.all()
 
         if search_query:
             products = products.filter(
                 Q(name__icontains=search_query) | Q(description__icontains=search_query)
             )
+        # Category filter
+        if category:
+            products = products.filter(category__in=category)
+        
+        if min_price:
+            products = products.filter(price__gte=min_price) 
+        if max_price:
+            products = products.filter(price__lte=max_price)
+
+        if brand_filter:
+            products = products.filter(brand__in=brand_filter)
+
+        if condition_filter:
+            products = products.filter(condition__in=condition_filter)
 
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -99,18 +118,97 @@ class ProductView(APIView):
 class LaptopView(APIView): 
     def get(self, request):
         products = Product.objects.filter(category="Laptop")  
+        search_query = request.GET.get('search', '')
+        category = request.GET.getlist("category") 
+        min_price = request.GET.get("min_price")
+        max_price = request.GET.get("max_price")
+        brand_filter = request.GET.getlist("brand") 
+        condition_filter = request.GET.getlist("condition") 
+        products = Product.objects.all()
+
+        if search_query:
+            products = products.filter(
+                Q(name__icontains=search_query) | Q(description__icontains=search_query)
+            )
+        # Category filter
+        if category:
+            products = products.filter(category__in=category)
+        
+        if min_price:
+            products = products.filter(price__gte=min_price) 
+        if max_price:
+            products = products.filter(price__lte=max_price)
+
+        if brand_filter:
+            products = products.filter(brand__in=brand_filter)
+
+        if condition_filter:
+            products = products.filter(condition__in=condition_filter)
+
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class SmartPhonesView(APIView): 
     def get(self, request):
-        products = Product.objects.filter(category="Smartphone")  
+        products = Product.objects.filter(category="Smartphone")
+        search_query = request.GET.get('search', '')
+        category = request.GET.getlist("category") 
+        min_price = request.GET.get("min_price")
+        max_price = request.GET.get("max_price")
+        brand_filter = request.GET.getlist("brand") 
+        condition_filter = request.GET.getlist("condition") 
+
+        if search_query:
+            products = products.filter(
+                Q(name__icontains=search_query) | Q(description__icontains=search_query)
+            )
+        # Category filter
+        if category:
+            products = products.filter(category__in=category)
+        
+        if min_price:
+            products = products.filter(price__gte=min_price) 
+        if max_price:
+            products = products.filter(price__lte=max_price)
+
+        if brand_filter:
+            products = products.filter(brand__in=brand_filter)
+
+        if condition_filter:
+            products = products.filter(condition__in=condition_filter)
+
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
 class SmartwatchView(APIView): 
     def get(self, request):
         products = Product.objects.filter(category="Smartwatch")  
+        search_query = request.GET.get('search', '')
+        category = request.GET.getlist("category") 
+        min_price = request.GET.get("min_price")
+        max_price = request.GET.get("max_price")
+        brand_filter = request.GET.getlist("brand") 
+        condition_filter = request.GET.getlist("condition") 
+
+        if search_query:
+            products = products.filter(
+                Q(name__icontains=search_query) | Q(description__icontains=search_query)
+            )
+        # Category filter
+        if category:
+            products = products.filter(category__in=category)
+        
+        if min_price:
+            products = products.filter(price__gte=min_price) 
+        if max_price:
+            products = products.filter(price__lte=max_price)
+
+        if brand_filter:
+            products = products.filter(brand__in=brand_filter)
+
+        if condition_filter:
+            products = products.filter(condition__in=condition_filter)
+
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     

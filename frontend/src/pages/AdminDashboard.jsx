@@ -50,7 +50,6 @@ function AdminDashboard() {
   };
 
   useEffect(() => {
-    toast.success("Success! Login successful.");
     const token = localStorage.getItem("access_token");
 
     if (token) {
@@ -210,8 +209,8 @@ function AdminDashboard() {
                       <th className="border-2 px-4 py-2">Description</th>
                       <th className="border-2 px-4 py-2">Price</th>
                       <th className="border-2 px-4 py-2">Category</th>
-                      <th className="border-2 px-4 py-2">Brand</th>
-                      <th className="border-2 px-4 py-2">Condition</th>
+                      <th className="border-2 px-4 py-2">Conditon</th>
+                      <th className="border-2 px-4 py-2">Delete</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -221,6 +220,9 @@ function AdminDashboard() {
                         className="border border-purple-500 text-center"
                       >
                         <td className="border-2 px-4 py-2">{index + 1}</td>
+                        <td className="border-2 px-4 py-2">
+                          {product.id || "-"}
+                        </td>
                         <td className="border-2 px-4 py-2">
                           {product.name || "-"}
                         </td>
@@ -232,9 +234,6 @@ function AdminDashboard() {
                         </td>
                         <td className="border-2 px-4 py-2">
                           {product.category || "-"}
-                        </td>
-                        <td className="border-2 px-4 py-2">
-                          {product.brand || "-"}
                         </td>
                         <td className="border-2 px-4 py-2">
                           {product.condition || "-"}

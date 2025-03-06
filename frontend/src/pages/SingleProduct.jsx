@@ -22,6 +22,7 @@ function SingleProduct() {
       .then((response) => response.json())
       .then((data) => {
         setProduct(data);
+        console.log("Fetched product:", data);
       })
       .catch((error) => console.error("Error fetching products:", error));
   }, []);

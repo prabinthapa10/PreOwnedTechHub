@@ -3,19 +3,60 @@ import ProductItems from "../components/ProductItems";
 import Navbar from "../components/Navbar";
 import NavMenu from "../components/NavMenu";
 import Title from "../components/Title";
+import Filter from "../components/Filter";
 
 function Products() {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
-
+  const [selectedFilters, setSelectedFilters] = useState({
+    category: [],
+    priceRange: [],
+    brand: [],
+    condition: [],
+  });
   const fetchProducts = () => {
-    console.log(`Fetching products with search query: "${search}"`);
+    let url = `http://127.0.0.1:8000/api/product_list/?search=${search}`;
 
-    fetch(`http://127.0.0.1:8000/api/product_list/?search=${search}`)
+    if (selectedFilters.category.length) {
+      url += `&category=${selectedFilters.category.join(",")}`;
+    }
+
+    // Extract min/max price correctly
+    const priceMapping = {
+      "Under $500": [0, 500],
+      "$500 - $1000": [500, 1000],
+      "$1000 - $2000": [1000, 2000],
+      "Over $2000": [2000, Infinity],
+    };
+
+    let minPrice = null;
+    let maxPrice = null;
+
+    selectedFilters.priceRange.forEach((range) => {
+      const [min, max] = priceMapping[range] || [];
+      if (min !== undefined && max !== undefined) {
+        if (minPrice === null || min < minPrice) minPrice = min;
+        if (maxPrice === null || max > maxPrice) maxPrice = max;
+      }
+    });
+
+    if (minPrice !== null) url += `&min_price=${minPrice}`;
+    if (maxPrice !== null && maxPrice !== Infinity)
+      url += `&max_price=${maxPrice}`;
+
+    if (selectedFilters.brand.length) {
+      url += `&brand=${selectedFilters.brand.join(",")}`;
+    }
+
+    if (selectedFilters.condition.length) {
+      url += `&condition=${selectedFilters.condition.join(",")}`;
+    }
+
+    fetch(url)
       .then((response) => response.json())
       .then((data) => {
-        console.log("Fetched data:", data);
         setProducts(data);
+        console.log(data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -24,7 +65,8 @@ function Products() {
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [search, selectedFilters]);
+
   return (
     <>
       <Navbar setSearch={setSearch} handleSearch={fetchProducts} />
@@ -34,18 +76,26 @@ function Products() {
       <div>
         <Title titleFor="page" title="Products" />
       </div>
-      <div className="w-[90%] m-auto justify-center gap-10 flex flex-wrap mt-10">
-        {products.map((product) => (
-          <ProductItems
-            category={product.category}
-            processor={product.processor}
-            screen_size={product.screen_size}
-            gpu={product.gpu}
-            price={product.price}
-            image={product.image}
-            condition={product.conditon}
-          />
-        ))}
+      <div className="flex">
+        <Filter
+          selectedFilters={selectedFilters}
+          setSelectedFilters={setSelectedFilters}
+        />
+        <div className="w-[90%] m-auto justify-center gap-10 flex flex-wrap mt-10">
+          {products.map((product) => (
+            <ProductItems
+              key={product.id}
+              id={product.id}
+              category={product.category}
+              processor={product.processor}
+              screen_size={product.screen_size}
+              gpu={product.gpu}
+              price={product.price}
+              image={product.image}
+              condition={product.conditon}
+            />
+          ))}
+        </div>
       </div>
     </>
   );

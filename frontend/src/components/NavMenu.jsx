@@ -98,7 +98,7 @@ function NavMenu() {
                 : "hover:text-blue-950"
             }
           >
-            Submit Product
+            Quick Sell
           </NavLink>
         </li>
         <li>
