@@ -6,19 +6,48 @@ import Footer from "../components/Footer";
 import ProductItems from "../components/ProductItems";
 import Title from "../components/Title";
 import { useParams } from "react-router-dom";
+import axios from "axios";
+import { ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 function SingleProduct() {
   const { id } = useParams();
+  const productId = id;
+  const [token, setToken] = useState(null);
 
-  const addToCart = (e) => {
-    e.stopPropagation();
-    alert("Added successfully!");
+  useEffect(() => {
+    const storedToken = localStorage.getItem("access_token");
+    if (storedToken) {
+      setToken(storedToken);
+    }
+    console.log("Token:", storedToken);
+    console.log(productId);
+  }, []);
+
+  const addToCart = async (e) => {
+    if (!productId) return toast.error("Invalid product ID");
+    if (!token) return toast.error("You need to log in first!");
+
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/add_to_cart/",
+        { product_id: productId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      toast.success("Added Successfully");
+    } catch (error) {
+      toast.error("Error adding product. Please try again.");
+    }
   };
 
   const [product, setProduct] = useState([]);
   // for specific product
   useEffect(() => {
-    fetch(`http://127.0.0.1:8000/api/specific_product/${id}/`)
+    fetch(`http://127.0.0.1:8000/api/specific_product/${productId}/`)
       .then((response) => response.json())
       .then((data) => {
         setProduct(data);
@@ -31,6 +60,7 @@ function SingleProduct() {
 
   return (
     <div className="bg-customBg">
+      <ToastContainer />
       <Navbar />
       <div className="mt-1">
         <NavMenu />s

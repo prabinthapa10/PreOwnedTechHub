@@ -18,9 +18,23 @@ function ProductItems({
     navigate(`/specific_product/${id}`);
   };
 
-  const addToCart = (e) => {
+  const addToCart = async (id, e) => {
     e.stopPropagation();
-    alert("Added successfully!");
+    if (!id) return alert("Invalid product ID");
+
+    try {
+      await axios.post(
+        "http://127.0.0.1:8000/api/add_to_cart/",
+        { product_id: id },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+      alert("Item added to cart!");
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Failed to add item to cart.");
+    }
   };
 
   return (
@@ -101,7 +115,10 @@ function ProductItems({
         </div>
       ) : (
         // horizontal product
-        <div className="w-[255px] h-[330px] bg-white shadow-lg transition-transform duration-300 transform hover:scale-105 hover:shadow-2xl" onClick={handleClick}>
+        <div
+          className="w-[255px] h-[330px] bg-white shadow-lg transition-transform duration-300 transform hover:scale-105 hover:shadow-2xl"
+          onClick={handleClick}
+        >
           <div>
             {condition == "New" ? (
               <div className="w-[50px] bg-[#ff0505] text-[11px]  text-center  rounded-sm">
@@ -167,7 +184,7 @@ function ProductItems({
             )}
             <p className="mt-6">💰Price: NPR {price}</p>
           </div>
-          <div>
+          <div onClick={addToCart}>
             <Button name={"Add to cart"} className={"rounded-none w-full"} />
           </div>
         </div>

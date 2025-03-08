@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import User, Product
-from .serializers import RegisterSerializers, UserSerializer, ProductSerializer
+from .models import *
+from .serializers import RegisterSerializers, UserSerializer, ProductSerializer, CartItemSerializer
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated, IsAdminUser,  AllowAny
@@ -219,3 +219,37 @@ class SpecificProduct(APIView):
             return Response({"detail": "Product not found."}, status=status.HTTP_404_NOT_FOUND)
         serializer = ProductSerializer(product) 
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+
+class AddToCartView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        product_id = request.data.get("product_id")
+        # quantity = request.data.get("quantity", 1)
+
+        product = Product.objects.get(id=product_id)
+        cart, _ = Cart.objects.get_or_create(user=user)
+
+        cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+        if not created:
+            cart_item.quantity +=1
+            # cart_item.quantity += int(quantity)
+        cart_item.save()
+
+        return Response({"message": "Item added to cart"}, status=200)
+    
+
+    def get(self, request):
+        user = request.user 
+        cart = Cart.objects.filter(user=user).first()  
+
+        if cart is None:
+            return Response({"message": "No cart found for the user"}, status=404)
+
+        user_items = CartItem.objects.filter(cart=cart)
+
+        serializer = CartItemSerializer(user_items, many=True)
+
+        return Response(serializer.data)

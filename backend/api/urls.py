@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
 from .views import *
 
 
@@ -15,5 +15,5 @@ urlpatterns = [
     path('smartwatch_list/', SmartwatchView .as_view()),
     path('smartphone_list/', SmartPhonesView.as_view()),
     path('specific_product/<int:id>/', SpecificProduct.as_view()),
-
+    path("add_to_cart/", AddToCartView.as_view()),
 ]
