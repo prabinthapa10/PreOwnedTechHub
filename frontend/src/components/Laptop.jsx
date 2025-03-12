@@ -17,12 +17,13 @@ function Laptop({ itemType, numberOfItems, className }) {
   return (
     <div className="w-[90%] m-auto flex justify-center">
       <div
-        className={`w-[90%] flex justify-center flex-wrap m-auto gap-3 mt-10 ${className}`}
+        className={`w-[90%] flex justify-center flex-wrap m-auto gap-6 mt-10 ${className}`}
       >
         {products.slice(0, numberOfItems).map((product) => (
           <ProductItems
             type={itemType}
             id={product.id}
+            name={product.name.slice(0, 20)}
             category={product.category}
             processor={product.processor}
             screen_size={product.screen_size}

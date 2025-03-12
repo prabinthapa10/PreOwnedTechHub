@@ -5,6 +5,7 @@ import NavMenu from "../components/NavMenu";
 import Title from "../components/Title";
 import Filter from "../components/Filter";
 import ProductItems from "../components/ProductItems";
+import { Portal } from "@mui/material";
 
 function SmartwatchPage() {
   const [products, setProducts] = useState([]);
@@ -85,6 +86,8 @@ function SmartwatchPage() {
             <ProductItems
               key={product.id}
               id={product.id}
+              name={product.name}
+              storage={product.storage}
               category={product.category}
               processor={product.processor}
               screen_size={product.screen_size}

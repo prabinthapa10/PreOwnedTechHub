@@ -15,10 +15,12 @@ function TopProducts() {
 
   return (
     <div>
-      <div className="w-[90%] flex justify-center flex-wrap m-auto gap-3 mt-10">
+      <div className="w-[90%] flex justify-center flex-wrap m-auto gap-6 mt-10">
         {products.slice(0, 6).map((product) => (
           <ProductItems
+            key={product.id}
             id={product.id}
+            name={product.name.slice(0, 20)}
             type="side"
             category={product.category}
             processor={product.processor}
@@ -26,6 +28,7 @@ function TopProducts() {
             gpu={product.gpu}
             price={product.price}
             image={product.image}
+            condition={product.condition}
           />
         ))}
       </div>

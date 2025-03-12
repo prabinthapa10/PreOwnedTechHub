@@ -81,7 +81,7 @@ class Product(models.Model):
     ram = models.CharField(max_length=50, blank=True, null=True)
     storage = models.CharField(max_length=50, blank=True, null=True)
     battery = models.CharField(max_length=50, blank=True, null=True)
-    screen_size = models.CharField(max_length=20, blank=True, null=True)
+    screen_size = models.CharField(max_length=50, blank=True, null=True)
     operating_system = models.CharField(max_length=100, blank=True, null=True)
 
     camera = models.CharField(max_length=50, blank=True, null=True)

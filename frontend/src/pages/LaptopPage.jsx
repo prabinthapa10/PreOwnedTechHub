@@ -87,6 +87,7 @@ function LaptopPage() {
             <ProductItems
               key={product.id}
               id={product.id}
+              name={product.name.slice(0, 20)}
               category={product.category}
               processor={product.processor}
               screen_size={product.screen_size}
@@ -94,6 +95,7 @@ function LaptopPage() {
               price={product.price}
               image={product.image}
               condition={product.conditon}
+              ram={product.ram}
             />
           ))}
         </div>

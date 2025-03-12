@@ -3,9 +3,10 @@ import InputField from "../components/InputField";
 import axios from "axios";
 import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Toastify from "../components/Toastify";
 import { toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 export default function AddProduct() {
   const [token, setToken] = useState(null);
@@ -110,237 +111,245 @@ export default function AddProduct() {
     navigate("/admin-dashboard");
   };
 
-  const arrow = <ArrowBackIcon />;
-
   return (
     <>
       <Toastify />
-      <div onClick={backButton}>
-        <Button name={arrow} />
-      </div>
-      <form
-        onSubmit={handleSubmit}
-        className="space-y-4 p-4 border rounded shadow-md"
-      >
-        <InputField
-          id="name"
-          name="name"
-          label="Product Name"
-          type="text"
-          value={productName}
-          onChange={(e) => setProductName(e.target.value)}
-          placeHolder="Product Name"
-          className="block w-full p-2 border rounded"
-        />
-        {formErrors.productName && (
-          <p className="text-red-500">{formErrors.productName}</p>
-        )}
-        <textarea
-          id="description"
-          name="description"
-          value={productDescription}
-          onChange={(e) => setProductDescription(e.target.value)}
-          placeholder="Product Description"
-          className="block w-full p-2 border rounded"
-          rows="4"
-        />
-        {formErrors.productDescription && (
-          <p className="text-red-500">{formErrors.productDescription}</p>
-        )}
-        <InputField
-          id="price"
-          name="price"
-          label="Product Price"
-          type="text"
-          value={productPrice}
-          onChange={(e) => setProductPrice(Number(e.target.value))}
-          placeHolder="Product Price"
-          className="block w-full p-2 border rounded"
-        />
-        {formErrors.productPrice && (
-          <p className="text-red-500">{formErrors.productPrice}</p>
-        )}
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => setProductImage(e.target.files[0])}
-          className="block w-full p-2 border rounded"
-        />
-        {formErrors.productImage && (
-          <p className="text-red-500">{formErrors.productImage}</p>
-        )}
-        <select
-          id="category"
-          name="category"
-          value={productCategory}
-          onChange={handleChangeCategory}
-          className="block w-full p-2 border rounded"
-        >
-          <option value="Laptop">Laptop</option>
-          <option value="Smartphone">Smartphone/Tablet</option>
-          <option value="Smartwatch">Smartwatch</option>
-        </select>
-        {formErrors.productCategory && (
-          <p className="text-red-500">{formErrors.productCategory}</p>
-        )}
-        <InputField
-          id="brand"
-          name="brand"
-          label="Product Brand"
-          type="text"
-          value={productBrand}
-          onChange={(e) => setProductBrand(e.target.value)}
-          placeHolder="Product Brand"
-          className="block w-full p-2 border rounded"
-        />
-        {formErrors.productBrand && (
-          <p className="text-red-500">{formErrors.productBrand}</p>
-        )}
-        <select
-          id="condition"
-          name="condition"
-          value={productCondition}
-          onChange={handleChangeCondition}
-          className="block w-full p-2 border rounded"
-        >
-          <option value="New">New</option>
-          <option value="Used - Like New">Used - Like New</option>
-          <option value="Used - Good">Used - Good</option>
-          <option value="Used - Fair">Used - Fair</option>
-        </select>
-        {formErrors.productCondition && (
-          <p className="text-red-500">{formErrors.productCondition}</p>
-        )}
-        <InputField
-          id="stock"
-          name="stock"
-          label="Stock"
-          type="text"
-          value={productStock}
-          onChange={(e) => setStock(Number(e.target.value))}
-          placeHolder="Stock"
-          className="block w-full p-2 border rounded"
-        />
-        {formErrors.productStock && (
-          <p className="text-red-500">{formErrors.productStock}</p>
-        )}
-        <InputField
-          id="processor"
-          name="processor"
-          label="Processor"
-          type="text"
-          value={processor}
-          onChange={(e) => setProcessor(e.target.value)}
-          placeHolder="Processor"
-          className="block w-full p-2 border rounded"
-        />
-        {formErrors.processor && (
-          <p className="text-red-500">{formErrors.processor}</p>
-        )}
-        <InputField
-          id="ram"
-          name="ram"
-          label="RAM"
-          type="text"
-          value={ram}
-          onChange={(e) => setRam(e.target.value)}
-          placeHolder="RAM"
-          className="block w-full p-2 border rounded"
-        />
-        {formErrors.ram && <p className="text-red-500">{formErrors.ram}</p>}
-        <InputField
-          id="storage"
-          name="storage"
-          label="Storage"
-          type="text"
-          value={storage}
-          onChange={(e) => setStorage(e.target.value)}
-          placeHolder="Storage"
-          className="block w-full p-2 border rounded"
-        />
-        {formErrors.storage && (
-          <p className="text-red-500">{formErrors.storage}</p>
-        )}
-        <InputField
-          id="battery"
-          name="battery"
-          label="Battery"
-          type="text"
-          value={battery}
-          onChange={(e) => setBattery(e.target.value)}
-          placeHolder="Battery"
-          className="block w-full p-2 border rounded"
-        />
-        {formErrors.battery && (
-          <p className="text-red-500">{formErrors.battery}</p>
-        )}
-        <InputField
-          id="screen_size"
-          name="screen_size"
-          label="Screen Size"
-          type="text"
-          value={screenSize}
-          onChange={(e) => setScreenSize(e.target.value)}
-          placeHolder="Screen Size"
-          className="block w-full p-2 border rounded"
-        />
-        {formErrors.screenSize && (
-          <p className="text-red-500">{formErrors.screenSize}</p>
-        )}
-        <InputField
-          id="operating_system"
-          name="operating_system"
-          label="Operating System"
-          type="text"
-          value={operatingSystem}
-          onChange={(e) => setOperatingSystem(e.target.value)}
-          placeHolder="Operating System"
-          className="block w-full p-2 border rounded"
-        />
-        {formErrors.operatingSystem && (
-          <p className="text-red-500">{formErrors.operatingSystem}</p>
-        )}
-        <InputField
-          id="camera"
-          name="camera"
-          label="Camera"
-          type="text"
-          value={camera}
-          onChange={(e) => setCamera(e.target.value)}
-          placeHolder="Camera"
-          className="block w-full p-2 border rounded"
-        />
-        {formErrors.camera && (
-          <p className="text-red-500">{formErrors.camera}</p>
-        )}
-        <InputField
-          id="sim_slots"
-          name="sim_slots"
-          label="Sim Slots"
-          type="text"
-          value={simSlots}
-          onChange={(e) => setSimSlots(e.target.value)}
-          placeHolder="Sim Slots"
-          className="block w-full p-2 border rounded"
-        />
-        {formErrors.simSlots && (
-          <p className="text-red-500">{formErrors.simSlots}</p>
-        )}
-        <InputField
-          id="gpu"
-          name="gpu"
-          label="GPU"
-          type="text"
-          value={gpu}
-          onChange={(e) => setGpu(e.target.value)}
-          placeHolder="GPU"
-          className="block w-full p-2 border rounded"
-        />
-        {formErrors.gpu && <p className="text-red-500">{formErrors.gpu}</p>}
-        <div>
-          <Button name="Add Product" />
+      <div className="flex justify-around mt-10">
+        <div onClick={backButton}>
+          <Button
+            name={
+              <FontAwesomeIcon
+                icon={faCircleArrowLeft}
+                className="text-red-500"
+              />
+            }
+            className="w-[40px] h-[40px] flex items-center justify-center bg-gray-200 rounded-full shadow-lg hover:bg-gray-300 transition-colors duration-200"
+          />
         </div>
-      </form>
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-4 p-4 rounded w-[90%] m-auto shadow-2xl mb-10"
+        >
+          <InputField
+            id="name"
+            name="name"
+            label="Product Name"
+            type="text"
+            value={productName}
+            onChange={(e) => setProductName(e.target.value)}
+            placeHolder="Product Name"
+            className="block w-full p-2 border rounded"
+          />
+          {formErrors.productName && (
+            <p className="text-red-500">{formErrors.productName}</p>
+          )}
+          <textarea
+            id="description"
+            name="description"
+            value={productDescription}
+            onChange={(e) => setProductDescription(e.target.value)}
+            placeholder="Product Description"
+            className="block w-full p-2 border rounded"
+            rows="4"
+          />
+          {formErrors.productDescription && (
+            <p className="text-red-500">{formErrors.productDescription}</p>
+          )}
+          <InputField
+            id="price"
+            name="price"
+            label="Product Price"
+            type="text"
+            value={productPrice}
+            onChange={(e) => setProductPrice(Number(e.target.value))}
+            placeHolder="Product Price"
+            className="block w-full p-2 border rounded"
+          />
+          {formErrors.productPrice && (
+            <p className="text-red-500">{formErrors.productPrice}</p>
+          )}
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setProductImage(e.target.files[0])}
+            className="block w-full p-2 border rounded"
+          />
+          {formErrors.productImage && (
+            <p className="text-red-500">{formErrors.productImage}</p>
+          )}
+          <select
+            id="category"
+            name="category"
+            value={productCategory}
+            onChange={handleChangeCategory}
+            className="block w-full p-2 border rounded"
+          >
+            <option value="Laptop">Laptop</option>
+            <option value="Smartphone">Smartphone/Tablet</option>
+            <option value="Smartwatch">Smartwatch</option>
+          </select>
+          {formErrors.productCategory && (
+            <p className="text-red-500">{formErrors.productCategory}</p>
+          )}
+          <InputField
+            id="brand"
+            name="brand"
+            label="Product Brand"
+            type="text"
+            value={productBrand}
+            onChange={(e) => setProductBrand(e.target.value)}
+            placeHolder="Product Brand"
+            className="block w-full p-2 border rounded"
+          />
+          {formErrors.productBrand && (
+            <p className="text-red-500">{formErrors.productBrand}</p>
+          )}
+          <select
+            id="condition"
+            name="condition"
+            value={productCondition}
+            onChange={handleChangeCondition}
+            className="block w-full p-2 border rounded"
+          >
+            <option value="New">New</option>
+            <option value="Used - Like New">Used - Like New</option>
+            <option value="Used - Good">Used - Good</option>
+            <option value="Used - Fair">Used - Fair</option>
+          </select>
+          {formErrors.productCondition && (
+            <p className="text-red-500">{formErrors.productCondition}</p>
+          )}
+          <InputField
+            id="stock"
+            name="stock"
+            label="Stock"
+            type="text"
+            value={productStock}
+            onChange={(e) => setStock(Number(e.target.value))}
+            placeHolder="Stock"
+            className="block w-full p-2 border rounded"
+          />
+          {formErrors.productStock && (
+            <p className="text-red-500">{formErrors.productStock}</p>
+          )}
+          <InputField
+            id="processor"
+            name="processor"
+            label="Processor"
+            type="text"
+            value={processor}
+            onChange={(e) => setProcessor(e.target.value)}
+            placeHolder="Processor"
+            className="block w-full p-2 border rounded"
+          />
+          {formErrors.processor && (
+            <p className="text-red-500">{formErrors.processor}</p>
+          )}
+          <InputField
+            id="ram"
+            name="ram"
+            label="RAM"
+            type="text"
+            value={ram}
+            onChange={(e) => setRam(e.target.value)}
+            placeHolder="RAM"
+            className="block w-full p-2 border rounded"
+          />
+          {formErrors.ram && <p className="text-red-500">{formErrors.ram}</p>}
+          <InputField
+            id="storage"
+            name="storage"
+            label="Storage"
+            type="text"
+            value={storage}
+            onChange={(e) => setStorage(e.target.value)}
+            placeHolder="Storage"
+            className="block w-full p-2 border rounded"
+          />
+          {formErrors.storage && (
+            <p className="text-red-500">{formErrors.storage}</p>
+          )}
+          <InputField
+            id="battery"
+            name="battery"
+            label="Battery"
+            type="text"
+            value={battery}
+            onChange={(e) => setBattery(e.target.value)}
+            placeHolder="Battery"
+            className="block w-full p-2 border rounded"
+          />
+          {formErrors.battery && (
+            <p className="text-red-500">{formErrors.battery}</p>
+          )}
+          <InputField
+            id="screen_size"
+            name="screen_size"
+            label="Screen Size"
+            type="text"
+            value={screenSize}
+            onChange={(e) => setScreenSize(e.target.value)}
+            placeHolder="Screen Size"
+            className="block w-full p-2 border rounded"
+          />
+          {formErrors.screenSize && (
+            <p className="text-red-500">{formErrors.screenSize}</p>
+          )}
+          <InputField
+            id="operating_system"
+            name="operating_system"
+            label="Operating System"
+            type="text"
+            value={operatingSystem}
+            onChange={(e) => setOperatingSystem(e.target.value)}
+            placeHolder="Operating System"
+            className="block w-full p-2 border rounded"
+          />
+          {formErrors.operatingSystem && (
+            <p className="text-red-500">{formErrors.operatingSystem}</p>
+          )}
+          <InputField
+            id="camera"
+            name="camera"
+            label="Camera"
+            type="text"
+            value={camera}
+            onChange={(e) => setCamera(e.target.value)}
+            placeHolder="Camera"
+            className="block w-full p-2 border rounded"
+          />
+          {formErrors.camera && (
+            <p className="text-red-500">{formErrors.camera}</p>
+          )}
+          <InputField
+            id="sim_slots"
+            name="sim_slots"
+            label="Sim Slots"
+            type="text"
+            value={simSlots}
+            onChange={(e) => setSimSlots(e.target.value)}
+            placeHolder="Sim Slots"
+            className="block w-full p-2 border rounded"
+          />
+          {formErrors.simSlots && (
+            <p className="text-red-500">{formErrors.simSlots}</p>
+          )}
+          <InputField
+            id="gpu"
+            name="gpu"
+            label="GPU"
+            type="text"
+            value={gpu}
+            onChange={(e) => setGpu(e.target.value)}
+            placeHolder="GPU"
+            className="block w-full p-2 border rounded"
+          />
+          {formErrors.gpu && <p className="text-red-500">{formErrors.gpu}</p>}
+          <div>
+            <Button name="Add Product" />
+          </div>
+        </form>
+      </div>
     </>
   );
 }

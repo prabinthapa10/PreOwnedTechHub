@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ProductItems from "./ProductItems";
 
-function SmartWatch({numberOfItems}) {
+function SmartWatch({ numberOfItems }) {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -19,7 +19,10 @@ function SmartWatch({numberOfItems}) {
         <div className="flex flex-wrap mt-10 gap-10 justify-center">
           {products.slice(0, numberOfItems).map((product) => (
             <ProductItems
+              key={product.key}
               id={product.id}
+              name={product.name}
+              storage={product.storage}
               category={product.category}
               processor={product.processor}
               screen_size={product.screen_size}
@@ -27,6 +30,7 @@ function SmartWatch({numberOfItems}) {
               price={product.price}
               image={product.image}
               condition={product.condition}
+              battery={product.battery}
             />
           ))}
         </div>

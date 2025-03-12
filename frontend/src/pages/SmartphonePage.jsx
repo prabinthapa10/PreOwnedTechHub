@@ -86,6 +86,7 @@ function SmartphonePage() {
             <ProductItems
               key={product.id}
               id={product.id}
+              name={product.name}
               category={product.category}
               processor={product.processor}
               screen_size={product.screen_size}

@@ -227,15 +227,14 @@ class AddToCartView(APIView):
     def post(self, request):
         user = request.user
         product_id = request.data.get("product_id")
-        # quantity = request.data.get("quantity", 1)
+        quantity = request.data.get("quantity", 1)
 
         product = Product.objects.get(id=product_id)
         cart, _ = Cart.objects.get_or_create(user=user)
 
         cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
         if not created:
-            cart_item.quantity +=1
-            # cart_item.quantity += int(quantity)
+            cart_item.quantity += int(quantity)
         cart_item.save()
 
         return Response({"message": "Item added to cart"}, status=200)
@@ -253,3 +252,27 @@ class AddToCartView(APIView):
         serializer = CartItemSerializer(user_items, many=True)
 
         return Response(serializer.data)
+    
+    def delete(self, request):
+        user = request.user
+        product_id = request.data.get("product_id")
+
+        # Check if the product exists
+        product = Product.objects.filter(id=product_id).first()
+        if not product:
+            return Response({"error": "Product not found"}, status=404)
+
+        # Get or create the cart for the user
+        cart = Cart.objects.filter(user=user).first()
+        if not cart:
+            return Response({"error": "Cart not found"}, status=404)
+
+        # Check if the cart item exists
+        cart_item = CartItem.objects.filter(cart=cart, product=product).first()
+        if not cart_item:
+            return Response({"error": "Item not found in cart"}, status=404)
+
+        # Remove the item from the cart
+        cart_item.delete()
+
+        return Response({"message": "Item removed from cart"}, status=200)

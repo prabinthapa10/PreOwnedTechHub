@@ -13,38 +13,40 @@ import Title from "../components/Title";
 
 export default function Home() {
   return (
-    <div className="min-h-screen">
-      <div>
-        <Navbar />
-      </div>
-      <div className="mt-0.5">
-        <NavMenu />
-      </div>
-      <div className="mt-5">
-        <Banner />
-      </div>
-      <div className="mt-10">
-        <Categories />
-      </div>
-      <div className="mt-10">
-        <Title title="Latest Products" />
-        <LatestProducts />
-      </div>
-      <div className="mt-10">
-        <Title title="Top Products" />
-        <TopProducts />
-      </div>
-      <div className="mt-10">
-        <Title title="Smartphone/Tablets" />
-        <Smartphone />
-      </div>
-      <div className="mt-10">
-        <Title title="Laptops" />
-        <Laptop itemType="side" numberOfItems="6" />
-      </div>
-      <div className="mt-10">
-        <Title title="Smartwatch" />
-        <SmartWatch numberOfItems="8" />
+    <div className="">
+      <div className="mb-[100px]">
+        <div>
+          <Navbar />
+        </div>
+        <div className="mt-0.5">
+          <NavMenu />
+        </div>
+        <div className="mt-5">
+          <Banner />
+        </div>
+        <div className="mt-10">
+          <Categories />
+        </div>
+        <div className="mt-10">
+          <Title title="Latest Products" />
+          <LatestProducts />
+        </div>
+        <div className="mt-10">
+          <Title title="Top Products" />
+          <TopProducts />
+        </div>
+        <div className="mt-10">
+          <Title title="Smartphone/Tablets" />
+          <Smartphone />
+        </div>
+        <div className="mt-10">
+          <Title title="Laptops" />
+          <Laptop itemType="side" numberOfItems="6" />
+        </div>
+        <div className="mt-10">
+          <Title title="Smartwatch" />
+          <SmartWatch numberOfItems="8" />
+        </div>
       </div>
       <div className="mt-10">
         <Footer />

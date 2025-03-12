@@ -1,9 +1,11 @@
 import React from "react";
 import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
+import NPR from "./NPR";
 
 function ProductItems({
   id,
+  name,
   type,
   category,
   processor,
@@ -12,6 +14,10 @@ function ProductItems({
   price,
   image,
   condition,
+  storage,
+  ram,
+  battery,
+  camera,
 }) {
   const navigate = useNavigate();
   const handleClick = (e) => {
@@ -39,21 +45,21 @@ function ProductItems({
 
   return (
     <>
-      {/* side product */}
+      {/* Horizontal product */}
       {type == "side" ? (
         <div
           className="flex w-[380px] h-[200px] bg-white shadow-lg items-center transition-transform duration-300 transform hover:scale-105 hover:shadow-2xl"
           onClick={handleClick}
         >
-          <div className="w-[40%]">
+          <div className="w-[45%] h-full">
             <div>
               {condition == "New" ? (
-                <div className="w-[50px] bg-[#ff0505] ext-[11px]  text-center  rounded-sm">
+                <div className="w-[50px] bg-[#ff0505] text-[11px] text-center  rounded-sm">
                   <p className="">New</p>
                 </div>
               ) : null}
             </div>
-            <div className="w-[140px] h-[125px] mt-3">
+            <div className="w-[full] h-[125px] mt-3">
               <img
                 className="w-full  h-full  object-cover"
                 src={`http://127.0.0.1:8000/${image}`}
@@ -61,64 +67,79 @@ function ProductItems({
               />
             </div>
           </div>
-          <div className="flex flex-col w-[60%] ">
-            <div className="flex h-[154px] flex-col px-2 py-2 text-[13px] leading-tight bg-gray-100 rounded-lg shadow-md">
+          {/* description */}
+          <div className="flex flex-col w-[55%] bg-gray-100">
+            <div className="flex h-[125px] flex-col px-2 py-2 text-[13px]">
               {category == "Laptop" ? (
                 // for laptop
                 <>
-                  <span>
-                    🎮 <strong>High Performance:</strong> {processor}
-                  </span>
-                  <span>
-                    🖥️ <strong>Fast Display:</strong> {screen_size}
-                  </span>
-                  <span>
-                    🎮 <strong>RTX Graphics:</strong> {gpu}
-                  </span>
+                  <div className="text-center m-1">
+                    <strong className="text-[14px]">{name}</strong>
+                  </div>
+                  <div>
+                    💻 <strong>Processor:</strong> {processor}
+                  </div>
+                  <div>
+                    👀 <strong>Screen:</strong> {screen_size}
+                  </div>
+                  <div>
+                    💻 <strong>GPU:</strong> {gpu}
+                  </div>
                   <br />
                 </>
               ) : category == "Smartphone" ? (
                 // for phone
-                <strong>
-                  <span>
-                    📱 <strong>Powerful Processor:</strong> {processor}
-                  </span>
-                  <span>
-                    🔆 <strong>Vibrant Display:</strong> {screen_size}
-                  </span>
-                  <span>
-                    📸 <strong>High-Quality Camera:</strong> {gpu}
-                  </span>
+                <>
+                  <div className="text-center m-1">
+                    <strong className="text-[14px]">{name}</strong>
+                  </div>
+                  <div>
+                    📱 <strong>Processor:</strong> {processor}
+                  </div>
+                  <div>
+                    👀 <strong>Screen Size:</strong> {screen_size}
+                  </div>
+                  <div>
+                    💾 <strong>Storage:</strong> {storage}
+                  </div>
                   <br />
-                </strong>
+                </>
               ) : (
                 // for smart watch
                 <>
-                  <span>
+                  <div className="text-center m-1">
+                    <strong className="text-[14px]">{name.slice(0, 17)}</strong>
+                  </div>
+                  <div>
                     ⌚ <strong>Advanced Features:</strong> {processor}
-                  </span>
-                  <span>
+                  </div>
+                  <div>
                     🖥️ <strong>Display:</strong> {screen_size}
-                  </span>
-                  <span>
-                    🔋 <strong>Battery Life:</strong> {gpu}
-                  </span>
+                  </div>
+                  <div>
+                    🔋 <strong>Battery Life:</strong> {battery}
+                  </div>
                   <br />
                 </>
               )}
-              <p className="mt-2">💰Price: NPR {price}</p>
             </div>
-            <div onClick={addToCart}>
-              <Button name="Add to Cart" className={"w-full rounded-none"} />
+            <div>
+              <p className="mt-2 text-[13px]">
+                💰Price: <NPR /> {price}
+              </p>
+              <div onClick={addToCart}>
+                <Button name="Add to Cart" className={"w-full rounded-none"} />
+              </div>
             </div>
           </div>
         </div>
       ) : (
-        // horizontal product
+        // vertical product
         <div
           className="w-[255px] h-[330px] bg-white shadow-lg transition-transform duration-300 transform hover:scale-105 hover:shadow-2xl"
           onClick={handleClick}
         >
+          {/* new */}
           <div>
             {condition == "New" ? (
               <div className="w-[50px] bg-[#ff0505] text-[11px]  text-center  rounded-sm">
@@ -138,54 +159,68 @@ function ProductItems({
             />
           </div>
           {/* description section */}
-          <div className="w-[255px] h-[137.5px] mt-3 p-2 text-[13px] leading-tight bg-gray-100 rounded-lg shadow-md">
-            {category == "Laptop" ? (
-              // for laptop
-              <>
-                <span>
-                  🎮 <strong>High Performance:</strong> {processor}
-                </span>
-                <span>
-                  🖥️ <strong>Fast Display:</strong> {screen_size}
-                </span>
-                <span>
-                  🎮 <strong>RTX Graphics:</strong> {gpu}
-                </span>
-                <br />
-              </>
-            ) : category == "Smartphone" ? (
-              // for phone
-              <strong>
-                <span>
-                  📱 <strong>Powerful Processor:</strong> {processor}
-                </span>
-                <span>
-                  🔆 <strong>Vibrant Display:</strong> {screen_size}
-                </span>
-                <span>
-                  📸 <strong>High-Quality Camera:</strong> {gpu}
-                </span>
-                <br />
-              </strong>
-            ) : (
-              // for smart watch
-              <>
-                <span>
-                  ⌚ <strong>Advanced Features:</strong> {processor}
-                </span>
-                <span>
-                  🖥️ <strong>Display:</strong> {screen_size}
-                </span>
-                <span>
-                  🔋 <strong>Battery Life:</strong> {gpu}
-                </span>
-                <br />
-              </>
-            )}
-            <p className="mt-6">💰Price: NPR {price}</p>
-          </div>
-          <div onClick={addToCart}>
-            <Button name={"Add to cart"} className={"rounded-none w-full"} />
+          <div className="bg-gray-100">
+            <div className="w-[255px] h-[112px] mt-3 p-2 text-[13px]">
+              {category === "Laptop" ? (
+                // for laptop
+                <>
+                  <div className="text-center m-1">
+                    <strong className="text-[14px]">{name}</strong>
+                  </div>
+                  <div>
+                    🎮 <strong>Performance:</strong> {processor}
+                  </div>
+                  <div>
+                    🖥️ <strong>Display:</strong> {screen_size}
+                  </div>
+                  <div>
+                    🎮 <strong>Graphics:</strong> {gpu}
+                  </div>
+                </>
+              ) : category === "Smartphone" ? (
+                // for phone
+                <>
+                  <div className="text-center m-1">
+                    <strong className="text-[14px]">{name}</strong>
+                  </div>
+                  <div>
+                    📱 <strong>Processor:</strong> {processor}
+                  </div>
+                  <div>
+                    👀 <strong>Screen Size:</strong> {screen_size}
+                  </div>
+                  <div>
+                    📸 <strong>Camera:</strong> {camera}
+                  </div>
+                </>
+              ) : category === "Smartwatch" ? (
+                // for smartwatch
+                <>
+                  <div className="text-center m-1">
+                    <strong className="text-[14px]">{name}</strong>
+                  </div>
+                  <div>
+                    ⌚ <strong>Processor:</strong> {processor}
+                  </div>
+                  <div>
+                    🖥️ <strong>Display:</strong> {screen_size}
+                  </div>
+                  <div>
+                    🔋 <strong>Battery Life:</strong> {battery}
+                  </div>
+                  <br />
+                </>
+              ) : null}
+            </div>
+
+            <div>
+              <p className="text-[13px]">
+                💰 Price: <NPR /> {price}
+              </p>
+              <div onClick={addToCart}>
+                <Button name="Add to cart" className="rounded-none w-full" />
+              </div>
+            </div>
           </div>
         </div>
       )}

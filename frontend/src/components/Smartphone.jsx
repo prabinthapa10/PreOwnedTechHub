@@ -20,14 +20,17 @@ function Smartphone() {
         <div className="flex flex-wrap mt-10 gap-10 justify-center">
           {products.slice(1, 9).map((product) => (
             <ProductItems
+              key={product.id}
               id={product.id}
               category={product.category}
+              name={product.name}
               processor={product.processor}
               screen_size={product.screen_size}
               gpu={product.gpu}
               price={product.price}
               image={product.image}
               condition={product.condition}
+              camera={product.camera}
             />
           ))}
         </div>

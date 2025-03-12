@@ -16,4 +16,5 @@ urlpatterns = [
     path('smartphone_list/', SmartPhonesView.as_view()),
     path('specific_product/<int:id>/', SpecificProduct.as_view()),
     path("add_to_cart/", AddToCartView.as_view()),
+    path('api/add_to_cart/<int:product_id>/', AddToCartView.as_view()),
 ]

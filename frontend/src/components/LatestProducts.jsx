@@ -20,13 +20,16 @@ function LatestProducts() {
         <div className="flex flex-wrap mt-10 gap-10 justify-center">
           {products.slice(0, 4).map((product) => (
             <ProductItems
+              key={product.id}
               id={product.id}
+              name={product.name}
               category={product.category}
               processor={product.processor}
               screen_size={product.screen_size}
               gpu={product.gpu}
               price={product.price}
               image={product.image}
+              condition={product.condition}
             />
           ))}
         </div>

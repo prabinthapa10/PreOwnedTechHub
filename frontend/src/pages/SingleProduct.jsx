@@ -63,16 +63,13 @@ function SingleProduct() {
       <ToastContainer />
       <Navbar />
       <div className="mt-1">
-        <NavMenu />s
+        <NavMenu />
       </div>
       <div className="bg-white w-[90%] h-[550px] mt-10 m-auto flex justify-center ">
         {/* Left Box */}
         <div className="flex ">
           <div className="border w-[100px] h-[35%] mt-[30px] ">
             <ul className="">
-              <li className="border-b p-3 text-gray-800 hover:bg-gray-200">
-                {product.name}
-              </li>
               <li className="border-b p-3 text-gray-800 hover:bg-gray-200">
                 Hello
               </li>
@@ -93,39 +90,61 @@ function SingleProduct() {
 
         {/* Right Box */}
         <div className="w-[60%] h-[500px] p-6 mt-6 shadow-lg rounded-lg ">
-          <h1 className="font-bold h-[90px] text-2xl mb-4 text-gray-800">
-            Lenovo LOQ 15IRH8 (12th Gen Intel Core i5 12450H Processor | 8GB
-            DDR5 RAM | 512GB SSD | NVIDIA GeForce RTX 2050 4GB Graphics Card |
-            15.6-inch FHD 144Hz Display | 1 Year Warranty)
+          <h1 className="font-bold h-[80px] text-2xl mb-4 text-gray-800">
+            {product.name} ({product.processor} | {product.ram} RAM |{" "}
+            {product.storage} | {product.gpu} | {product.screen_size} |{" "}
+            {product.battery})
           </h1>
-          <p className="text-gray-600 mb-4">Reviews ****</p>
+          <strong className="text-gray-600 mb-4">Reviews ****</strong>
           <p className="font-bold text-xl text-gray-900">PRICE: NPR 1,00,000</p>
 
           <ul className="bg-gray-100 p-4 mt-6 rounded-lg shadow-md">
             <h3 className="text-xl font-semibold mb-3 text-gray-800">
-              Key Specifications: {product.name}
+              Key Specifications:
             </h3>
             <li className="flex items-center mb-2">
-              <span className="text-sm font-medium text-gray-700 mr-2">🎮</span>
-              <span className="text-sm text-gray-700">{product.processor}</span>
-            </li>
-            <li className="flex items-center mb-2">
-              <span className="text-sm font-medium text-gray-700 mr-2">🖥️</span>
+              <span className="text-sm font-medium text-gray-700 mr-2">🛠️</span>
               <span className="text-sm text-gray-700">
-                {product.screen_size}
+                <strong>Condition:</strong> {product.condition}
               </span>
             </li>
             <li className="flex items-center mb-2">
               <span className="text-sm font-medium text-gray-700 mr-2">🎮</span>
-              <span className="text-sm text-gray-700">{product.gpu}</span>
+              <span className="text-sm text-gray-700">
+                <strong>Processor: </strong>
+                {product.processor}
+              </span>
             </li>
             <li className="flex items-center mb-2">
-              <span className="text-sm font-medium text-gray-700 mr-2">🎮</span>
-              <span className="text-sm text-gray-700">{product.gpu}</span>
+              <strong className="text-sm font-medium text-gray-700 mr-2">
+                🖥️
+              </strong>
+              <span className="text-sm text-gray-700">
+                <strong>Screen Size: </strong>
+                {product.screen_size}
+              </span>
+            </li>
+            <li className="flex items-center mb-2">
+              <strong className="text-sm font-medium text-gray-700 mr-2">
+                🎮
+              </strong>
+              <span className="text-sm text-gray-700">
+                <strong>GPU: </strong> {product.gpu}
+              </span>
             </li>
             <li className="flex items-center mb-2">
               <span className="text-sm font-medium text-gray-700 mr-2">💾</span>
-              <span className="text-sm text-gray-700">{product.ram}</span>
+              <span className="text-sm text-gray-700">
+                <strong>RAM:</strong> {product.ram}
+              </span>
+            </li>
+            <li className="flex items-center mb-2">
+              <strong className="text-sm font-medium text-gray-700 mr-2">
+                💽
+              </strong>
+              <span className="text-sm text-gray-700">
+                <strong>Storage:</strong> {product.storage}
+              </span>
             </li>
           </ul>
           <div onClick={addToCart}>
