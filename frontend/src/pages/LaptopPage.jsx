@@ -12,22 +12,27 @@ function LaptopPage() {
   const [selectedFilters, setSelectedFilters] = useState({
     category: [],
     priceRange: [],
-    brand: [],
-    condition: [],
+    brands: [],
+    conditions: [],
+    ram: [],
+    storage: [],
   });
   const fetchProducts = () => {
     let url = `http://127.0.0.1:8000/api/laptop_list/?search=${search}`;
 
     if (selectedFilters.category.length) {
-      url += `&category=${selectedFilters.category.join(",")}`;
+      url += `&category=${selectedFilters.category.join("&category=")}`;
     }
 
-    // Extract min/max price correctly
+    if (selectedFilters.brands.length) {
+      url += `&brand=${selectedFilters.brands.join("&brand=")}`;
+    }
+
     const priceMapping = {
-      "Under $500": [0, 500],
-      "$500 - $1000": [500, 1000],
-      "$1000 - $2000": [1000, 2000],
-      "Over $2000": [2000, Infinity],
+      "Under 50000": [0, 50000],
+      "50000 - 100000": [50000, 100000],
+      "100000 - 200000": [100000, 200000],
+      "Over 200000": [200000, Infinity],
     };
 
     let minPrice = null;
@@ -45,19 +50,20 @@ function LaptopPage() {
     if (maxPrice !== null && maxPrice !== Infinity)
       url += `&max_price=${maxPrice}`;
 
-    if (selectedFilters.brand.length) {
-      url += `&brand=${selectedFilters.brand.join(",")}`;
+    if (selectedFilters.conditions.length) {
+      url += `&condition=${selectedFilters.conditions.join(",")}`;
     }
 
-    if (selectedFilters.condition.length) {
-      url += `&condition=${selectedFilters.condition.join(",")}`;
+    if (selectedFilters.ram.length) {
+      url += `&ram=${selectedFilters.ram.join("&ram=")}`;
     }
-
+    if (selectedFilters.storage.length) {
+      url += `&storage=${selectedFilters.storage.join("&storage=")}`;
+    }
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);
-        console.log(data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -66,6 +72,7 @@ function LaptopPage() {
 
   useEffect(() => {
     fetchProducts();
+    console.log(selectedFilters.brands);
   }, [search, selectedFilters]);
   return (
     <div className="">
@@ -78,7 +85,7 @@ function LaptopPage() {
       </div>
       <div className="flex">
         <Filter
-          filterFor="laptop"
+          product="laptop"
           selectedFilters={selectedFilters}
           setSelectedFilters={setSelectedFilters}
         />

@@ -20,11 +20,11 @@ function Products() {
     let url = `http://127.0.0.1:8000/api/product_list/?search=${search}`;
 
     if (selectedFilters.category.length) {
-      url += `&category=${selectedFilters.category.join(",")}`;
+      url += `&category=${selectedFilters.category.join("&category=")}`;
     }
 
     if (selectedFilters.brands.length) {
-      url += `&brand=${selectedFilters.brands.join(",")}`;
+      url += `&brand=${selectedFilters.brands.join("&brand=")}`;
     }
 
     const priceMapping = {
@@ -54,10 +54,10 @@ function Products() {
     }
 
     if (selectedFilters.ram.length) {
-      url += `&ram=${selectedFilters.ram.join(",")}`;
+      url += `&ram=${selectedFilters.ram.join("&ram=")}`;
     }
     if (selectedFilters.storage.length) {
-      url += `&storage=${selectedFilters.storage.join(",")}`;
+      url += `&storage=${selectedFilters.storage.join("&storage=")}`;
     }
 
     fetch(url)

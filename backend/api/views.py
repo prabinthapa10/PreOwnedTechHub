@@ -74,7 +74,7 @@ class ProductView(APIView):
         category = request.GET.getlist("category") 
         min_price = request.GET.get("min_price")
         max_price = request.GET.get("max_price")
-        brand_filter = request.GET.getlist("brand") 
+        brand_filter = request.GET.getlist("brand")
         condition_filter = request.GET.getlist("condition") 
         ram_filter = request.GET.getlist("ram") 
         storage_filter = request.GET.getlist("storage") 
@@ -131,9 +131,8 @@ class LaptopView(APIView):
         category = request.GET.getlist("category") 
         min_price = request.GET.get("min_price")
         max_price = request.GET.get("max_price")
-        brand_filter = request.GET.getlist("brand") 
+        brand_filter = request.GET.getlist("brand")
         condition_filter = request.GET.getlist("condition") 
-        products = Product.objects.all()
 
         if search_query:
             products = products.filter(
