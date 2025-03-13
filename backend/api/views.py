@@ -76,6 +76,8 @@ class ProductView(APIView):
         max_price = request.GET.get("max_price")
         brand_filter = request.GET.getlist("brand") 
         condition_filter = request.GET.getlist("condition") 
+        ram_filter = request.GET.getlist("ram") 
+        storage_filter = request.GET.getlist("storage") 
         products = Product.objects.all()
 
         if search_query:
@@ -97,6 +99,12 @@ class ProductView(APIView):
         if condition_filter:
             products = products.filter(condition__in=condition_filter)
 
+        if ram_filter:
+            products = products.filter(ram__in=ram_filter)
+
+        if storage_filter:
+            products = products.filter(storage__in=storage_filter)
+
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
@@ -114,6 +122,7 @@ class ProductView(APIView):
             return Response({"message": "Product deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
         except Product.DoesNotExist:
             return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
+
 
 class LaptopView(APIView): 
     def get(self, request):
@@ -211,7 +220,56 @@ class SmartwatchView(APIView):
 
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
+# fitler options
+class FilterOptionsView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        price_ranges = ["Under 50000", "50000 - 100000", "100000 - 200000", "Over 200000"]
+        category = request.GET.get("category", None)
+
+        
+        if not category:
+            categories = Product.objects.values_list("category", flat=True).distinct()
+            brands = Product.objects.values_list("brand", flat=True).distinct()
+            conditions = Product.objects.values_list("condition", flat=True).distinct()
+            rams = Product.objects.values_list("ram", flat=True).distinct()
+            storages = Product.objects.values_list("storage", flat=True).distinct()
+
+            return Response(
+                {
+                    "categories": list(categories),
+                    "priceRange": price_ranges,
+                    "brands": list(brands),
+                    "conditions": list(conditions),
+                    "ram": list(rams),
+                    "storage": list(storages),
+                },
+                status=status.HTTP_200_OK
+            )
+
+        # Filter products by category
+        products = Product.objects.filter(category=category)
+
+        # Get distinct filter options
+        brands = products.values_list("brand", flat=True).distinct()
+        conditions = products.values_list("condition", flat=True).distinct()
+        rams = products.values_list("ram", flat=True).distinct()
+        storages = products.values_list("storage", flat=True).distinct()
+
+        # Response
+        filter_options = {
+            "categories": category,
+            "priceRange": price_ranges,
+            "brands": list(brands),
+            "conditions": list(conditions),
+            "ram": list(rams),
+            "storage": list(storages),
+        }
+
+        return Response(filter_options, status=status.HTTP_200_OK)
+
 class SpecificProduct(APIView):
     def get(self, request, id):  
         product = Product.objects.filter(id=id).first()

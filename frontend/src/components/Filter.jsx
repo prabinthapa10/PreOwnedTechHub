@@ -1,148 +1,99 @@
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import Button from "../components/Button";
-import React, { useState } from "react";
 
-function Filter({
-  filterFor,
-  selectedFilters = { category: [], priceRange: [], brand: [], condition: [] },
-  setSelectedFilters,
-}) {
-  const categories =
-    filterFor === "laptop"
-      ? ["Gaming Laptops", "2-in-1 Laptops"]
-      : filterFor === "phone"
-      ? ["Android", "iPhones", "Gaming Phones"]
-      : filterFor === "watch"
-      ? ["Luxury Smartwatches", "Budget Smartwatches"]
-      : ["Laptop", "Phones", "SmartWatch"];
+function Filter({ product, selectedFilters, setSelectedFilters }) {
+  const [filterOptions, setFilterOptions] = useState({
+    category: [],
+    priceRange: [],
+    brands: [],
+    conditions: [],
+    ram: [],
+    storage: [],
+  });
+  useEffect(() => {
+    const fetchFilters = async () => {
+      try {
+        const url = product
+          ? `http://127.0.0.1:8000/api/filter_options/?category=${product}`
+          : "http://127.0.0.1:8000/api/filter_options/";
 
-  const priceRanges =
-    filterFor === "laptop"
-      ? ["Under $500", "$500 - $1000", "$1000 - $2000", "Over $2000"]
-      : filterFor === "phone"
-      ? ["Under $200", "$200 - $500", "$500 - $1000", "Over $1000"]
-      : filterFor === "watch"
-      ? ["Under $200", "$200 - $500", "$500 - $1000", "Over $1000"]
-      : ["Under $500", "$500 - $1000", "$1000 - $2000", "Over $2000"]; //
+        const response = await axios.get(url);
 
-  const brands =
-    filterFor === "laptop"
-      ? ["Apple", "Dell", "HP", "Lenovo", "Asus"]
-      : filterFor === "phone"
-      ? ["Apple", "Samsung", "OnePlus", "Google", "Xiaomi"]
-      : ["Apple", "Garmin", "Fitbit", "Samsung", "Fossil"];
+        if (response.data) {
+          setFilterOptions({
+            category: [].concat(response.data.categories || []),
+            priceRange: response.data.priceRange || [],
+            brands: response.data.brands || [],
+            conditions: response.data.conditions || [],
+            ram: response.data.ram || [],
+            storage: response.data.storage || [],
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching filters:", error);
+      }
+    };
 
-  const conditions =
-    filterFor === "laptop"
-      ? ["New", "Refurbished", "Used"]
-      : filterFor === "phone"
-      ? ["New", "Refurbished", "Used"]
-      : filterFor === "watch"
-      ? ["New", "Refurbished"]
-      : ["New", "Refurbished", "Used"];
+    fetchFilters();
+  }, [product]);
 
-  const handleFilterChange = (type, value) => {
-    setSelectedFilters((prevFilters) => {
-      let updatedFilter;
+  // Handle checkbox selection
+  const handleCheckboxChange = (category, value) => {
+    setSelectedFilters((prevState) => {
+      const newSelection = [...prevState[category]];
+      const index = newSelection.indexOf(value);
 
-      if (type === "priceRange") {
-        // Ensure priceRange is an array (toggle selection)
-        updatedFilter = prevFilters.priceRange.includes(value)
-          ? prevFilters.priceRange.filter((item) => item !== value)
-          : [...prevFilters.priceRange, value];
+      if (index > -1) {
+        newSelection.splice(index, 1);
       } else {
-        updatedFilter = prevFilters[type].includes(value)
-          ? prevFilters[type].filter((item) => item !== value)
-          : [...prevFilters[type], value];
+        newSelection.push(value);
       }
 
-      return { ...prevFilters, [type]: updatedFilter };
+      return { ...prevState, [category]: newSelection };
     });
   };
 
-  const handleResetFilters = () => {
+  // Reset all checkboxes
+  const handleReset = () => {
     setSelectedFilters({
       category: [],
       priceRange: [],
-      brand: [],
-      condition: [],
+      brands: [],
+      conditions: [],
+      ram: [],
+      storage: [],
     });
   };
+
   return (
-    <div className="max-w-[400px] p-4 bg-gray-100 rounded-lg shadow-md">
-      <h2 className="text-lg font-semibold mb-2">Filters</h2>
+    <div className="p-4 w-[200px] border border-gray-300 rounded-lg">
+      <h3 className="text-xl font-semibold mb-4">Filter Options</h3>
 
-      {/* Categories */}
-      <div className="mb-4">
-        <h3 className="font-medium">Category</h3>
-        {categories.map((category) => (
-          <label key={category} className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              value={category}
-              checked={selectedFilters.category.includes(category)}
-              onChange={() => handleFilterChange("category", category)}
-            />
-            <span>{category}</span>
-          </label>
-        ))}
-      </div>
-
-      {/* Price Range */}
-      <div className="mb-4">
-        <h3 className="font-medium">Price</h3>
-        {priceRanges.map((price) => (
-          <label key={price} className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              value={price}
-              checked={selectedFilters.priceRange.includes(price)}
-              onChange={() => handleFilterChange("priceRange", price)}
-            />
-            <span>{price}</span>
-          </label>
-        ))}
-      </div>
-
-      {/* Brands */}
-      <div className="mb-4">
-        <h3 className="font-medium">Brand</h3>
-        {brands.map((brand) => (
-          <label key={brand} className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              value={brand}
-              checked={selectedFilters.brand.includes(brand)}
-              onChange={() => handleFilterChange("brand", brand)}
-            />
-            <span>{brand}</span>
-          </label>
-        ))}
-      </div>
-
-      {/* conditions */}
-      <div>
-        <h3 className="font-medium">Conditions</h3>
-        {conditions.map((condition) => (
-          <label key={condition} className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              value={condition}
-              checked={selectedFilters.condition.includes(condition)}
-              onChange={() => handleFilterChange("condition", condition)}
-            />
-            <span>{condition}</span>
-          </label>
-        ))}
-      </div>
-
-      {/* Reset Button */}
-      <div className="mt-4" onClick={handleResetFilters}>
-        <button
-          className="bg-customPurple text-sm p-2 w-full text-center rounded-md
-        hover:bg-gray-400 transition duration-200 ease-in-out"
-        >
-          Reset Filters
-        </button>
+      {Object.keys(filterOptions).map((key) => (
+        <div key={key} className="mb-2">
+          <h4 className="text-lg font-medium capitalize">
+            {key.replace(/([A-Z])/g, " $1")}
+          </h4>
+          <ul className="pl-4">
+            {filterOptions[key].map((option, index) => (
+              <li key={index} className="text-gray-700">
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={selectedFilters[key].includes(option)}
+                    onChange={() => handleCheckboxChange(key, option)}
+                    className="mr-2"
+                  />
+                  {option}
+                </label>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+      <div className="mt-4" onClick={handleReset}>
+        <Button name="Reset" />
       </div>
     </div>
   );

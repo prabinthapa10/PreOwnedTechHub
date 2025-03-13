@@ -93,7 +93,7 @@ function SingleProduct() {
           <h1 className="font-bold h-[80px] text-2xl mb-4 text-gray-800">
             {product.name} ({product.processor} | {product.ram} RAM |{" "}
             {product.storage} | {product.gpu} | {product.screen_size} |{" "}
-            {product.battery})
+            {product.battery} | {product.sim_slots} | {product.camera})
           </h1>
           <strong className="text-gray-600 mb-4">Reviews ****</strong>
           <p className="font-bold text-xl text-gray-900">PRICE: NPR 1,00,000</p>
