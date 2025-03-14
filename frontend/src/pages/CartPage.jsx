@@ -10,12 +10,47 @@ function CartPage() {
   const [productDetails, setProductDetails] = useState([]);
   const token = localStorage.getItem("access_token");
 
+  // Calculate Sub Total dynamically
+  const calculateSubTotal = () => {
+    return productDetails.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    );
+  };
+
+  // 10% discunt
+  const calculateDiscount = () => {
+    return calculateSubTotal() * 0.1;
+  };
+
+  // 12% task
+  const calculateTax = () => {
+    const tax = (calculateSubTotal() - calculateDiscount()) * 0.12;
+    return tax.toFixed(2);
+  };
+
+  // Example of fixed shipping cost
+  const shippingCost = 200;
+
+  // Calculate the Grand Total dynamically
+  const calculateGrandTotal = () => {
+    const subTotal = calculateSubTotal();
+    const discount = calculateDiscount();
+    const tax = calculateTax();
+    const shipping = shippingCost;
+
+    const total = subTotal - discount + tax + shipping;
+    return total;
+  };
+
+  // Order summary with dynamically calculated values
   const orderSummary = [
-    { id: 1, name: "Sub Total :", value: "200" },
-    { id: 2, name: "Discount :", value: "2200" },
-    { id: 3, name: "Tax : ", value: "2400" },
-    { id: 4, name: "Shipping : ", value: "2200" },
+    { id: 1, name: "Sub Total :", value: calculateSubTotal() },
+    { id: 2, name: "Discount(10%) :", value: calculateDiscount() },
+    { id: 3, name: "Tax(12%) : ", value: calculateTax() },
+    { id: 4, name: "Shipping : ", value: shippingCost },
   ];
+  const grandTotal = calculateGrandTotal();
 
   // Fetch cart items
   useEffect(() => {
@@ -85,6 +120,7 @@ function CartPage() {
       )
     );
   };
+
   return (
     <div>
       <Navbar />
@@ -101,6 +137,7 @@ function CartPage() {
             <div className="flex w-[65%] justify-around">
               <span>Quantity</span>
               <span>Price</span>
+              <span>Total Price</span>
               <span>Action</span>
             </div>
           </div>
@@ -140,7 +177,7 @@ function CartPage() {
               <hr className="mt-9" />
               <div className="flex justify-between mt-2">
                 <strong>Total: </strong>
-                <strong>NPR 300</strong>
+                <strong>NPR {grandTotal}</strong>
               </div>
               <div className="mt-8">
                 <Button name="Add To Cart" className="w-full" />

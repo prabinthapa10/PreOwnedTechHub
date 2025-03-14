@@ -333,3 +333,25 @@ class AddToCartView(APIView):
         cart_item.delete()
 
         return Response({"message": "Item removed from cart"}, status=200)
+    
+    def patch(self, request, cart_item_id):
+        try:
+            cart_item = CartItem.objects.get(id=cart_item_id, cart__user=request.user)
+            new_quantity = request.data.get("quantity")
+
+            if new_quantity is None:
+                return Response({"error": "Quantity is required"}, status=400)
+
+            try:
+                new_quantity = int(new_quantity)
+                if new_quantity <= 0:
+                    return Response({"error": "Quantity must be greater than 0"}, status=400)
+            except ValueError:
+                return Response({"error": "Invalid quantity format"}, status=400)
+
+            cart_item.quantity = new_quantity
+            cart_item.save()
+            return Response({"message": "Quantity updated successfully"}, status=200)
+
+        except CartItem.DoesNotExist:
+            return Response({"error": "Cart item not found"}, status=404)

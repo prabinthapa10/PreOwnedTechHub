@@ -148,7 +148,7 @@ function SingleProduct() {
             </li>
           </ul>
           <div onClick={addToCart}>
-            <Button name="Order" className={"w-full rounded-none"} />
+            <Button name="Add to Cart" className={"w-full rounded-none"} />
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import NPR from "./NPR";
@@ -10,23 +10,53 @@ function CartItems({
   price,
   initialQuantity,
   onQuantityChange,
-  key,
 }) {
+  useEffect(() => {
+    console.log("Cart Item ID:", id);
+  }, [id]);
+
+  const totalPrice = price * initialQuantity;
+
   const [quantity, setQuantity] = useState(initialQuantity);
+
+  const updateQuantity = async (newQuantity) => {
+    const token = localStorage.getItem("access_token");
+
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:8000/update_cart_items/${id}/`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ quantity: newQuantity }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error updating quantity:", errorData);
+        return;
+      }
+
+      setQuantity(newQuantity);
+      onQuantityChange(id, newQuantity);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   // Increase Quantity
   const increaseQuantity = () => {
-    const newQuantity = quantity + 1;
-    setQuantity(newQuantity);
-    onQuantityChange(id, newQuantity);
+    updateQuantity(quantity + 1);
   };
 
   // Decrease Quantity
   const decreaseQuantity = () => {
     if (quantity > 1) {
-      const newQuantity = quantity - 1;
-      setQuantity(newQuantity);
-      onQuantityChange(id, newQuantity);
+      updateQuantity(quantity - 1);
     }
   };
 
@@ -81,7 +111,6 @@ function CartItems({
           <button onClick={increaseQuantity}>
             <FontAwesomeIcon icon={faPlus} />
           </button>
-          <div>{id}</div>
         </div>
 
         {/* Price */}
@@ -89,6 +118,14 @@ function CartItems({
           <p className="font-bold">
             <NPR />
             {price}
+          </p>
+        </div>
+
+        {/* Price */}
+        <div className="flex items-center">
+          <p className="font-bold">
+            <NPR />
+            {totalPrice}
           </p>
         </div>
 
