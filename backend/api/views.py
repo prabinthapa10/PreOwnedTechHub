@@ -310,26 +310,26 @@ class AddToCartView(APIView):
 
         return Response(serializer.data)
     
-    def delete(self, request):
+    def delete(self, request, product_id):
         user = request.user
-        product_id = request.data.get("product_id")
 
         # Check if the product exists
-        product = Product.objects.filter(id=product_id).first()
-        if not product:
+        try:
+            product = Product.objects.get(id=product_id)
+        except Product.DoesNotExist:
             return Response({"error": "Product not found"}, status=404)
 
-        # Get or create the cart for the user
+        # Get user's cart
         cart = Cart.objects.filter(user=user).first()
         if not cart:
             return Response({"error": "Cart not found"}, status=404)
 
-        # Check if the cart item exists
+        # Check if the product is in the cart
         cart_item = CartItem.objects.filter(cart=cart, product=product).first()
         if not cart_item:
             return Response({"error": "Item not found in cart"}, status=404)
 
-        # Remove the item from the cart
+        # Delete the cart item
         cart_item.delete()
 
         return Response({"message": "Item removed from cart"}, status=200)

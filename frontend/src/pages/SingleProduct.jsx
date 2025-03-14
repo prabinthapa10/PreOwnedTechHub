@@ -148,10 +148,12 @@ function SingleProduct() {
             </li>
           </ul>
           <div onClick={addToCart}>
-            <Button name="Add to Cart" className={"w-full rounded-none"} />
+            <Button name="Order" className={"w-full rounded-none"} />
           </div>
         </div>
       </div>
+
+      {/* similar product */}
       <div className="m-auto mt-10">
         <Title title="Similar Products" />
         <div className="flex justify-center gap-[50px] mt-10 h-[400px] bg-white w-[90%] m-auto pt-10">

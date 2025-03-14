@@ -10,6 +10,7 @@ function CartItems({
   price,
   initialQuantity,
   onQuantityChange,
+  key,
 }) {
   const [quantity, setQuantity] = useState(initialQuantity);
 
@@ -26,6 +27,32 @@ function CartItems({
       const newQuantity = quantity - 1;
       setQuantity(newQuantity);
       onQuantityChange(id, newQuantity);
+    }
+  };
+
+  const removeFromCart = async (id) => {
+    const token = localStorage.getItem("access_token");
+
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:8000/api/add_to_cart/${id}/`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.ok) {
+        const data = await response.json(); // Parse the response body as JSON
+        console.log(data.message);
+      } else {
+        const errorData = await response.json();
+        console.error(errorData || "Error removing from cart");
+      }
+    } catch (error) {
+      console.error("Error:", error);
     }
   };
 
@@ -54,6 +81,7 @@ function CartItems({
           <button onClick={increaseQuantity}>
             <FontAwesomeIcon icon={faPlus} />
           </button>
+          <div>{id}</div>
         </div>
 
         {/* Price */}
@@ -66,7 +94,7 @@ function CartItems({
 
         {/* Delete */}
         <div>
-          <button>
+          <button onClick={() => removeFromCart(id)}>
             <strong className="text-red-500 mr-10">Delete</strong>
           </button>
         </div>
