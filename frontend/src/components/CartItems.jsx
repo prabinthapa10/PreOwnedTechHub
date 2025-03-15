@@ -10,11 +10,8 @@ function CartItems({
   price,
   initialQuantity,
   onQuantityChange,
+  setRemoved,
 }) {
-  useEffect(() => {
-    console.log("Cart Item ID:", id);
-  }, [id]);
-
   const totalPrice = price * initialQuantity;
 
   const [quantity, setQuantity] = useState(initialQuantity);
@@ -81,6 +78,7 @@ function CartItems({
         const errorData = await response.json();
         console.error(errorData || "Error removing from cart");
       }
+      setRemoved(true);
     } catch (error) {
       console.error("Error:", error);
     }

@@ -15,7 +15,6 @@ import { toast } from "react-toastify";
 
 export default function Home() {
   const [addToCart, setAddToCart] = useState(null);
-
   useEffect(() => {
     if (addToCart === null) return;
     if (addToCart) {
@@ -27,7 +26,8 @@ export default function Home() {
   }, [addToCart]);
   return (
     <div className="">
-      <ToastContainer />
+      <ToastContainer position="bottom-right" />
+
       <div className="mb-[100px]">
         <div>
           <Navbar />

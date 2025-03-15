@@ -89,7 +89,7 @@ function SmartwatchPage() {
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer position="bottom-right" />
       <Navbar setSearch={setSearch} handleSearch={fetchProducts} />
       <NavMenu />
       <div>

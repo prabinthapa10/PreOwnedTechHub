@@ -90,7 +90,7 @@ function LaptopPage() {
 
   return (
     <div className="">
-      <ToastContainer />
+      <ToastContainer position="bottom-right" />
       <Navbar setSearch={setSearch} handleSearch={fetchProducts} />
       <div className="mt-1">
         <NavMenu toActive="laptop" />

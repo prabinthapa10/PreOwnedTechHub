@@ -88,7 +88,7 @@ function SmartphonePage() {
 
   return (
     <div>
-      <ToastContainer />
+      <ToastContainer position="bottom-right" />
       <Navbar />
       <div className="mt-1">
         <NavMenu />

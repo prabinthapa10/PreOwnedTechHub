@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import CartItems from "../components/CartItems";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
+import { useSyncExternalStore } from "react";
 
 function CartPage() {
   const [cartItems, setCartItems] = useState([]);
@@ -10,6 +11,7 @@ function CartPage() {
   const [productDetails, setProductDetails] = useState([]);
   const token = localStorage.getItem("access_token");
   const [noOfItems, setNoOfItems] = useState(0);
+  const [removed, setRemoved] = useState(null);
 
   // Calculate Sub Total dynamically
   const calculateSubTotal = () => {
@@ -81,7 +83,8 @@ function CartPage() {
         console.error("Error fetching cart items:", error);
         setCartItems([]);
       });
-  }, [token, cartItems]);
+    setRemoved(false);
+  }, [token, removed]);
 
   useEffect(() => {
     if (cartItems.length > 0) {
@@ -123,7 +126,7 @@ function CartPage() {
 
       fetchProductDetails();
     }
-  }, [cartItems, token]);
+  }, [cartItems]);
 
   const handleQuantityChange = (id, newQuantity) => {
     setCartItems((prevItems) =>
@@ -164,6 +167,7 @@ function CartPage() {
                     image={item.image}
                     initialQuantity={item.quantity}
                     onQuantityChange={handleQuantityChange}
+                    setRemoved={setRemoved}
                   />
                 </div>
               </>

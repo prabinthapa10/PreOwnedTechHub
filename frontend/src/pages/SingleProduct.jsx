@@ -60,7 +60,7 @@ function SingleProduct() {
 
   return (
     <div className="bg-customBg">
-      <ToastContainer />
+      <ToastContainer position="bottom-right" />
       <Navbar />
       <div className="mt-1">
         <NavMenu />
