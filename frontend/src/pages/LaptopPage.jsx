@@ -5,8 +5,11 @@ import Footer from "../components/Footer";
 import NavMenu from "../components/NavMenu";
 import Title from "../components/Title";
 import Filter from "../components/Filter";
+import { ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 function LaptopPage() {
+  const [addToCart, setAddToCart] = useState(null);
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
   const [selectedFilters, setSelectedFilters] = useState({
@@ -73,9 +76,21 @@ function LaptopPage() {
   useEffect(() => {
     fetchProducts();
     console.log(selectedFilters.brands);
-  }, [search, selectedFilters]);
+  }, [search, selectedFilters, addToCart]);
+
+  useEffect(() => {
+    if (addToCart === null) return;
+    if (addToCart) {
+      toast.success("Added Successfully");
+      console.log("added");
+    } else {
+      toast.error("Login.");
+    }
+  }, [addToCart]);
+
   return (
     <div className="">
+      <ToastContainer />
       <Navbar setSearch={setSearch} handleSearch={fetchProducts} />
       <div className="mt-1">
         <NavMenu toActive="laptop" />
@@ -103,6 +118,7 @@ function LaptopPage() {
               image={product.image}
               condition={product.conditon}
               ram={product.ram}
+              setAddToCart={setAddToCart}
             />
           ))}
         </div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ProductItems from "./ProductItems";
 
-function SmartWatch({ numberOfItems }) {
+function SmartWatch({ numberOfItems, setAddToCart}) {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -31,6 +31,7 @@ function SmartWatch({ numberOfItems }) {
               image={product.image}
               condition={product.condition}
               battery={product.battery}
+              setAddToCart={setAddToCart}
             />
           ))}
         </div>

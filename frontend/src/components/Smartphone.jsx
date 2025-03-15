@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import ProductItems from "./ProductItems";
 import Title from "./Title";
 
-function Smartphone() {
+function Smartphone({ setAddToCart }) {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -31,6 +31,7 @@ function Smartphone() {
               image={product.image}
               condition={product.condition}
               camera={product.camera}
+              setAddToCart={setAddToCart}
             />
           ))}
         </div>

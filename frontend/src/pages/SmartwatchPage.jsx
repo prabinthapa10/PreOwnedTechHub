@@ -5,9 +5,11 @@ import NavMenu from "../components/NavMenu";
 import Title from "../components/Title";
 import Filter from "../components/Filter";
 import ProductItems from "../components/ProductItems";
-import { Portal } from "@mui/material";
+import { ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 function SmartwatchPage() {
+  const [addToCart, setAddToCart] = useState(null);
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
   const [selectedFilters, setSelectedFilters] = useState({
@@ -73,10 +75,21 @@ function SmartwatchPage() {
   };
   useEffect(() => {
     fetchProducts();
-  }, [search, selectedFilters]);
+  }, [search, selectedFilters, addToCart]);
+
+  useEffect(() => {
+    if (addToCart === null) return;
+    if (addToCart) {
+      toast.success("Added Successfully");
+      console.log("added");
+    } else {
+      toast.error("Login.");
+    }
+  }, [addToCart]);
 
   return (
     <>
+      <ToastContainer />
       <Navbar setSearch={setSearch} handleSearch={fetchProducts} />
       <NavMenu />
       <div>
@@ -102,6 +115,7 @@ function SmartwatchPage() {
               price={product.price}
               image={product.image}
               condition={product.conditon}
+              setAddToCart={setAddToCart}
             />
           ))}
         </div>

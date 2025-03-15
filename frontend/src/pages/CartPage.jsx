@@ -9,13 +9,24 @@ function CartPage() {
   const [productIDs, setProductIDs] = useState([]);
   const [productDetails, setProductDetails] = useState([]);
   const token = localStorage.getItem("access_token");
+  const [noOfItems, setNoOfItems] = useState(0);
 
   // Calculate Sub Total dynamically
   const calculateSubTotal = () => {
-    return productDetails.reduce(
-      (total, item) => total + item.price * item.quantity,
-      0
-    );
+    if (!productDetails || productDetails.length === 0) return 0;
+
+    return productDetails.reduce((total, item) => {
+      // Ensure item is defined and contains the price and quantity properties
+      if (!item || item.price === undefined || item.quantity === undefined) {
+        return total; // Skip this item if it's invalid
+      }
+
+      // Otherwise, use the price and quantity values
+      const price = item.price || 0;
+      const quantity = item.quantity || 0;
+
+      return total + price * quantity;
+    }, 0);
   };
 
   // 10% discunt
@@ -26,7 +37,7 @@ function CartPage() {
   // 12% task
   const calculateTax = () => {
     const tax = (calculateSubTotal() - calculateDiscount()) * 0.12;
-    return tax.toFixed(2);
+    return Number(tax.toFixed(2));
   };
 
   // Example of fixed shipping cost
@@ -40,7 +51,7 @@ function CartPage() {
     const shipping = shippingCost;
 
     const total = subTotal - discount + tax + shipping;
-    return total;
+    return Number(total.toFixed(2));
   };
 
   // Order summary with dynamically calculated values
@@ -70,12 +81,13 @@ function CartPage() {
         console.error("Error fetching cart items:", error);
         setCartItems([]);
       });
-  }, [token]);
+  }, [token, cartItems]);
 
   useEffect(() => {
     if (cartItems.length > 0) {
       const ids = cartItems.map((item) => item.product);
       setProductIDs(ids);
+      setNoOfItems(ids.length);
     }
   }, [cartItems]);
 
@@ -128,7 +140,7 @@ function CartPage() {
         {/* left box */}
         <div className="w-[69%] border border-gray-200 bg-white rounded-3xl">
           <h1 className="font-bold text-3xl m-5">
-            Cart <span className="text-[12px]">(3 products)</span>
+            Cart <span className="text-[12px]">({noOfItems} products)</span>
           </h1>
           <div className="flex font-bold w-[95%] m-auto justify-around">
             <div className=" w-[35%] m-auto">

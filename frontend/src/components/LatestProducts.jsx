@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import ProductItems from "./ProductItems";
-import Title from "./Title";
 
-function LatestProducts() {
+
+function LatestProducts({ setAddToCart }) {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -12,10 +12,11 @@ function LatestProducts() {
         setProducts(data);
       })
       .catch((error) => console.error("Error fetching products:", error));
-  }, []);
+  });
 
   return (
     <div>
+
       <div className="w-[90%] m-auto flex justify-center ">
         <div className="flex flex-wrap mt-10 gap-10 justify-center">
           {products.slice(0, 4).map((product) => (
@@ -30,6 +31,7 @@ function LatestProducts() {
               price={product.price}
               image={product.image}
               condition={product.condition}
+              setAddToCart={setAddToCart}
             />
           ))}
         </div>

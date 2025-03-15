@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ProductItems from "./ProductItems";
 
-function TopProducts() {
+function TopProducts({ setAddToCart }) {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -29,6 +29,7 @@ function TopProducts() {
             price={product.price}
             image={product.image}
             condition={product.condition}
+            setAddToCart={setAddToCart}
           />
         ))}
       </div>

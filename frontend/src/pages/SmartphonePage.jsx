@@ -5,8 +5,11 @@ import NavMenu from "../components/NavMenu";
 import Title from "../components/Title";
 import ProductItems from "../components/ProductItems";
 import Filter from "../components/Filter";
+import { ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 function SmartphonePage() {
+  const [addToCart, setAddToCart] = useState(null);
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
   const [selectedFilters, setSelectedFilters] = useState({
@@ -71,9 +74,21 @@ function SmartphonePage() {
   };
   useEffect(() => {
     fetchProducts();
-  }, [search, selectedFilters]);
+  }, [search, selectedFilters, addToCart]);
+
+  useEffect(() => {
+    if (addToCart === null) return;
+    if (addToCart) {
+      toast.success("Added Successfully");
+      console.log("added");
+    } else {
+      toast.error("Login.");
+    }
+  }, [addToCart]);
+
   return (
     <div>
+      <ToastContainer />
       <Navbar />
       <div className="mt-1">
         <NavMenu />
@@ -100,6 +115,7 @@ function SmartphonePage() {
               price={product.price}
               image={product.image}
               condition={product.conditon}
+              setAddToCart={setAddToCart}
             />
           ))}
         </div>

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ProductItems from "./ProductItems";
-import Title from "./Title";
 
-function Laptop({ itemType, numberOfItems, className }) {
+function Laptop({ itemType, numberOfItems, className, setAddToCart }) {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -31,6 +30,7 @@ function Laptop({ itemType, numberOfItems, className }) {
             price={product.price}
             image={product.image}
             condition={product.condition}
+            setAddToCart={setAddToCart}
           />
         ))}
       </div>
