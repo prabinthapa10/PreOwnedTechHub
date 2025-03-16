@@ -82,42 +82,46 @@ function Filter({ product, selectedFilters, setSelectedFilters }) {
       <h3 className="text-xl font-semibold mb-4">Filter Options</h3>
 
       {/* Dropdown Sections */}
-      {Object.entries(filterOptions).map(([key, options]) => (
-        <div key={key} className="mb-2">
-          <h4
-            className="text-lg font-medium capitalize flex justify-between items-center cursor-pointer"
-            onClick={() => toggleDropdown(key)}
-          >
-            {key}
-            <FontAwesomeIcon
-              icon={visibleDropdown === key ? faMinus : faPlus}
-              className="ml-2"
-            />
-          </h4>
+      {Object.entries(filterOptions).map(([key, options]) => {
+        if (!Array.isArray(options) || options.length === 0) return null;
 
-          {visibleDropdown === key && (
-            <ul className="pl-4">
-              {options.map((option, index) => (
-                <li key={index} className="text-gray-700">
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={selectedFilters[key].includes(option)}
-                      onChange={() => handleCheckboxChange(key, option)}
-                      className="mr-2"
-                    />
-                    {option}
-                  </label>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      ))}
+        return (
+          <div key={key} className="mb-2">
+            <h4
+              className="text-lg font-medium capitalize flex justify-between items-center cursor-pointer"
+              onClick={() => toggleDropdown(key)}
+            >
+              {key}
+              <FontAwesomeIcon
+                icon={visibleDropdown === key ? faMinus : faPlus}
+                className="ml-2"
+              />
+            </h4>
+
+            {visibleDropdown === key && (
+              <ul className="pl-4">
+                {options.map((option, index) => (
+                  <li key={index} className="text-gray-700">
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={selectedFilters[key].includes(option)}
+                        onChange={() => handleCheckboxChange(key, option)}
+                        className="mr-2"
+                      />
+                      {option}
+                    </label>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        );
+      })}
 
       {/* Reset Button */}
       <div className="mt-4" onClick={handleReset}>
-        <Button name="Reset"  />
+        <Button name="Reset" />
       </div>
     </div>
   );

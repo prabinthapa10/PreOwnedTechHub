@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, act } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import NPR from "./NPR";
@@ -13,11 +13,18 @@ function CartItems({
   onQuantityChange,
   setRemoved,
 }) {
-  const totalPrice = price * initialQuantity;
-
   const [quantity, setQuantity] = useState(initialQuantity);
+  const total = price * quantity;
 
   console.log(productId);
+
+  const changeQuantity = (action) => {
+    if (action === "increase") {
+      setQuantity(quantity + 1);
+    } else if (action === "decrease" && quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
 
   useEffect(() => {
     const updateQuantity = async () => {
@@ -52,19 +59,7 @@ function CartItems({
     };
 
     updateQuantity();
-  }, [quantity]);
-
-  // Increase Quantity
-  const increaseQuantity = () => {
-    setQuantity(quantity + 1);
-  };
-
-  // Decrease Quantity
-  const decreaseQuantity = () => {
-    if (quantity > 1) {
-      setQuantity(quantity - 1);
-    }
-  };
+  }, [quantity, total]);
 
   const removeFromCart = async (productId) => {
     const token = localStorage.getItem("access_token");
@@ -81,7 +76,7 @@ function CartItems({
         }
       );
       if (response.ok) {
-        const data = await response.json(); // Parse the response body as JSON
+        const data = await response.json();
         console.log(data.message);
       } else {
         const errorData = await response.json();
@@ -111,11 +106,11 @@ function CartItems({
 
         {/* Quantity */}
         <div className="flex items-center space-x-3">
-          <button onClick={decreaseQuantity}>
+          <button onClick={() => changeQuantity("decrease")}>
             <FontAwesomeIcon icon={faMinus} />
           </button>
           <p className="w-6 text-center">{quantity}</p>
-          <button onClick={increaseQuantity}>
+          <button onClick={() => changeQuantity("increase")}>
             <FontAwesomeIcon icon={faPlus} />
           </button>
         </div>
@@ -132,7 +127,7 @@ function CartItems({
         <div className="flex items-center">
           <p className="font-bold">
             <NPR />
-            {totalPrice}
+            {price * quantity}
           </p>
         </div>
 

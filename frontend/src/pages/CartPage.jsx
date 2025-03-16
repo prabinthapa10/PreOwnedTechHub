@@ -3,67 +3,17 @@ import Navbar from "../components/Navbar";
 import CartItems from "../components/CartItems";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
-import { useSyncExternalStore } from "react";
+import NPR from "../components/NPR";
+import { useNavigate } from "react-router-dom";
 
 function CartPage() {
   const [cartItems, setCartItems] = useState([]);
   const token = localStorage.getItem("access_token");
   const [noOfItems, setNoOfItems] = useState(0);
   const [removed, setRemoved] = useState(null);
+  const [grandTotal, setGrandTotal] = useState(0);
+  const navigate = useNavigate();
 
-  // Calculate Sub Total dynamically
-  // const calculateSubTotal = () => {
-  //   if (!productDetails || productDetails.length === 0) return 0;
-
-  //   return productDetails.reduce((total, item) => {
-  //     // Ensure item is defined and contains the price and quantity properties
-  //     if (!item || item.price === undefined || item.quantity === undefined) {
-  //       return total;
-  //     }
-
-  //     // Otherwise, use the price and quantity values
-  //     const price = item.price || 0;
-  //     const quantity = item.quantity || 0;
-
-  //     return total + price * quantity;
-  //   }, 0);
-  // };
-
-  // // 10% discunt
-  // const calculateDiscount = () => {
-  //   return calculateSubTotal() * 0.1;
-  // };
-
-  // // 12% task
-  // const calculateTax = () => {
-  //   const tax = (calculateSubTotal() - calculateDiscount()) * 0.12;
-  //   return Number(tax.toFixed(2));
-  // };
-
-  // // Example of fixed shipping cost
-  // const shippingCost = 200;
-
-  // // Calculate the Grand Total dynamically
-  // const calculateGrandTotal = () => {
-  //   const subTotal = calculateSubTotal();
-  //   const discount = calculateDiscount();
-  //   const tax = calculateTax();
-  //   const shipping = shippingCost;
-
-  //   const total = subTotal - discount + tax + shipping;
-  //   return Number(total.toFixed(2));
-  // };
-
-  // // Order summary with dynamically calculated values
-  // const orderSummary = [
-  //   { id: 1, name: "Sub Total :", value: calculateSubTotal() },
-  //   { id: 2, name: "Discount(10%) :", value: calculateDiscount() },
-  //   { id: 3, name: "Tax(12%) : ", value: calculateTax() },
-  //   { id: 4, name: "Shipping : ", value: shippingCost },
-  // ];
-  // const grandTotal = calculateGrandTotal();
-
-  console.log(cartItems);
   // Fetch cart items
   useEffect(() => {
     if (!token) {
@@ -93,6 +43,20 @@ function CartPage() {
     );
   };
 
+  useEffect(() => {
+    setGrandTotal(
+      cartItems.reduce(
+        (total, item) => total + item.product.price * item.quantity,
+        0
+      )
+    );
+    setNoOfItems(cartItems.length);
+    console.log(cartItems);
+  }, [cartItems, grandTotal]);
+
+  const handleProceed = () => {
+    navigate("/orderpage");
+  };
   return (
     <div>
       <Navbar />
@@ -115,50 +79,48 @@ function CartPage() {
           </div>
           <ul className=" pb-[40px]">
             {cartItems.map((item) => (
-              <>
-                <div key={item.id}>
-                  <CartItems
-                    id={item.id}
-                    productId={item.product.id}
-                    name={item.product.name}
-                    price={item.product.price}
-                    image={item.product.image}
-                    initialQuantity={item.quantity}
-                    onQuantityChange={handleQuantityChange}
-                    setRemoved={setRemoved}
-                  />
-                </div>
-              </>
+              <div key={item.id}>
+                <CartItems
+                  id={item.id}
+                  productId={item.product.id}
+                  name={item.product.name}
+                  price={item.product.price}
+                  image={item.product.image}
+                  initialQuantity={item.quantity}
+                  onQuantityChange={handleQuantityChange}
+                  setRemoved={setRemoved}
+                />
+              </div>
             ))}
           </ul>
         </div>
         {/* right box */}
-        {/* <div className="w-[30%] h-[380px] bg-[#b48ff130]  rounded-3xl">
+        <div className="w-[30%] h-[380px] bg-[#b48ff130]  rounded-3xl">
           <div className="w-[80%]  m-auto mt-5 ">
             <p className="font-bold w-[135px] m-auto">Order Summary</p>
             <div className="w-[90%] m-auto mt-6">
-              {orderSummary.map((item) => (
-                <>
-                  <div className="flex justify-between mt-2">
-                    <span>{item.name} </span>{" "}
-                    <span>
-                      <strong className="text-[12px]">NPR. </strong>
-                      {item.value}
-                    </span>
-                  </div>
-                </>
-              ))}
+              <>
+                <div className="flex justify-between mt-2">
+                  <span>Total: </span>
+                  <span>
+                    <strong className="text-[12px]">NPR. </strong>
+                    {grandTotal}
+                  </span>
+                </div>
+              </>
               <hr className="mt-9" />
               <div className="flex justify-between mt-2">
                 <strong>Total: </strong>
-                <strong>NPR {grandTotal}</strong>
+                <strong>
+                  <NPR /> : {grandTotal}
+                </strong>
               </div>
-              <div className="mt-8">
+              <div className="mt-8" onClick={handleProceed}>
                 <Button name="Proceed To Payment" className="w-full" />
               </div>
             </div>
           </div>
-        </div> */}
+        </div>
       </div>
       <div className="mt-10">
         <Footer />
