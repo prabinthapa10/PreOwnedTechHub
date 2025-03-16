@@ -20,6 +20,7 @@ function Laptop({ itemType, numberOfItems, className, setAddToCart }) {
       >
         {products.slice(0, numberOfItems).map((product) => (
           <ProductItems
+            key={product.id}
             type={itemType}
             id={product.id}
             name={product.name.slice(0, 20)}

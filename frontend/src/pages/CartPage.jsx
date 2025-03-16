@@ -196,7 +196,7 @@ function CartPage() {
                 <strong>NPR {grandTotal}</strong>
               </div>
               <div className="mt-8">
-                <Button name="Add To Cart" className="w-full" />
+                <Button name="Proceed To Payment" className="w-full" />
               </div>
             </div>
           </div>

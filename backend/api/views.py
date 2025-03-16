@@ -1,11 +1,12 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import *
-from .serializers import RegisterSerializers, UserSerializer, ProductSerializer, CartItemSerializer
+from .serializers import RegisterSerializers, UserSerializer, ProductSerializer, CartItemSerializer, OrderSerializer, OrderItemSerializer
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated, IsAdminUser,  AllowAny
 from django.db.models import Q
+from decimal import Decimal
 
 class RegisterView(APIView):
     def post(self, request):
@@ -355,3 +356,48 @@ class AddToCartView(APIView):
 
         except CartItem.DoesNotExist:
             return Response({"error": "Cart item not found"}, status=404)
+        
+class OrderView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        cart = Cart.objects.filter(user=user).first()
+        cart_items = CartItem.objects.filter(cart=cart)
+        
+        if not cart_items.exists():
+            return Response({"error": "Cart is empty"}, status=400)
+
+        total_amount = sum(item.total_price() for item in cart_items)
+
+         # Get address details from request data
+        address = request.data.get("address")
+        city = request.data.get("city")
+        zip_code = request.data.get("zip_code")
+        country = request.data.get("country")
+
+        if not address or not city or not zip_code or not country:
+            return Response({"error": "Please provide complete address details"}, status=400)
+
+        order = Order.objects.create(
+            user=user,
+            total_amount=total_amount,
+            address=address,
+            city=city,
+            zip_code=zip_code,
+            country=country
+        )
+
+        # Move cart items to order items
+        for item in cart_items:
+            OrderItem.objects.create(
+                order=order,
+                product_name=item.product.name,
+                price=Decimal(item.product.price), 
+                quantity=item.quantity
+            )
+
+        # Clear the cart
+        cart_items.delete()
+
+        return Response({"message": "Order placed successfully!", "order_id": order.id}, status=201)

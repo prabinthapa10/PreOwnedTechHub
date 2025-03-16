@@ -14,6 +14,7 @@ import LaptopPage from "./pages/LaptopPage";
 import SmartphonePage from "./pages/SmartphonePage";
 import Contact from "./pages/Contact";
 import SubmtiProduct from "./pages/SubmitProduct";
+import OrderPage from "./pages/OrderPage";
 
 export default function App() {
   return (
@@ -33,7 +34,8 @@ export default function App() {
           <Route path="/products/smartwatch" element={<SmartwatchPage />} />
           <Route path="/products/phone" element={<SmartphonePage />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/submit_product" element={<SubmtiProduct />} />
+          <Route path="/submit_product" element={<SubmtiProduct />} />0
+          <Route path="/orderpage" element={<OrderPage />} />
         </Routes>
       </BrowserRouter>
     </div>

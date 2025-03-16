@@ -16,7 +16,7 @@ function Banner() {
   };
   const image = [
     { id: "1", src: "/images/slider/banner1.png" },
-    { id: "1", src: "/images/slider/banner5.png" },
+    { id: "2", src: "/images/slider/banner5.png" },
   ];
   return (
     <div className="flex justify-center bg-customBg">
@@ -25,7 +25,7 @@ function Banner() {
         <div className="w-[70%] transition-transform duration-300 transform hover:scale-102 hover:shadow-2xl">
           <Slider {...settings}>
             {image.map((image) => (
-              <div className="h-[380px]">
+              <div key={image.id} className="h-[380px]">
                 <img
                   className="w-full h-full object-cover"
                   src={image.src}
