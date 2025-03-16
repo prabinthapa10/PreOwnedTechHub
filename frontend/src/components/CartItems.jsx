@@ -5,6 +5,7 @@ import NPR from "./NPR";
 
 function CartItems({
   id,
+  productId,
   name,
   image,
   price,
@@ -16,53 +17,61 @@ function CartItems({
 
   const [quantity, setQuantity] = useState(initialQuantity);
 
-  const updateQuantity = async (newQuantity) => {
-    const token = localStorage.getItem("access_token");
+  console.log(productId);
 
-    try {
-      const response = await fetch(
-        `http://127.0.0.1:8000/update_cart_items/${id}/`,
-        {
-          method: "PATCH",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ quantity: newQuantity }),
+  useEffect(() => {
+    const updateQuantity = async () => {
+      const token = localStorage.getItem("access_token");
+
+      try {
+        const response = await fetch(
+          `http://127.0.0.1:8000/api/update_cart_items/${id}/`,
+          {
+            method: "PATCH",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              quantity: quantity,
+            }),
+          }
+        );
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error("Error updating quantity:", errorData);
+          return;
         }
-      );
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("Error updating quantity:", errorData);
-        return;
+        setQuantity(quantity);
+        onQuantityChange(productId, quantity);
+      } catch (error) {
+        console.error("Error:", error);
       }
+    };
 
-      setQuantity(newQuantity);
-      onQuantityChange(id, newQuantity);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
+    updateQuantity();
+  }, [quantity]);
 
   // Increase Quantity
   const increaseQuantity = () => {
-    updateQuantity(quantity + 1);
+    setQuantity(quantity + 1);
   };
 
   // Decrease Quantity
   const decreaseQuantity = () => {
     if (quantity > 1) {
-      updateQuantity(quantity - 1);
+      setQuantity(quantity - 1);
     }
   };
 
-  const removeFromCart = async (id) => {
+  const removeFromCart = async (productId) => {
     const token = localStorage.getItem("access_token");
 
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/api/add_to_cart/${id}/`,
+        `http://127.0.0.1:8000/api/add_to_cart/${productId}/`,
         {
           method: "DELETE",
           headers: {
@@ -129,7 +138,7 @@ function CartItems({
 
         {/* Delete */}
         <div>
-          <button onClick={() => removeFromCart(id)}>
+          <button onClick={() => removeFromCart(productId)}>
             <strong className="text-red-500 mr-10">Delete</strong>
           </button>
         </div>

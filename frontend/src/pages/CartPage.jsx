@@ -7,64 +7,63 @@ import { useSyncExternalStore } from "react";
 
 function CartPage() {
   const [cartItems, setCartItems] = useState([]);
-  const [productIDs, setProductIDs] = useState([]);
-  const [productDetails, setProductDetails] = useState([]);
   const token = localStorage.getItem("access_token");
   const [noOfItems, setNoOfItems] = useState(0);
   const [removed, setRemoved] = useState(null);
 
   // Calculate Sub Total dynamically
-  const calculateSubTotal = () => {
-    if (!productDetails || productDetails.length === 0) return 0;
+  // const calculateSubTotal = () => {
+  //   if (!productDetails || productDetails.length === 0) return 0;
 
-    return productDetails.reduce((total, item) => {
-      // Ensure item is defined and contains the price and quantity properties
-      if (!item || item.price === undefined || item.quantity === undefined) {
-        return total; // Skip this item if it's invalid
-      }
+  //   return productDetails.reduce((total, item) => {
+  //     // Ensure item is defined and contains the price and quantity properties
+  //     if (!item || item.price === undefined || item.quantity === undefined) {
+  //       return total;
+  //     }
 
-      // Otherwise, use the price and quantity values
-      const price = item.price || 0;
-      const quantity = item.quantity || 0;
+  //     // Otherwise, use the price and quantity values
+  //     const price = item.price || 0;
+  //     const quantity = item.quantity || 0;
 
-      return total + price * quantity;
-    }, 0);
-  };
+  //     return total + price * quantity;
+  //   }, 0);
+  // };
 
-  // 10% discunt
-  const calculateDiscount = () => {
-    return calculateSubTotal() * 0.1;
-  };
+  // // 10% discunt
+  // const calculateDiscount = () => {
+  //   return calculateSubTotal() * 0.1;
+  // };
 
-  // 12% task
-  const calculateTax = () => {
-    const tax = (calculateSubTotal() - calculateDiscount()) * 0.12;
-    return Number(tax.toFixed(2));
-  };
+  // // 12% task
+  // const calculateTax = () => {
+  //   const tax = (calculateSubTotal() - calculateDiscount()) * 0.12;
+  //   return Number(tax.toFixed(2));
+  // };
 
-  // Example of fixed shipping cost
-  const shippingCost = 200;
+  // // Example of fixed shipping cost
+  // const shippingCost = 200;
 
-  // Calculate the Grand Total dynamically
-  const calculateGrandTotal = () => {
-    const subTotal = calculateSubTotal();
-    const discount = calculateDiscount();
-    const tax = calculateTax();
-    const shipping = shippingCost;
+  // // Calculate the Grand Total dynamically
+  // const calculateGrandTotal = () => {
+  //   const subTotal = calculateSubTotal();
+  //   const discount = calculateDiscount();
+  //   const tax = calculateTax();
+  //   const shipping = shippingCost;
 
-    const total = subTotal - discount + tax + shipping;
-    return Number(total.toFixed(2));
-  };
+  //   const total = subTotal - discount + tax + shipping;
+  //   return Number(total.toFixed(2));
+  // };
 
-  // Order summary with dynamically calculated values
-  const orderSummary = [
-    { id: 1, name: "Sub Total :", value: calculateSubTotal() },
-    { id: 2, name: "Discount(10%) :", value: calculateDiscount() },
-    { id: 3, name: "Tax(12%) : ", value: calculateTax() },
-    { id: 4, name: "Shipping : ", value: shippingCost },
-  ];
-  const grandTotal = calculateGrandTotal();
+  // // Order summary with dynamically calculated values
+  // const orderSummary = [
+  //   { id: 1, name: "Sub Total :", value: calculateSubTotal() },
+  //   { id: 2, name: "Discount(10%) :", value: calculateDiscount() },
+  //   { id: 3, name: "Tax(12%) : ", value: calculateTax() },
+  //   { id: 4, name: "Shipping : ", value: shippingCost },
+  // ];
+  // const grandTotal = calculateGrandTotal();
 
+  console.log(cartItems);
   // Fetch cart items
   useEffect(() => {
     if (!token) {
@@ -85,48 +84,6 @@ function CartPage() {
       });
     setRemoved(false);
   }, [token, removed]);
-
-  useEffect(() => {
-    if (cartItems.length > 0) {
-      const ids = cartItems.map((item) => item.product);
-      setProductIDs(ids);
-      setNoOfItems(ids.length);
-    }
-  }, [cartItems]);
-
-  // Fetch product details
-  useEffect(() => {
-    if (cartItems.length > 0) {
-      const fetchProductDetails = async () => {
-        try {
-          const productDetailsPromises = cartItems.map((item) =>
-            fetch(
-              `http://127.0.0.1:8000/api/specific_product/${item.product}/`,
-              {
-                method: "GET",
-                headers: { Authorization: `Bearer ${token}` },
-              }
-            )
-              .then((response) => response.json())
-              .then((productData) => ({
-                ...productData,
-                quantity: item.quantity, // Attach quantity from cartItems
-              }))
-              .catch((error) =>
-                console.error(`Error fetching product ${item.product}:`, error)
-              )
-          );
-
-          const productDetailsData = await Promise.all(productDetailsPromises);
-          setProductDetails(productDetailsData);
-        } catch (error) {
-          console.error("Error fetching product details:", error);
-        }
-      };
-
-      fetchProductDetails();
-    }
-  }, [cartItems]);
 
   const handleQuantityChange = (id, newQuantity) => {
     setCartItems((prevItems) =>
@@ -157,14 +114,15 @@ function CartPage() {
             </div>
           </div>
           <ul className=" pb-[40px]">
-            {productDetails.map((item) => (
+            {cartItems.map((item) => (
               <>
                 <div key={item.id}>
                   <CartItems
                     id={item.id}
-                    name={item.name}
-                    price={item.price}
-                    image={item.image}
+                    productId={item.product.id}
+                    name={item.product.name}
+                    price={item.product.price}
+                    image={item.product.image}
                     initialQuantity={item.quantity}
                     onQuantityChange={handleQuantityChange}
                     setRemoved={setRemoved}
@@ -175,7 +133,7 @@ function CartPage() {
           </ul>
         </div>
         {/* right box */}
-        <div className="w-[30%] h-[380px] bg-[#b48ff130]  rounded-3xl">
+        {/* <div className="w-[30%] h-[380px] bg-[#b48ff130]  rounded-3xl">
           <div className="w-[80%]  m-auto mt-5 ">
             <p className="font-bold w-[135px] m-auto">Order Summary</p>
             <div className="w-[90%] m-auto mt-6">
@@ -200,7 +158,7 @@ function CartPage() {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
       <div className="mt-10">
         <Footer />

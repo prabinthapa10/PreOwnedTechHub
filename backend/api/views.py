@@ -305,7 +305,7 @@ class AddToCartView(APIView):
         if cart is None:
             return Response({"message": "No cart found for the user"}, status=404)
 
-        user_items = CartItem.objects.filter(cart=cart)
+        user_items = CartItem.objects.select_related('product').filter(cart=cart)
 
         serializer = CartItemSerializer(user_items, many=True)
 
