@@ -36,27 +36,33 @@ function CartPage() {
   }, [token, removed]);
 
   const handleQuantityChange = (id, newQuantity) => {
-    setCartItems((prevItems) =>
-      prevItems.map((item) =>
-        item.product === id ? { ...item, quantity: newQuantity } : item
-      )
-    );
+    setCartItems((prevItems) => {
+      const updatedItems = prevItems.map((item) =>
+        item.product.id === id ? { ...item, quantity: newQuantity } : item
+      );
+      const updatedTotal = updatedItems.reduce(
+        (total, item) => total + item.product.price * item.quantity,
+        0
+      );
+      setGrandTotal(updatedTotal);
+
+      return updatedItems;
+    });
   };
 
   useEffect(() => {
-    setGrandTotal(
-      cartItems.reduce(
-        (total, item) => total + item.product.price * item.quantity,
-        0
-      )
+    const total = cartItems.reduce(
+      (total, item) => total + item.product.price * item.quantity,
+      0
     );
+    setGrandTotal(total);
     setNoOfItems(cartItems.length);
-    console.log(cartItems);
-  }, [cartItems, grandTotal]);
+  }, [cartItems]);
 
   const handleProceed = () => {
     navigate("/orderpage");
   };
+
   return (
     <div>
       <Navbar />

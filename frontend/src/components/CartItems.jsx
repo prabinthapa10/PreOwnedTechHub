@@ -18,7 +18,7 @@ function CartItems({
 
   console.log(productId);
 
-  const changeQuantity = (action) => {
+  const changeQuantity = (action, price) => {
     if (action === "increase") {
       setQuantity(quantity + 1);
     } else if (action === "decrease" && quantity > 1) {
@@ -106,11 +106,11 @@ function CartItems({
 
         {/* Quantity */}
         <div className="flex items-center space-x-3">
-          <button onClick={() => changeQuantity("decrease")}>
+          <button onClick={() => changeQuantity("decrease", price)}>
             <FontAwesomeIcon icon={faMinus} />
           </button>
           <p className="w-6 text-center">{quantity}</p>
-          <button onClick={() => changeQuantity("increase")}>
+          <button onClick={() => changeQuantity("increase", price)}>
             <FontAwesomeIcon icon={faPlus} />
           </button>
         </div>
