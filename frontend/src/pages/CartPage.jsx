@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import CartItems from "../components/CartItems";
 import Footer from "../components/Footer";
-import Button from "../components/Button";
-import NPR from "../components/NPR";
 import { useNavigate } from "react-router-dom";
 
 function CartPage() {
@@ -12,8 +10,11 @@ function CartPage() {
   const [noOfItems, setNoOfItems] = useState(0);
   const [removed, setRemoved] = useState(null);
   const [grandTotal, setGrandTotal] = useState(0);
+  const [total, setTotal] = useState(0);
   const navigate = useNavigate();
-
+  const [code, setCode] = useState("");
+  const [discount, setDiscount] = useState(0);
+  const [message, setMessage] = useState("");
   // Fetch cart items
   useEffect(() => {
     if (!token) {
@@ -55,12 +56,30 @@ function CartPage() {
       (total, item) => total + item.product.price * item.quantity,
       0
     );
-    setGrandTotal(total);
+    setTotal(total);
+    setGrandTotal(total - discount);
     setNoOfItems(cartItems.length);
-  }, [cartItems]);
+  }, [cartItems, discount]);
 
   const handleProceed = () => {
-    navigate("/orderpage");
+    navigate("/orderpage", { state: { grandTotal, discount, total } });
+  };
+
+  const handleCode = () => {
+    if (discount > 0) {
+      setMessage("Discount already applied");
+      return;
+    }
+
+    if (code === "SAVE10") {
+      setMessage("Discount of 10% applied");
+      setDiscount(grandTotal * 0.1);
+    } else if (code === "SAVE20") {
+      setMessage("Discount of 20% applied");
+      setDiscount(grandTotal * 0.2);
+    } else {
+      setMessage("Invalid Code ❌");
+    }
   };
 
   return (
@@ -101,28 +120,70 @@ function CartPage() {
           </ul>
         </div>
         {/* right box */}
-        <div className="w-[30%] h-[380px] bg-[#b48ff130]  rounded-3xl">
-          <div className="w-[80%]  m-auto mt-5 ">
-            <p className="font-bold w-[135px] m-auto">Order Summary</p>
-            <div className="w-[90%] m-auto mt-6">
-              <>
-                <div className="flex justify-between mt-2">
-                  <span>Total: </span>
-                  <span>
-                    <strong className="text-[12px]">NPR. </strong>
-                    {grandTotal}
-                  </span>
-                </div>
-              </>
-              <hr className="mt-9" />
-              <div className="flex justify-between mt-2">
-                <strong>Total: </strong>
-                <strong>
-                  <NPR /> : {grandTotal}
-                </strong>
+        <div className="w-[30%] h-auto bg-[#f3e8ff] rounded-3xl shadow-lg p-6">
+          <div className="w-[80%] m-auto">
+            <p className="font-bold text-center text-lg text-gray-700">
+              Order Summary
+            </p>
+
+            <div className="w-[90%] m-auto mt-6 space-y-4">
+              {/* Total */}
+              <div className="flex justify-between text-gray-600">
+                <span>Total:</span>
+                <span>
+                  <strong className="text-[12px]">NPR. </strong>
+                  {total}
+                </span>
               </div>
-              <div className="mt-8" onClick={handleProceed}>
-                <Button name="Proceed To Payment" className="w-full" />
+
+              {/* Promo Code Section */}
+              <div className="mt-3">
+                <span className="text-gray-600">Promo Code:</span>
+                <div className="flex items-center space-x-2 mt-1">
+                  <input
+                    type="text"
+                    className="w-[120px] border border-gray-300 focus:ring-2 focus:ring-purple-400 
+                focus:outline-none px-3 py-1 rounded-lg text-sm"
+                    value={code}
+                    onChange={(e) => setCode(e.target.value)}
+                    placeholder="Enter code"
+                  />
+                  <button
+                    className="bg-[#b48ff1] text-white border border-[#9c7dd9] px-3 py-1 rounded-lg 
+                hover:bg-[#a37be8] transition duration-200 shadow-md text-sm"
+                    onClick={handleCode}
+                  >
+                    Apply
+                  </button>
+                </div>
+                <span className="text-[12px] text-red-500 mt-1 block">
+                  {message}
+                </span>
+              </div>
+
+              {/* Discount */}
+              <div className="flex justify-between text-gray-600">
+                <span>Discount:</span>
+                <strong className="text-green-600">NPR {discount}</strong>
+              </div>
+
+              <hr className="border-gray-300 mt-4" />
+
+              {/* Grand Total */}
+              <div className="flex justify-between font-bold text-gray-700 mt-3">
+                <span>Total:</span>
+                <strong>NPR {grandTotal - discount}</strong>
+              </div>
+
+              {/* Proceed to Payment Button */}
+              <div className="mt-6">
+                <button
+                  onClick={handleProceed}
+                  className="w-full bg-purple-600 text-white py-2 rounded-lg 
+              hover:bg-purple-700 transition duration-200 shadow-md"
+                >
+                  Proceed to Payment
+                </button>
               </div>
             </div>
           </div>

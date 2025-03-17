@@ -4,14 +4,21 @@ import NavMenu from "../components/NavMenu";
 import Button from "../components/Button";
 import NPR from "../components/NPR";
 import { Country, State, City } from "country-state-city";
+import { useLocation } from "react-router-dom";
 
 const OrderPage = () => {
   const [cartItems, setCartItems] = useState([]);
   const [countries, setCountries] = useState(Country.getAllCountries());
   const [state, setState] = useState([]);
   const [city, setCity] = useState([]);
+  const location = useLocation();
+  const grandTotal = location.state?.grandTotal || 0;
+  const discount = location.state?.discount || 0;
+  const total = location.state?.total || 0;
 
   const [selectedCountry, setSelectedCountry] = useState(null);
+
+  console.log(discount, total, grandTotal);
 
   // Handle order submission (static, no backend call)
   const handleSubmitOrder = () => {
@@ -82,7 +89,27 @@ const OrderPage = () => {
                 </div>
               </div>
             ))}
-            <div className="font-bold text-xl mt-4">Grand Total:</div>
+            <div className="mt-6 p-4 bg-gray-50 rounded-lg shadow-md">
+              {/* Discount & Total Section */}
+              <div className="flex justify-between text-gray-700 text-lg mt-2">
+                <span>Subtotal:</span>
+                <span className="font-medium">NPR {total}</span>
+              </div>
+              <div className="flex justify-between text-gray-600 text-lg">
+                <span>Discount:</span>
+                <span className="text-green-600 font-semibold">
+                  NPR {discount}
+                </span>
+              </div>
+
+              <hr className="my-4 border-gray-300" />
+
+              {/* Grand Total Section */}
+              <div className="flex justify-between text-xl font-bold text-gray-900">
+                <span>Grand Total:</span>
+                <span className="text-purple-600">NPR {grandTotal}</span>
+              </div>
+            </div>
           </div>
 
           {/* Right Box - Shipping Info */}
