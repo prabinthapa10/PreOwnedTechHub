@@ -1,3 +1,4 @@
+import uuid
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import *
@@ -356,48 +357,87 @@ class AddToCartView(APIView):
 
         except CartItem.DoesNotExist:
             return Response({"error": "Cart item not found"}, status=404)
-        
+
 class OrderView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
         user = request.user
+        # Fetch cart and cart items
         cart = Cart.objects.filter(user=user).first()
+        if not cart:
+            return Response({"error": "Cart not found"}, status=400)
+            
         cart_items = CartItem.objects.filter(cart=cart)
         
+        # Validate cart has items
         if not cart_items.exists():
-            return Response({"error": "Cart is empty"}, status=400)
-
-        total_amount = sum(item.total_price() for item in cart_items)
-
-         # Get address details from request data
+            return Response({"error": "Your cart is empty"}, status=400)
+            
+        # Get address details from request data
         address = request.data.get("address")
         city = request.data.get("city")
         zip_code = request.data.get("zip_code")
         country = request.data.get("country")
+        status = "Pending"
+        discount = request.data.get("discount", 0)
+        total_amount = request.data.get("total_amount", 0)
 
-        if not address or not city or not zip_code or not country:
-            return Response({"error": "Please provide complete address details"}, status=400)
+        # Convert to Decimal
+        discount = Decimal(discount)
+        total_amount = Decimal(total_amount)
 
-        order = Order.objects.create(
-            user=user,
-            total_amount=total_amount,
-            address=address,
-            city=city,
-            zip_code=zip_code,
-            country=country
-        )
-
-        # Move cart items to order items
-        for item in cart_items:
-            OrderItem.objects.create(
-                order=order,
-                product_name=item.product.name,
-                price=Decimal(item.product.price), 
-                quantity=item.quantity
+        # Calculate grand total
+        grand_total = total_amount - discount
+        
+        # Generate a unique purchase order ID
+        purchase_order_id = f"ORD-{uuid.uuid4().hex[:8].upper()}"
+        
+        try:
+            # Create the order
+            order = Order.objects.create(
+                user=user,
+                purchase_order_id=purchase_order_id,
+                total_amount=total_amount,
+                address=address,
+                city=city,
+                zip_code=zip_code,
+                country=country,
+                status=status,
+                discount=discount,
+                grand_total=grand_total
             )
-
-        # Clear the cart
-        cart_items.delete()
-
-        return Response({"message": "Order placed successfully!", "order_id": order.id}, status=201)
+            
+            # Create order items
+            order_items = []
+            for item in cart_items:
+                order_item = OrderItem(
+                    order=order,
+                    product_name=item.product.name,
+                    price=Decimal(item.product.price),
+                    quantity=item.quantity
+                )
+                order_items.append(order_item)
+            
+            # Bulk create order items for better performance
+            OrderItem.objects.bulk_create(order_items)
+            
+            # Clear the cart after successful order creation
+            cart_items.delete()
+            
+            # Return success response with order details
+            return Response({
+                "message": "Order placed successfully!",
+                "order_id": order.id,
+                "purchase_order_id": purchase_order_id,
+                "total_amount": float(total_amount),
+                "items_count": len(order_items)
+            }, status=201)
+            
+        except Exception as e:
+            # If an error occurs, we should handle it but we won't have automatic rollback
+            # You might want to add manual cleanup here if needed
+            return Response({
+                "error": "Failed to create order",
+                "details": str(e)
+            }, status=500)

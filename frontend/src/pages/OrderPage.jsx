@@ -16,14 +16,14 @@ function OrderPage() {
   const country = location.state?.country || "";
   const state = location.state?.state || "";
   const city = location.state?.city || "";
+  const contact = location.state?.phone || "";
 
+  console.log(grandTotal, discount, total, country, state, city, contact);
 
   const [userDetails, setUserDetails] = useState({});
 
+  // get user detials
   useEffect(() => {
-    // Get the access token (assuming it's stored in localStorage)
-    const token = localStorage.getItem("access_token");
-
     if (token) {
       // Fetch the profile data with the access token
       fetch("http://127.0.0.1:8000/api/profile/", {
@@ -153,12 +153,11 @@ function OrderPage() {
                 </span>
               </p>
               <p>
-                <strong>Phone Number:</strong> {userDetails.phone_number}
+                <strong>Phone Number:</strong> {contact}
               </p>
               <p>
                 <strong>Shipping Address:</strong> {country}, {state}, {city}
               </p>
-
             </div>
           </div>
         </div>

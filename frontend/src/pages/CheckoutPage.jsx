@@ -6,6 +6,10 @@ import NPR from "../components/NPR";
 import axios from "axios";
 
 function Checkout() {
+  const [address, setAddress] = useState("");
+  const [phone, setPhone] = useState("");
+  const [zipCode, setZipCode] = useState("");
+  const [city, setCity] = useState("");
   const [cartItems, setCartItems] = useState([]);
   const navigate = useNavigate();
 
@@ -16,30 +20,6 @@ function Checkout() {
   const discount = location.state?.discount || 0;
   const total = location.state?.total || 0;
 
-  const [userDetails, setUserDetails] = useState({});
-
-  useEffect(() => {
-    // Get the access token (assuming it's stored in localStorage)
-    const token = localStorage.getItem("access_token");
-
-    if (token) {
-      // Fetch the profile data with the access token
-      fetch("http://127.0.0.1:8000/api/profile/", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`, // Include the token in the header
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          setUserDetails(data);
-        })
-        .catch((error) => console.error("Error fetching profile data:", error));
-    } else {
-      console.log("No access token found.");
-    }
-  }, []);
-
   // fetch items from cart
   useEffect(() => {
     if (!token) {
@@ -49,7 +29,7 @@ function Checkout() {
     }
     const fetchCartItems = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/order/", {
+        const response = await fetch("http://127.0.0.1:8000/api/add_to_cart/", {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -57,7 +37,6 @@ function Checkout() {
           },
         });
 
-        // Check if response is successful (status code 200)
         if (!response.ok) {
           throw new Error("Failed to fetch cart items");
         }
@@ -74,28 +53,28 @@ function Checkout() {
   }, []);
 
   const handleCheckout = async () => {
-    navigate("/order");
     try {
+      navigate("/order", {
+        state: { grandTotal, discount, total, phone, city },
+      });
       const response = await axios.post(
         "http://localhost:8000/api/order/",
         {
-          total_price: 500, // Replace with actual total
-          shipping_address: "123 Main Street, City",
-          payment_method: "Credit Card",
+          country: "Nepal",
+          address: address,
+          city: city,
+          zip_code: zipCode,
+          phone: phone,
+          discount: discount,
+          total_amount: total,
         },
         {
           headers: {
-            Authorization: "Bearer {token}",
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         }
       );
-
-    //   console.log("Order Placed:", response.data);
-    //   alert("Order placed successfully!");
-
-    //   // Redirect to order confirmation page
-
     } catch (error) {
       console.error(
         "Error during checkout:",
@@ -104,26 +83,6 @@ function Checkout() {
       alert("Checkout failed. Please try again.");
     }
   };
-
-  //   const makePayment = async () => {
-  //     try {
-  //       const response = await axios.post(
-  //         "http://localhost:8000/api/payment/initiate/",
-  //         {
-  //           return_url: "http://localhost:5173/profile",
-  //           website_url: "http://localhost:5173/products",
-  //           amount: grandTotal,
-  //           purchase_order_id: `${userDetails.first_name}${total}`,
-  //           purchase_order_name: "Test Order",
-  //         }
-  //       );
-
-  //       // Handle the response (for example, redirecting to the payment gateway)
-  //       console.log("Payment initiated successfully:", response.data);
-  //     } catch (error) {
-  //       console.error("Error initiating payment:", error);
-  //     }
-  //   };
 
   return (
     <div>
@@ -175,31 +134,6 @@ function Checkout() {
           <div className="w-[35%] border border-gray-200 bg-white rounded-3xl p-6">
             <h2 className="text-2xl font-bold mb-4">Fill form Information</h2>
             <form>
-              {/* <div className="mb-4">
-                <div className="mb-4">
-                  <label className="block">Country</label>
-                  <select
-                    name="country"
-                    className="w-full p-2 border border-gray-300 rounded"
-                    onChange={(e) =>
-                      handleCountryChange(
-                        countries.find(
-                          (country) => country.isoCode === e.target.value
-                        )
-                      )
-                    }
-                  >
-                    <option value="" disabled>
-                      Select a country
-                    </option>
-                    {countries.map((country) => (
-                      <option key={country.isoCode} value={country.isoCode}>
-                        {country.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div> */}
               <div className="mb-4">
                 <label className="block">Address</label>
                 <input
@@ -207,6 +141,8 @@ function Checkout() {
                   name="address"
                   className="w-full p-2 border border-gray-300 rounded"
                   placeholder="Enter your address"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
                 />
               </div>
 
@@ -217,6 +153,8 @@ function Checkout() {
                   name="phone"
                   className="w-full p-2 border border-gray-300 rounded"
                   placeholder="Enter your phone number"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
                 />
               </div>
 
@@ -227,6 +165,8 @@ function Checkout() {
                   name="zipCode"
                   className="w-full p-2 border border-gray-300 rounded"
                   placeholder="Enter your zip code"
+                  value={zipCode}
+                  onChange={(e) => setZipCode(e.target.value)}
                 />
               </div>
 
@@ -237,6 +177,8 @@ function Checkout() {
                   name="city"
                   className="w-full p-2 border border-gray-300 rounded"
                   placeholder="Enter your city"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
                 />
               </div>
               <div>

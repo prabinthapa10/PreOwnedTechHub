@@ -113,6 +113,10 @@ class CartItem(models.Model):
         return self.product.price * self.quantity
     
 class Order(models.Model):
+    purchase_order_id = models.CharField(max_length=100, default="")
+    status = models.CharField(max_length=20, choices=[
+        ("Pending", "Pending"),("Delivered", "Delivered"),("Cancelled", "Cancelled")
+    ], default="Pending")
     user = models.ForeignKey(User, on_delete=models.CASCADE)  
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     address = models.TextField()
@@ -120,6 +124,8 @@ class Order(models.Model):
     zip_code = models.CharField(max_length=10)
     country = models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
+    discount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    grand_total = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
     def __str__(self):
         return f"Order {self.id} by {self.user.first_name} {self.user.last_name}"
