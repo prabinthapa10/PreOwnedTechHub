@@ -62,7 +62,7 @@ function CartPage() {
   }, [cartItems, discount]);
 
   const handleProceed = () => {
-    navigate("/orderpage", { state: { grandTotal, discount, total } });
+    navigate("/checkout", { state: { grandTotal, discount, total } });
   };
 
   const handleCode = () => {
@@ -123,7 +123,7 @@ function CartPage() {
         <div className="w-[30%] h-auto bg-[#f3e8ff] rounded-3xl shadow-lg p-6">
           <div className="w-[80%] m-auto">
             <p className="font-bold text-center text-lg text-gray-700">
-              Order Summary
+              Summary
             </p>
 
             <div className="w-[90%] m-auto mt-6 space-y-4">
@@ -171,8 +171,8 @@ function CartPage() {
 
               {/* Grand Total */}
               <div className="flex justify-between font-bold text-gray-700 mt-3">
-                <span>Total:</span>
-                <strong>NPR {grandTotal - discount}</strong>
+                <span>Grand Total:</span>
+                <strong>NPR {grandTotal}</strong>
               </div>
 
               {/* Proceed to Payment Button */}

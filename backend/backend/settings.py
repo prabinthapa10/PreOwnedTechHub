@@ -87,7 +87,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'pre_owned_tech_hub',
+        'NAME': 'preownedtechhub',
         'USER': 'root',
         'PASSWORD': 'prabin',
         'HOST': 'localhost',

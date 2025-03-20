@@ -1,32 +1,48 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
-import NavMenu from "../components/NavMenu";
 import Button from "../components/Button";
-import NPR from "../components/NPR";
-import { Country, State, City } from "country-state-city";
 import { useLocation } from "react-router-dom";
+import NPR from "../components/NPR";
 
-const OrderPage = () => {
+function OrderPage() {
   const [cartItems, setCartItems] = useState([]);
-  const [countries, setCountries] = useState(Country.getAllCountries());
-  const [state, setState] = useState([]);
-  const [city, setCity] = useState([]);
+
+  const token = localStorage.getItem("access_token");
   const location = useLocation();
+
   const grandTotal = location.state?.grandTotal || 0;
   const discount = location.state?.discount || 0;
   const total = location.state?.total || 0;
+  const country = location.state?.country || "";
+  const state = location.state?.state || "";
+  const city = location.state?.city || "";
 
-  const [selectedCountry, setSelectedCountry] = useState(null);
 
-  console.log(discount, total, grandTotal);
+  const [userDetails, setUserDetails] = useState({});
 
-  // Handle order submission (static, no backend call)
-  const handleSubmitOrder = () => {
-    alert("Order placed successfully!");
-  };
+  useEffect(() => {
+    // Get the access token (assuming it's stored in localStorage)
+    const token = localStorage.getItem("access_token");
 
-  const token = localStorage.getItem("access_token");
+    if (token) {
+      // Fetch the profile data with the access token
+      fetch("http://127.0.0.1:8000/api/profile/", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the header
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setUserDetails(data);
+        })
+        .catch((error) => console.error("Error fetching profile data:", error));
+    } else {
+      console.log("No access token found.");
+    }
+  }, []);
 
+  // fetch items from cart
   useEffect(() => {
     if (!token) {
       console.log("No token found, user is not logged in.");
@@ -59,25 +75,36 @@ const OrderPage = () => {
     fetchCartItems();
   }, []);
 
-  const handleCountryChange = (country) => {
-    selectedCountry(country);
-    setState(State.getStatesOfCountry(country.isoCode));
+  const makePayment = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/payment/initiate/",
+        {
+          return_url: "http://localhost:5173/profile",
+          website_url: "http://localhost:5173/products",
+          amount: grandTotal,
+          purchase_order_id: `${userDetails.first_name}${total}`,
+          purchase_order_name: "Test Order",
+        }
+      );
+
+      // Handle the response (for example, redirecting to the payment gateway)
+      console.log("Payment initiated successfully:", response.data);
+    } catch (error) {
+      console.error("Error initiating payment:", error);
+    }
   };
 
   return (
     <div>
       <Navbar />
-      <div className="mt-1">
-        <NavMenu />
-      </div>
-
       {/* Content Section */}
       <div className="w-[85%] m-auto mt-10 mb-[100px]">
-        <h1 className="text-3xl font-bold">Checkout</h1>
+        <h1 className="text-3xl font-bold">Order</h1>
         <div className="flex justify-between mt-10">
-          {/* Left Box - Cart Summary */}
+          {/* Left Box - Order Summary */}
           <div className="w-[60%] border border-gray-200 bg-white rounded-3xl p-6">
-            <h2 className="text-2xl font-bold mb-4">Cart Summary</h2>
+            <h2 className="text-2xl font-bold mb-4">Order Summary</h2>
             {cartItems.map((item) => (
               <div key={item.id} className="flex justify-between mb-4">
                 <div>{item.product.name}</div>
@@ -93,12 +120,14 @@ const OrderPage = () => {
               {/* Discount & Total Section */}
               <div className="flex justify-between text-gray-700 text-lg mt-2">
                 <span>Subtotal:</span>
-                <span className="font-medium">NPR {total}</span>
+                <span className="font-medium">
+                  <NPR /> {total}
+                </span>
               </div>
               <div className="flex justify-between text-gray-600 text-lg">
                 <span>Discount:</span>
                 <span className="text-green-600 font-semibold">
-                  NPR {discount}
+                  <NPR /> {discount}
                 </span>
               </div>
 
@@ -112,85 +141,35 @@ const OrderPage = () => {
             </div>
           </div>
 
-          {/* Right Box - Shipping Info */}
+          {/* Right Box - Details */}
           <div className="w-[35%] border border-gray-200 bg-white rounded-3xl p-6">
-            <h2 className="text-2xl font-bold mb-4">Shipping Information</h2>
-            <form>
-              <div className="mb-4">
-                <div className="mb-4">
-                  <label className="block">Country</label>
-                  <select
-                    name="country"
-                    className="w-full p-2 border border-gray-300 rounded"
-                    onChange={(e) =>
-                      handleCountryChange(
-                        countries.find(
-                          (country) => country.isoCode === e.target.value
-                        )
-                      )
-                    }
-                  >
-                    <option value="" disabled>
-                      Select a country
-                    </option>
-                    {countries.map((country) => (
-                      <option key={country.isoCode} value={country.isoCode}>
-                        {country.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              <div className="mb-4">
-                <label className="block">Address</label>
-                <input
-                  type="text"
-                  name="address"
-                  className="w-full p-2 border border-gray-300 rounded"
-                  placeholder="Enter your address"
-                />
-              </div>
+            <h2 className="text-2xl font-bold mb-4">Order Information</h2>
 
-              <div className="mb-4">
-                <label className="block">Phone Number</label>
-                <input
-                  type="text"
-                  name="phone"
-                  className="w-full p-2 border border-gray-300 rounded"
-                  placeholder="Enter your phone number"
-                />
-              </div>
+            <div className="text-lg">
+              <p>
+                <strong>Name: </strong>
+                <span>
+                  {userDetails.first_name} {userDetails.last_name}
+                </span>
+              </p>
+              <p>
+                <strong>Phone Number:</strong> {userDetails.phone_number}
+              </p>
+              <p>
+                <strong>Shipping Address:</strong> {country}, {state}, {city}
+              </p>
 
-              <div className="mb-4">
-                <label className="block">Zip Code</label>
-                <input
-                  type="text"
-                  name="zipCode"
-                  className="w-full p-2 border border-gray-300 rounded"
-                  placeholder="Enter your zip code"
-                />
-              </div>
-
-              <div className="mb-4">
-                <label className="block">City</label>
-                <input
-                  type="text"
-                  name="city"
-                  className="w-full p-2 border border-gray-300 rounded"
-                  placeholder="Enter your city"
-                />
-              </div>
-            </form>
+            </div>
           </div>
         </div>
 
-        {/* Checkout Button */}
-        <div className="mt-6 flex justify-end" onClick={handleSubmitOrder}>
-          <Button name="Place Order" />
+        {/*Payment  Button */}
+        <div className="mt-6 flex justify-end" onClick={makePayment}>
+          <Button name="Make Payment" />
         </div>
       </div>
     </div>
   );
-};
+}
 
 export default OrderPage;

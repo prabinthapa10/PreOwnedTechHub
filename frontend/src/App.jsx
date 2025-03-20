@@ -15,6 +15,7 @@ import SmartphonePage from "./pages/SmartphonePage";
 import Contact from "./pages/Contact";
 import SubmtiProduct from "./pages/SubmitProduct";
 import OrderPage from "./pages/OrderPage";
+import Checkbox from "./pages/CheckoutPage";
 
 export default function App() {
   return (
@@ -35,7 +36,8 @@ export default function App() {
           <Route path="/products/phone" element={<SmartphonePage />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/submit_product" element={<SubmtiProduct />} />0
-          <Route path="/orderpage" element={<OrderPage />} />
+          <Route path="/order" element={<OrderPage />} />
+          <Route path="/checkout" element={<Checkbox />} />
         </Routes>
       </BrowserRouter>
     </div>

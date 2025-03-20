@@ -398,6 +398,6 @@ class OrderView(APIView):
             )
 
         # Clear the cart
-        # cart_items.delete()
+        cart_items.delete()
 
         return Response({"message": "Order placed successfully!", "order_id": order.id}, status=201)
