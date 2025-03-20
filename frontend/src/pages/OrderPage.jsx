@@ -3,9 +3,12 @@ import Navbar from "../components/Navbar";
 import Button from "../components/Button";
 import { useLocation } from "react-router-dom";
 import NPR from "../components/NPR";
+import axios from "axios";
 
 function OrderPage() {
   const [cartItems, setCartItems] = useState([]);
+  const [orderDetail, setOrderDetails] = useState({});
+  const [userDetails, setUserDetails] = useState({});
 
   const token = localStorage.getItem("access_token");
   const location = useLocation();
@@ -17,10 +20,6 @@ function OrderPage() {
   const state = location.state?.state || "";
   const city = location.state?.city || "";
   const contact = location.state?.phone || "";
-
-  console.log(grandTotal, discount, total, country, state, city, contact);
-
-  const [userDetails, setUserDetails] = useState({});
 
   // get user detials
   useEffect(() => {
@@ -35,6 +34,26 @@ function OrderPage() {
         .then((response) => response.json())
         .then((data) => {
           setUserDetails(data);
+        })
+        .catch((error) => console.error("Error fetching profile data:", error));
+    } else {
+      console.log("No access token found.");
+    }
+  }, []);
+
+  // get order detials
+  useEffect(() => {
+    if (token) {
+      // Fetch the profile data with the access token
+      fetch("http://127.0.0.1:8000/api/order/", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the header
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setOrderDetails(data);
         })
         .catch((error) => console.error("Error fetching profile data:", error));
     } else {
@@ -75,6 +94,8 @@ function OrderPage() {
     fetchCartItems();
   }, []);
 
+  const purchase_order_id = orderDetail.purchase_order_id;
+
   const makePayment = async () => {
     try {
       const response = await axios.post(
@@ -83,13 +104,15 @@ function OrderPage() {
           return_url: "http://localhost:5173/profile",
           website_url: "http://localhost:5173/products",
           amount: grandTotal,
-          purchase_order_id: `${userDetails.first_name}${total}`,
+          purchase_order_id: purchase_order_id,
           purchase_order_name: "Test Order",
         }
       );
 
       // Handle the response (for example, redirecting to the payment gateway)
       console.log("Payment initiated successfully:", response.data);
+      const paymentUrl = response.data.payment_url;
+      window.location.href = paymentUrl;
     } catch (error) {
       console.error("Error initiating payment:", error);
     }

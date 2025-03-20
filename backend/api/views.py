@@ -1,4 +1,6 @@
+import json
 import uuid
+import requests
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import *
@@ -423,7 +425,7 @@ class OrderView(APIView):
             OrderItem.objects.bulk_create(order_items)
             
             # Clear the cart after successful order creation
-            cart_items.delete()
+            # cart_items.delete()
             
             # Return success response with order details
             return Response({
@@ -441,3 +443,61 @@ class OrderView(APIView):
                 "error": "Failed to create order",
                 "details": str(e)
             }, status=500)
+
+    def get(self, request):
+        user = request.user 
+        # to get latest order
+        order = Order.objects.filter(user=user).last()  
+        if order is None:
+            return Response({"message": "No order found for the user"}, status=404)
+
+        serializer = OrderSerializer(order)
+        return Response(serializer.data, status=200)
+ 
+class KhaltiPaymentInitiateView(APIView):
+    def post(self, request):
+        # Get data from the request body
+        data = request.data
+        user_details = data.get("userDetails", {})
+
+        first_name = user_details.get("first_name")
+        last_name = user_details.get("last_name")
+        email = user_details.get("email")
+        phone_number = user_details.get("phone_number")
+
+
+        url = "https://dev.khalti.com/api/v2/epayment/initiate/"
+
+        payload = json.dumps({
+            "return_url": data.get("return_url"),
+            "website_url": data.get("website_url"),
+            "amount": str(Decimal(data.get("amount", 10)) * 100),
+            "purchase_order_id": data.get("purchase_order_id"),
+            "purchase_order_name": data.get("purchase_order_name"),
+            # "customer_info": {
+            #     "name": f"{first_name} {last_name}",  # Ensure full name is included
+            #     "email": email,
+            #     "phone": phone_number  # Include phone number!
+            # },
+        })
+
+
+        # Khalti API headers
+        headers = {
+            'Authorization': 'key 48a2f16a130d4cb18fb99eddbc09a754',
+            'Content-Type': 'application/json',
+        }   
+
+        #  Send the POST request to Khalti API
+        response = requests.post(url, headers=headers, data=payload)
+
+        # print(response.text)
+        if response.status_code == 200:
+            # Assuming Khalti returns a payment_url
+            payment_url = response.json().get('payment_url', '')
+            print(payment_url)
+            return Response({"payment_url": payment_url}, status=status.HTTP_200_OK)
+
+        else:
+            return Response({"detail": "Payment initiation failed", "error": response.json()}, status=status.HTTP_400_BAD_REQUEST)
+        

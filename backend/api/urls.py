@@ -20,4 +20,5 @@ urlpatterns = [
     path("update_cart_items/<int:cart_item_id>/", AddToCartView.as_view()),
     path('filter_options/', FilterOptionsView.as_view()),
     path('order/', OrderView.as_view()),
+    path('payment/initiate/', KhaltiPaymentInitiateView.as_view()),
 ]

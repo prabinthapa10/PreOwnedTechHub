@@ -182,7 +182,7 @@ function CartPage() {
                   className="w-full bg-purple-600 text-white py-2 rounded-lg 
               hover:bg-purple-700 transition duration-200 shadow-md"
                 >
-                  Proceed to Payment
+                  Proceed to Checkout
                 </button>
               </div>
             </div>
