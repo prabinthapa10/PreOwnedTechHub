@@ -3,8 +3,14 @@
 @tailwind utilities;
 
 body {
-  @apply bg-customBg font-acehsoft text-base;
+  @apply bg-customBg text-base;
 }
 * {
   border-color: black;
+}
+
+@layer utilities {
+  .font-bc {
+    @apply font-barriecito;
+  }
 }

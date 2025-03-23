@@ -18,10 +18,11 @@ function Categories() {
 
   return (
     <div>
-      <div className="flex justify-center items-center bg-customGray h-[50px]">
-        <p className="font-bold text-xl font-avantgarde">Shop By Categories</p>
+      <div className="flex justify-center items-center h-[50px] font-barriecito">
+        <p className="font-bold text-3xl font-avantgarde">Shop By Categories</p>
       </div>
-      <div className="flex justify-center space-x-[80px] mt-8">
+<div className="felx h-[120px] w-[50%] m-auto  bg-white">
+<div className="flex justify-center space-x-[80px]  mt-8 pt-2">
         {image.map((item) => (
           <div
             key={item.id}
@@ -37,6 +38,7 @@ function Categories() {
           </div>
         ))}
       </div>
+</div>
     </div>
   );
 }

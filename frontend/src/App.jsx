@@ -16,6 +16,7 @@ import Contact from "./pages/Contact";
 import SubmtiProduct from "./pages/SubmitProduct";
 import OrderPage from "./pages/OrderPage";
 import Checkbox from "./pages/CheckoutPage";
+import PaymentSuccess from "./pages/PaymentSuccess";
 
 export default function App() {
   return (
@@ -38,6 +39,7 @@ export default function App() {
           <Route path="/submit_product" element={<SubmtiProduct />} />0
           <Route path="/order" element={<OrderPage />} />
           <Route path="/checkout" element={<Checkbox />} />
+          <Route path="/success_payment" element={<PaymentSuccess />} />
         </Routes>
       </BrowserRouter>
     </div>

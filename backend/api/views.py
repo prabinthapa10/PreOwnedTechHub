@@ -10,6 +10,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated, IsAdminUser,  AllowAny
 from django.db.models import Q
 from decimal import Decimal
+from django.shortcuts import redirect
+
 
 class RegisterView(APIView):
     def post(self, request):
@@ -437,8 +439,6 @@ class OrderView(APIView):
             }, status=201)
             
         except Exception as e:
-            # If an error occurs, we should handle it but we won't have automatic rollback
-            # You might want to add manual cleanup here if needed
             return Response({
                 "error": "Failed to create order",
                 "details": str(e)
@@ -455,49 +455,76 @@ class OrderView(APIView):
         return Response(serializer.data, status=200)
  
 class KhaltiPaymentInitiateView(APIView):
+    permission_classes = [IsAuthenticated]
     def post(self, request):
         # Get data from the request body
         data = request.data
-        user_details = data.get("userDetails", {})
-
-        first_name = user_details.get("first_name")
-        last_name = user_details.get("last_name")
-        email = user_details.get("email")
-        phone_number = user_details.get("phone_number")
-
-
+        purchase_order_id= data.get("purchase_order_id")
         url = "https://dev.khalti.com/api/v2/epayment/initiate/"
-
         payload = json.dumps({
             "return_url": data.get("return_url"),
             "website_url": data.get("website_url"),
             "amount": str(Decimal(data.get("amount", 10)) * 100),
             "purchase_order_id": data.get("purchase_order_id"),
             "purchase_order_name": data.get("purchase_order_name"),
-            # "customer_info": {
-            #     "name": f"{first_name} {last_name}",  # Ensure full name is included
-            #     "email": email,
-            #     "phone": phone_number  # Include phone number!
-            # },
+            "customer_info": {
+                "name":data.get("name"),
+                "email":data.get("email"),  
+            },
         })
-
 
         # Khalti API headers
         headers = {
-            'Authorization': 'key 48a2f16a130d4cb18fb99eddbc09a754',
+            'Authorization': 'key 3ac79180c94940cfb67b6b759ed10b04',
             'Content-Type': 'application/json',
         }   
 
-        #  Send the POST request to Khalti API
         response = requests.post(url, headers=headers, data=payload)
 
-        # print(response.text)
-        if response.status_code == 200:
-            # Assuming Khalti returns a payment_url
-            payment_url = response.json().get('payment_url', '')
-            print(payment_url)
-            return Response({"payment_url": payment_url}, status=status.HTTP_200_OK)
+        print(response.text)
+        new_response = json.loads(response.text)
+        print(new_response)
+        userOrder = Order.objects.get(purchase_order_id=purchase_order_id)
+        # userOrder.status = "Completed"
+        # userOrder.save()
+        print(userOrder.status)
+        return Response({"payment_url": new_response['payment_url']}, status=status.HTTP_200_OK)
+    
+    
+class KhaltiPaymentVerifyView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request):
+        # Extract token and other details from request
+        token = request.data.get("token")
+        purchase_order_id = request.data.get("purchase_order_id")
+        amount = request.data.get("amount")
 
-        else:
-            return Response({"detail": "Payment initiation failed", "error": response.json()}, status=status.HTTP_400_BAD_REQUEST)
-        
+        # Verify the token with Khalti API
+        verify_url = "https://dev.khalti.com/api/v2/epayment/verify/"
+        headers = {
+            "Authorization": "key YOUR_SECRET_KEY",
+            "Content-Type": "application/json",
+        }
+        payload = {
+            "token": token,
+            "purchase_order_id": purchase_order_id,
+            "amount": str(amount),
+        }
+
+        try:
+            response = requests.post(verify_url, headers=headers, json=payload)
+            response_data = response.json()
+
+            # Handle verification response
+            if response.status_code == 200 and response_data.get("status") == "Completed":
+                # Mark order as paid
+                user_order = Order.objects.get(purchase_order_id=purchase_order_id)
+                user_order.status = "Completed"
+                user_order.save()
+
+                return Response({"success": True, "message": "Payment verified successfully!"}, status=status.HTTP_200_OK)
+            else:
+                return Response({"success": False, "message": "Payment verification failed!"}, status=status.HTTP_400_BAD_REQUEST)
+        except requests.exceptions.RequestException as e:
+            return Response({"success": False, "message": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

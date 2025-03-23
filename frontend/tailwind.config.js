@@ -10,8 +10,7 @@ module.exports = {
       },
       fontSize: { base: "16px" },
       fontFamily: {
-        avantgarde: ["AvantGardeBold", "sans-serif"],
-        acehsoft: ["AcehSoft", "sans-serif"],
+        barriecito: ["Barriecito", "cursive"],
       },
     },
   },

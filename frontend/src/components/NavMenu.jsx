@@ -15,7 +15,7 @@ function NavMenu() {
     location.pathname !== "/products";
 
   return (
-    <div className="flex bg-customGray h-[50px] items-center">
+    <div className="flex bg-customGray h-[50px] items-center font-barriecito">
       <ul className="flex justify-evenly items-center text-xl w-[70%]">
         <li>
           <MenuIcon style={{ fontSize: 30 }} className="cursor-pointer" />

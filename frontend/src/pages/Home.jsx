@@ -32,7 +32,7 @@ export default function Home() {
         <div>
           <Navbar />
         </div>
-        <div className="mt-0.5">
+        <div >
           <NavMenu />
         </div>
         <div className="mt-5">

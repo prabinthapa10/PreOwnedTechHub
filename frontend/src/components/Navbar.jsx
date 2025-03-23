@@ -47,7 +47,7 @@ function Navbar({ setSearch, handleSearch }) {
   }, []);
 
   return (
-    <div className="bg-customPurple flex justify-center py-2">
+    <div className="bg-customPurple flex justify-center py-2 font-barriecito">
       <div className="flex justify-between items-center w-[90%]">
         {/* logo */}
         <Link to={"/"}>

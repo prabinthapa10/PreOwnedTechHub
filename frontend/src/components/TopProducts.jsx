@@ -14,8 +14,8 @@ function TopProducts({ setAddToCart }) {
   }, []);
 
   return (
-    <div>
-      <div className="w-[90%] flex justify-center flex-wrap m-auto gap-6 mt-10">
+    <div className="bg-white h-[510px] w-[90%] m-auto">
+      <div className=" flex justify-center flex-wrap gap-6 mt-10 pt-10">
         {products.slice(0, 6).map((product) => (
           <ProductItems
             key={product.id}

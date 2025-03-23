@@ -94,25 +94,36 @@ function OrderPage() {
     fetchCartItems();
   }, []);
 
-  const purchase_order_id = orderDetail.purchase_order_id;
+  const purchase_order_id = orderDetail?.purchase_order_id;
+  const name = `${userDetails.first_name} ${userDetails.last_name}`;
+
+  console.log(name);
 
   const makePayment = async () => {
     try {
       const response = await axios.post(
         "http://localhost:8000/api/payment/initiate/",
         {
-          return_url: "http://localhost:5173/profile",
+          return_url: "http://localhost:5173//success_payment",
           website_url: "http://localhost:5173/products",
           amount: grandTotal,
           purchase_order_id: purchase_order_id,
           purchase_order_name: "Test Order",
+          name: name,
+          email: userDetails.email,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         }
       );
-
-      // Handle the response (for example, redirecting to the payment gateway)
-      console.log("Payment initiated successfully:", response.data);
-      const paymentUrl = response.data.payment_url;
-      window.location.href = paymentUrl;
+      if (response.data && response.data.payment_url) {
+        window.location.href = response.data.payment_url;
+      } else {
+        console.error("Payment URL not received");
+      }
     } catch (error) {
       console.error("Error initiating payment:", error);
     }
