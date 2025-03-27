@@ -23,7 +23,7 @@ function Contact() {
   return (
     <div className="bg-customBg">
       <Navbar />
-      <div className="mt-1">
+      <div>
         <NavMenu />
       </div>
       {/* content */}
@@ -77,7 +77,7 @@ function Contact() {
         <div className="mt-[60px]">
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d8361.97266357762!2d83.99549411923068!3d28.21410470838929!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39959434ad2a5bf9%3A0xf4e7f9c749f63113!2sInformatics%20College%20Pokhara!5e0!3m2!1sen!2snp!4v1740820614606!5m2!1sen!2snp"
-                className="w-full h-[450px]"
+            className="w-full h-[450px]"
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
           ></iframe>

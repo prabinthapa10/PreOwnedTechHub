@@ -18,7 +18,7 @@ function Categories() {
 
   return (
     <div>
-      <div className="flex justify-center items-center h-[50px] font-barriecito">
+      <div className="flex justify-center items-center h-[50px] font-rokkit">
         <p className="font-bold text-3xl font-avantgarde">Shop By Categories</p>
       </div>
 <div className="felx h-[120px] w-[50%] m-auto  bg-white">

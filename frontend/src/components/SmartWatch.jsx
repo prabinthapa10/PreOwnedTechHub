@@ -15,7 +15,7 @@ function SmartWatch({ numberOfItems, setAddToCart}) {
 
   return (
     <div>
-      <div className="w-[90%] m-auto flex justify-center">
+      <div className="w-[90%] m-auto flex justify-center bg-white pt-5 h-[450px] ">
         <div className="flex flex-wrap mt-10 gap-10 justify-center">
           {products.slice(0, numberOfItems).map((product) => (
             <ProductItems

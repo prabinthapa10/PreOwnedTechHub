@@ -475,13 +475,13 @@ class KhaltiPaymentInitiateView(APIView):
 
         # Khalti API headers
         headers = {
-            'Authorization': 'key 3ac79180c94940cfb67b6b759ed10b04',
+            'Authorization': 'key 48a2f16a130d4cb18fb99eddbc09a754',
             'Content-Type': 'application/json',
         }   
 
         response = requests.post(url, headers=headers, data=payload)
 
-        print(response.text)
+        print('husddhushkfkh ', response.text)
         new_response = json.loads(response.text)
         print(new_response)
         userOrder = Order.objects.get(purchase_order_id=purchase_order_id)
@@ -490,41 +490,41 @@ class KhaltiPaymentInitiateView(APIView):
         print(userOrder.status)
         return Response({"payment_url": new_response['payment_url']}, status=status.HTTP_200_OK)
     
-    
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+
+@method_decorator(csrf_exempt, name='dispatch')  # Disable CSRF for this view
 class KhaltiPaymentVerifyView(APIView):
-    permission_classes = [IsAuthenticated]
-    
     def post(self, request):
-        # Extract token and other details from request
-        token = request.data.get("token")
-        purchase_order_id = request.data.get("purchase_order_id")
-        amount = request.data.get("amount")
-
-        # Verify the token with Khalti API
-        verify_url = "https://dev.khalti.com/api/v2/epayment/verify/"
-        headers = {
-            "Authorization": "key YOUR_SECRET_KEY",
-            "Content-Type": "application/json",
-        }
-        payload = {
-            "token": token,
-            "purchase_order_id": purchase_order_id,
-            "amount": str(amount),
-        }
-
         try:
-            response = requests.post(verify_url, headers=headers, json=payload)
-            response_data = response.json()
+            # Parse request data
+            data = request.data
+            pidx = data.get("pidx")
 
-            # Handle verification response
-            if response.status_code == 200 and response_data.get("status") == "Completed":
-                # Mark order as paid
-                user_order = Order.objects.get(purchase_order_id=purchase_order_id)
-                user_order.status = "Completed"
-                user_order.save()
+            if not pidx:
+                return Response({"error": "Missing pidx"}, status=status.HTTP_400_BAD_REQUEST)
 
-                return Response({"success": True, "message": "Payment verified successfully!"}, status=status.HTTP_200_OK)
-            else:
-                return Response({"success": False, "message": "Payment verification failed!"}, status=status.HTTP_400_BAD_REQUEST)
-        except requests.exceptions.RequestException as e:
-            return Response({"success": False, "message": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            # Khalti API details
+            KHALTI_URL = "https://a.khalti.com/api/v2/epayment/lookup/"
+            HEADERS = {
+                "Authorization": "Key 48a2f16a130d4cb18fb99eddbc09a754",
+                "Content-Type": "application/json",
+            }
+
+            # Send request to Khalti
+            response = requests.post(KHALTI_URL, json={"pidx": pidx}, headers=HEADERS)
+
+            # Handle response
+            if response.status_code == 200:
+                payment_data = response.json()
+
+                # Check if the payment was successful
+                if payment_data.get("status") == "Completed":
+                    return Response({"message": "Payment Verified", "data": payment_data}, status=status.HTTP_200_OK)
+                else:
+                    return Response({"message": "Payment Not Completed", "data": payment_data}, status=status.HTTP_400_BAD_REQUEST)
+
+            return Response({"error": "Failed to verify payment"}, status=response.status_code)
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

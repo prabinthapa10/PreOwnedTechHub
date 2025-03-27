@@ -104,8 +104,8 @@ function OrderPage() {
       const response = await axios.post(
         "http://localhost:8000/api/payment/initiate/",
         {
-          return_url: "http://localhost:5173//success_payment",
-          website_url: "http://localhost:5173/products",
+          return_url: "http://localhost:5173/success_payment/",
+          website_url: "http://localhost:5173/",
           amount: grandTotal,
           purchase_order_id: purchase_order_id,
           purchase_order_name: "Test Order",
@@ -119,13 +119,27 @@ function OrderPage() {
           },
         }
       );
+
+      console.log("Payment Response:", response);
+
       if (response.data && response.data.payment_url) {
         window.location.href = response.data.payment_url;
+        // window.open(response.data.payment_url)
       } else {
-        console.error("Payment URL not received");
+        console.error("Payment URL not received. Response:", response.data);
       }
     } catch (error) {
-      console.error("Error initiating payment:", error);
+      if (error.response) {
+        console.error(
+          "Server Error:",
+          error.response.status,
+          error.response.data
+        );
+      } else if (error.request) {
+        console.error("No response received:", error.request);
+      } else {
+        console.error("Payment error:", error.message);
+      }
     }
   };
 

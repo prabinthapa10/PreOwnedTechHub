@@ -14,7 +14,7 @@ function Laptop({ itemType, numberOfItems, className, setAddToCart }) {
   }, []);
 
   return (
-    <div className="w-[90%] m-auto flex justify-center">
+    <div className="w-[90%] m-auto flex justify-center pt-5 bg-white h-[550px]">
       <div
         className={`w-[90%] flex justify-center flex-wrap m-auto gap-6 mt-10 ${className}`}
       >

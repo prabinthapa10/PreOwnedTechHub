@@ -78,7 +78,7 @@ function Products() {
   return (
     <>
       <Navbar setSearch={setSearch} handleSearch={fetchProducts} />
-      <div className="mt-1">
+      <div>
         <NavMenu />
       </div>
       <div>

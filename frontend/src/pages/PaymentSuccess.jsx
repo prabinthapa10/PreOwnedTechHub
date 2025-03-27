@@ -1,56 +1,72 @@
-import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useSearchParams } from "react-router-dom";
+import React, { useEffect } from "react";
+import { CheckCircle } from "lucide-react";
 
-const PaymentSuccess = () => {
-  const [paymentStatus, setPaymentStatus] = useState(null);
-  const [error, setError] = useState(null);
-  const [searchParams] = useSearchParams();
-
-  const token = searchParams.get("token");
-  const purchase_order_id = searchParams.get("purchase_order_id");
-  const amount = searchParams.get("amount");
+function PaymentSuccess() {
+  const handleOkClick = () => {
+    window.location.href = "/profile";
+  };
+  const query = new URLSearchParams(window.location.search);
+  const pidx = query.get("pidx");
+  const totalAmount = query.get("total_amount");
+  const status = query.get("status");
+  const transactionId = query.get("transaction_id");
 
   useEffect(() => {
-    if (token && purchase_order_id && amount) {
-      verifyPayment(token, amount, purchase_order_id);
-    }
-  }, [token, purchase_order_id, amount]);
+    const paymentDetails = async () => {
+      if (pidx && transactionId) {
+        console.log("Payment Success");
 
-  // Function to verify payment with the backend
-  const verifyPayment = async (token, amount, purchase_order_id) => {
-    try {
-      const response = await axios.post(
-        "http://localhost:8000/api/khalti-verify/",
-        {
-          token: token,
-          amount: amount,
-          purchase_order_id: purchase_order_id,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-            "Content-Type": "application/json",
-          },
+        const pidxValue = {
+          pidx: pidx,
+        };
+        const token = localStorage.getItem("access_token");
+        try {
+          const response = await axios.post(
+            "http://localhost:8000/api/payment/verify/", // Django API endpoint
+            { pidx }, // Request body
+            {
+              headers: {
+                Authorization: `Bearer ${token}`, // Ensure token is passed correctly
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          console.log("✅ Payment Verified:", response.data);
+        } catch (error) {
+          console.error(
+            "❌ Error verifying payment:",
+            error.response?.data || error
+          );
         }
-      );
-
-      if (response.data && response.data.success) {
-        setPaymentStatus("Payment Verified Successfully!");
-      } else {
-        setPaymentStatus("Payment Verification Failed!");
       }
-    } catch (error) {
-      setError("Error verifying payment: " + error.message);
-    }
-  };
+    };
+    paymentDetails();
+  }, [pidx, transactionId]);
 
   return (
-    <div>
-      {paymentStatus && <p>{paymentStatus}</p>}
-      {error && <p>{error}</p>}
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="bg-white p-8 rounded-lg shadow-md text-center max-w-md w-full">
+        <div className="flex justify-center mb-6">
+          <CheckCircle className="text-green-500" size={64} strokeWidth={1.5} />
+        </div>
+        <h1 className="text-2xl font-bold mb-4 text-gray-800">
+          Payment Completed
+        </h1>
+        <p className="text-gray-600 mb-6">
+          Thank you for purchasing via Khalti Payment Gateway! Your payment has
+          been confirmed successfully.
+        </p>
+        <button
+          onClick={handleOkClick}
+          className="bg-green-500 text-white px-6 py-2 rounded-md hover:bg-green-600 transition-colors duration-300"
+        >
+          OK
+        </button>
+      </div>
     </div>
   );
-};
+}
 
 export default PaymentSuccess;

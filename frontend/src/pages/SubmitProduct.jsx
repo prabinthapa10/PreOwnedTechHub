@@ -117,7 +117,7 @@ export default function SubmtiProduct() {
     <>
       <Toastify />
       <Navbar />
-      <div className="mt-1">
+      <div>
         <NavMenu />
       </div>
       <form className="w-[90%] m-auto p-4 rounded shadow-md mt-10">

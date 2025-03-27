@@ -20,4 +20,5 @@ urlpatterns = [
     path('filter_options/', FilterOptionsView.as_view()),
     path('order/', OrderView.as_view()),
     path('payment/initiate/', KhaltiPaymentInitiateView.as_view()),
+    path('payment/verify/', KhaltiPaymentVerifyView.as_view()),
 ]

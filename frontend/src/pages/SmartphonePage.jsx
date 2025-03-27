@@ -90,7 +90,7 @@ function SmartphonePage() {
     <div>
       <ToastContainer position="bottom-right" />
       <Navbar />
-      <div className="mt-1">
+      <div>
         <NavMenu />
       </div>
       <div>
