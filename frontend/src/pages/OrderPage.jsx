@@ -124,7 +124,6 @@ function OrderPage() {
 
       if (response.data && response.data.payment_url) {
         window.location.href = response.data.payment_url;
-        // window.open(response.data.payment_url)
       } else {
         console.error("Payment URL not received. Response:", response.data);
       }

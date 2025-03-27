@@ -427,7 +427,7 @@ class OrderView(APIView):
             OrderItem.objects.bulk_create(order_items)
             
             # Clear the cart after successful order creation
-            # cart_items.delete()
+            cart_items.delete()
             
             # Return success response with order details
             return Response({
@@ -484,10 +484,6 @@ class KhaltiPaymentInitiateView(APIView):
         print('husddhushkfkh ', response.text)
         new_response = json.loads(response.text)
         print(new_response)
-        userOrder = Order.objects.get(purchase_order_id=purchase_order_id)
-        # userOrder.status = "Completed"
-        # userOrder.save()
-        print(userOrder.status)
         return Response({"payment_url": new_response['payment_url']}, status=status.HTTP_200_OK)
     
 from django.views.decorators.csrf import csrf_exempt
@@ -500,7 +496,7 @@ class KhaltiPaymentVerifyView(APIView):
             # Parse request data
             data = request.data
             pidx = data.get("pidx")
-
+            latest_order = Order.objects.latest('created_at')
             if not pidx:
                 return Response({"error": "Missing pidx"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -513,7 +509,9 @@ class KhaltiPaymentVerifyView(APIView):
 
             # Send request to Khalti
             response = requests.post(KHALTI_URL, json={"pidx": pidx}, headers=HEADERS)
-
+            # userOrder = Order.objects.get(purchase_order_id=purchase_order_id)
+            latest_order.status = "Completed"
+            latest_order.save()
             # Handle response
             if response.status_code == 200:
                 payment_data = response.json()
