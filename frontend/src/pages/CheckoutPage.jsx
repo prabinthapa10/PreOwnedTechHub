@@ -4,6 +4,8 @@ import Button from "../components/Button";
 import { useLocation, useNavigate } from "react-router-dom";
 import NPR from "../components/NPR";
 import axios from "axios";
+import Toastify from "../components/Toastify";
+import { toast } from "react-toastify";
 
 function Checkout() {
   const [address, setAddress] = useState("");
@@ -19,6 +21,13 @@ function Checkout() {
   const grandTotal = location.state?.grandTotal || 0;
   const discount = location.state?.discount || 0;
   const total = location.state?.total || 0;
+
+  const [errors, setErrors] = useState({
+    address: "",
+    phone: "",
+    zipCode: "",
+    city: "",
+  });
 
   // fetch items from cart
   useEffect(() => {
@@ -52,41 +61,79 @@ function Checkout() {
     fetchCartItems();
   }, []);
 
-  const handleCheckout = async () => {
-    try {
-      navigate("/order", {
-        state: { grandTotal, discount, total, phone, city },
-      });
-      const response = await axios.post(
-        "http://localhost:8000/api/order/",
-        {
-          country: "Nepal",
-          address: address,
-          city: city,
-          zip_code: zipCode,
-          phone: phone,
-          discount: discount,
-          total_amount: total,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
+  const handleCheckout = async (e) => {
+    e.preventDefault();
+
+    const newErrors = {};
+
+    if (!address) {
+      newErrors.address = "Address is required.";
+    }
+
+    if (!phone) {
+      newErrors.phone = "Phone number is required.";
+    } else if (!/^\d{10}$/.test(phone)) {
+      newErrors.phone = "Phone number must be 10 digits.";
+    }
+
+    if (!zipCode) {
+      newErrors.zipCode = "Zip Code is required.";
+    } else if (!/^\d{5}$/.test(zipCode)) {
+      newErrors.zipCode = "Zip Code must be 5 digits.";
+    }
+
+    if (!city) {
+      newErrors.city = "City is required.";
+    }
+
+    setErrors(newErrors);
+
+    // If no errors, form is valid
+    if (Object.keys(newErrors).length === 0) {
+      if (cartItems.length != 0) {
+        try {
+          navigate("/order", {
+            state: { grandTotal, discount, total, phone, city },
+          });
+
+          // Sending the order data to the backend API
+          const response = await axios.post(
+            "http://localhost:8000/api/order/",
+            {
+              country: "Nepal",
+              address: address,
+              city: city,
+              zip_code: zipCode,
+              phone: phone,
+              discount: discount,
+              total_amount: total,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+        } catch (error) {
+          console.error(
+            "Error during checkout:",
+            error.response?.data || error.message
+          );
+          toast.error("Checkout failed");
         }
-      );
-    } catch (error) {
-      console.error(
-        "Error during checkout:",
-        error.response?.data || error.message
-      );
-      alert("Checkout failed. Please try again.");
+      } else {
+        toast.error("No items to order");
+      }
+    } else {
+      toast.error("Fill the form.");
     }
   };
 
   return (
     <div>
       <Navbar />
+      <Toastify />
       {/* Content Section */}
       <div className="w-[85%] m-auto mt-10 mb-[100px]">
         <h1 className="text-3xl font-bold">Order</h1>
@@ -144,6 +191,9 @@ function Checkout() {
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                 />
+                {errors.address && (
+                  <p className="text-red-500 text-sm">{errors.address}</p>
+                )}
               </div>
 
               <div className="mb-4">
@@ -156,6 +206,9 @@ function Checkout() {
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                 />
+                {errors.phone && (
+                  <p className="text-red-500 text-sm">{errors.phone}</p>
+                )}
               </div>
 
               <div className="mb-4">
@@ -168,30 +221,34 @@ function Checkout() {
                   value={zipCode}
                   onChange={(e) => setZipCode(e.target.value)}
                 />
+                {errors.zipCode && (
+                  <p className="text-red-500 text-sm">{errors.zipCode}</p>
+                )}
               </div>
 
               <div className="mb-4">
                 <label className="block">City</label>
-                <input
-                  type="text"
+                <select
                   name="city"
                   className="w-full p-2 border border-gray-300 rounded"
-                  placeholder="Enter your city"
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
-                />
-              </div>
-              <div>
-                <strong>Payment Method:</strong>
-                <div>
-                  <label>
-                    <input type="radio" name="payment" value="kalti" checked />{" "}
-                    Kalti
-                  </label>
-                  <label>
-                    <input type="radio" name="payment" value="esewa" /> Esewa
-                  </label>
-                </div>
+                >
+                  <option value="">Select a city</option>
+                  <option value="Kathmandu">Kathmandu</option>
+                  <option value="Pokhara">Pokhara</option>
+                  <option value="Lalitpur">Lalitpur</option>
+                  <option value="Bhaktapur">Bhaktapur</option>
+                  <option value="Butwal">Butwal</option>
+                  <option value="Bhairahawa">Bhairahawa</option>
+                  <option value="Dhangadhi">Dhangadhi</option>
+                  <option value="Biratnagar">Biratnagar</option>
+                  <option value="Hetauda">Hetauda</option>
+                  <option value="Chitwan">Chitwan</option>
+                </select>
+                {errors.city && (
+                  <p className="text-red-500 text-sm">{errors.city}</p>
+                )}
               </div>
             </form>
           </div>
