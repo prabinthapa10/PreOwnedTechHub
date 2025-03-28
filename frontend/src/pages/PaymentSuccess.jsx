@@ -2,30 +2,38 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { CheckCircle } from "lucide-react";
 import { X } from "lucide-react";
+import { useLocation } from "react-router-dom";
 
 function PaymentSuccess() {
   const handleOkClick = () => {
     window.location.href = "/profile";
   };
-  const query = new URLSearchParams(window.location.search);
+  const location = useLocation();
+  const query = new URLSearchParams(location.search);
   const pidx = query.get("pidx");
-  const totalAmount = query.get("total_amount");
-  const status = query.get("status");
+  const grandTotal = query.get("amount")/ 100;
+  const discount = query.get("discount")?.match(/\d+/)?.[0] || 0;
+  const total = parseInt(grandTotal) + parseInt(discount);
+
   const transactionId = query.get("transaction_id");
   const [success, setSuccess] = useState(false);
+  const token = localStorage.getItem("access_token");
+
+  console.log("----")
+  console.log(discount);
+  console.log(grandTotal);
+  console.log(total);
+  console.log(transactionId)
 
   useEffect(() => {
     const paymentDetails = async () => {
       if (pidx && transactionId) {
-        setSuccess(true)
-        const pidxValue = {
-          pidx: pidx,
-        };
-        const token = localStorage.getItem("access_token");
+        setSuccess(true);
+
         try {
           const response = await axios.post(
             "http://localhost:8000/api/payment/verify/",
-            { pidx },
+            { pidx, grandTotal, discount, total, transactionId},
             {
               headers: {
                 Authorization: `Bearer ${token}`,

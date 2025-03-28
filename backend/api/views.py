@@ -4,7 +4,7 @@ import requests
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import *
-from .serializers import RegisterSerializers, UserSerializer, ProductSerializer, CartItemSerializer, OrderSerializer, OrderItemSerializer
+from .serializers import *
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated, IsAdminUser,  AllowAny
@@ -459,12 +459,11 @@ class KhaltiPaymentInitiateView(APIView):
     def post(self, request):
         # Get data from the request body
         data = request.data
-        purchase_order_id= data.get("purchase_order_id")
         url = "https://dev.khalti.com/api/v2/epayment/initiate/"
         payload = json.dumps({
             "return_url": data.get("return_url"),
             "website_url": data.get("website_url"),
-            "amount": str(Decimal(data.get("amount", 10)) * 100),
+            "amount": str(Decimal(data.get("grandTotal", "0")) * 100),
             "purchase_order_id": data.get("purchase_order_id"),
             "purchase_order_name": data.get("purchase_order_name"),
             "customer_info": {
@@ -481,7 +480,6 @@ class KhaltiPaymentInitiateView(APIView):
 
         response = requests.post(url, headers=headers, data=payload)
 
-        print('husddhushkfkh ', response.text)
         new_response = json.loads(response.text)
         print(new_response)
         return Response({"payment_url": new_response['payment_url']}, status=status.HTTP_200_OK)
@@ -489,24 +487,27 @@ class KhaltiPaymentInitiateView(APIView):
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 
-@method_decorator(csrf_exempt, name='dispatch')  # Disable CSRF for this view
+@method_decorator(csrf_exempt, name='dispatch')
 class KhaltiPaymentVerifyView(APIView):
     def post(self, request):
         try:
             # Parse request data
             data = request.data
             pidx = data.get("pidx")
+            grandTotal = data.get("grandTotal");
+            discount = data.get("discount");
+            transactionId = data.get("transactionId")
+            total = data.get("total")
+            user = request.user
             latest_order = Order.objects.latest('created_at')
-            if not pidx:
-                return Response({"error": "Missing pidx"}, status=status.HTTP_400_BAD_REQUEST)
-
             # Khalti API details
             KHALTI_URL = "https://a.khalti.com/api/v2/epayment/lookup/"
             HEADERS = {
                 "Authorization": "Key 48a2f16a130d4cb18fb99eddbc09a754",
                 "Content-Type": "application/json",
-            }
+            }   
 
+            print("hello", total,discount, transactionId )
             # Send request to Khalti
             response = requests.post(KHALTI_URL, json={"pidx": pidx}, headers=HEADERS)
             # userOrder = Order.objects.get(purchase_order_id=purchase_order_id)
@@ -515,9 +516,18 @@ class KhaltiPaymentVerifyView(APIView):
             # Handle response
             if response.status_code == 200:
                 payment_data = response.json()
-
-                # Check if the payment was successful
                 if payment_data.get("status") == "Completed":
+                    payment_info = {
+                        "user": user.id,
+                        "grand_total": grandTotal,
+                        "transaction_id": transactionId,
+                        "order": latest_order.id,
+                        "discount": discount,
+                        "total": total,
+                    }
+                    serializer = PaymentSerializer(data=payment_info)
+                    if serializer.is_valid():
+                        serializer.save()
                     return Response({"message": "Payment Verified", "data": payment_data}, status=status.HTTP_200_OK)
                 else:
                     return Response({"message": "Payment Not Completed", "data": payment_data}, status=status.HTTP_400_BAD_REQUEST)

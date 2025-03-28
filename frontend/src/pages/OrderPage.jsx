@@ -97,16 +97,15 @@ function OrderPage() {
   const purchase_order_id = orderDetail?.purchase_order_id;
   const name = `${userDetails.first_name} ${userDetails.last_name}`;
 
-  console.log(name);
-
+  console.log(total)
   const makePayment = async () => {
     try {
       const response = await axios.post(
         "http://localhost:8000/api/payment/initiate/",
         {
-          return_url: "http://localhost:5173/success_payment/",
+          return_url: `http://localhost:5173/success_payment/?discount=${discount}`,
           website_url: "http://localhost:5173/",
-          amount: grandTotal,
+          grandTotal: grandTotal,
           purchase_order_id: purchase_order_id,
           purchase_order_name: "Test Order",
           name: name,
