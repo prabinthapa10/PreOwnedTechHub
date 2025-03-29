@@ -3,6 +3,8 @@ import Navbar from "../components/Navbar";
 import CartItems from "../components/CartItems";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import Toastify from "../components/Toastify";
 
 function CartPage() {
   const [cartItems, setCartItems] = useState([]);
@@ -62,7 +64,9 @@ function CartPage() {
   }, [cartItems, discount]);
 
   const handleProceed = () => {
-    navigate("/checkout", { state: { grandTotal, discount, total } });
+    cartItems.length > 0
+      ? navigate("/checkout", { state: { grandTotal, discount, total } })
+      : toast.error("Your cart is empty.");
   };
 
   const handleCode = () => {
@@ -84,6 +88,7 @@ function CartPage() {
 
   return (
     <div>
+      <Toastify />
       <Navbar />
       <div className="w-[85%] m-auto mt-10 mb-[100px] flex justify-between">
         {/* left box */}

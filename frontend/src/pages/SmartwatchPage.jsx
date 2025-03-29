@@ -91,7 +91,9 @@ function SmartwatchPage() {
     <>
       <ToastContainer position="bottom-right" />
       <Navbar setSearch={setSearch} handleSearch={fetchProducts} />
-      <NavMenu />
+      <div className="sticky top-0 z-10 bg-white shadow-md">
+        <NavMenu />
+      </div>
       <div>
         <Title titleFor="page" title="Smart Watch" />
       </div>

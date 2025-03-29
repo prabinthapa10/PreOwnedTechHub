@@ -62,7 +62,7 @@ function SingleProduct() {
     <div className="bg-customBg">
       <ToastContainer position="bottom-right" />
       <Navbar />
-      <div className="mt-1">
+      <div className="sticky top-0 z-10 bg-white shadow-md">
         <NavMenu />
       </div>
       <div className="bg-white w-[90%] h-[550px] mt-10 m-auto flex justify-center ">

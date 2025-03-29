@@ -4,11 +4,14 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import PersonIcon from "@mui/icons-material/Person";
 import SearchIcon from "@mui/icons-material/Search";
 import Button from "../components/Button";
+import Toastify from "../components/Toastify";
+import { toast } from "react-toastify";
 
 function Navbar({ setSearch, handleSearch }) {
   const [profile, setProfile] = useState(null);
   const navigate = useNavigate();
   const [openDropdown, setOpenDropdown] = useState(false);
+  const token = localStorage.getItem("access_token");
 
   const handleLogout = () => {
     // Remove the JWT token from localStorage
@@ -46,8 +49,13 @@ function Navbar({ setSearch, handleSearch }) {
     }
   }, []);
 
+  const handleCartClick = () => {
+    token ? navigate("/cart") : toast.error("login required");
+  };
+
   return (
     <div className="bg-customPurple flex justify-center py-2 font-rokkit">
+      <Toastify />
       <div className="flex justify-between items-center w-[90%]">
         {/* logo */}
         <Link to={"/"}>
@@ -107,9 +115,9 @@ function Navbar({ setSearch, handleSearch }) {
         </div>
 
         {/* cart items */}
-        <Link to="/cart">
+        <div onClick={handleCartClick} style={{ cursor: "pointer" }}>
           <AddShoppingCartIcon style={{ fontSize: 30 }} />
-        </Link>
+        </div>
       </div>
     </div>
   );

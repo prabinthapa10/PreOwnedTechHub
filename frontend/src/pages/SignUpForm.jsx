@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import Button from "../components/Button";
 import Navbar from "../components/Navbar";
 import InputField from "../components/InputField";
+import Toastify from "../components/Toastify";
+import { toast } from "react-toastify";
 
 export default function SignUpForm({ setShowLogin, setIsSignUpFormVisible }) {
   // State to store form data
@@ -22,7 +24,7 @@ export default function SignUpForm({ setShowLogin, setIsSignUpFormVisible }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+      toast.error("Password not match");
       return;
     }
     try {
@@ -37,7 +39,7 @@ export default function SignUpForm({ setShowLogin, setIsSignUpFormVisible }) {
         confirm_password: formData.confirmPassword,
       });
 
-      alert("User registered successfully!");
+      toast.success("User registered successfully!");
 
       setFormData({
         firstName: "",
@@ -51,15 +53,16 @@ export default function SignUpForm({ setShowLogin, setIsSignUpFormVisible }) {
       });
     } catch (error) {
       console.error("Signup Error:", error.response?.data || error.message);
-      alert("Registration failed!");
+      toast.error("Registration failed!");
     }
   };
 
   return (
     <div>
+      <Toastify />
       <Navbar />
       {/* Signup Box */}
-      <div className="flex justify-center pt-[10px]">
+      <div className="flex justify-center pt-[10px] mt-5 mb-10">
         <div className="bg-white p-5 rounded w-[500px] h-[630px] flex flex-col space-y-3 items-center shadow-2xl">
           <h1 className="text-4xl font-bold mb-4">Sign Up Form</h1>
           <form onSubmit={handleSubmit} className="flex flex-col w-full">

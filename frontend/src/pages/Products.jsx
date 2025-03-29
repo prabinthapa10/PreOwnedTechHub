@@ -78,7 +78,7 @@ function Products() {
   return (
     <>
       <Navbar setSearch={setSearch} handleSearch={fetchProducts} />
-      <div>
+      <div className="sticky top-0 z-10 bg-white shadow-md">
         <NavMenu />
       </div>
       <div>

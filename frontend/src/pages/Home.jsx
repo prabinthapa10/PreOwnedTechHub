@@ -32,7 +32,7 @@ export default function Home() {
         <div>
           <Navbar />
         </div>
-        <div >
+        <div className="sticky top-0 z-10 bg-white shadow-md">
           <NavMenu />
         </div>
         <div className="mt-5">

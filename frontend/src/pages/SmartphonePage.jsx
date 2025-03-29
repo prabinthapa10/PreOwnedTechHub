@@ -90,7 +90,7 @@ function SmartphonePage() {
     <div>
       <ToastContainer position="bottom-right" />
       <Navbar />
-      <div>
+      <div className="sticky top-0 z-10 bg-white shadow-md">
         <NavMenu />
       </div>
       <div>

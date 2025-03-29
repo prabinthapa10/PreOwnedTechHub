@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ProductItems from "./ProductItems";
 
-function Laptop({ itemType, numberOfItems, className, setAddToCart }) {
+function Laptop({ setAddToCart }) {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -14,16 +14,14 @@ function Laptop({ itemType, numberOfItems, className, setAddToCart }) {
   }, []);
 
   return (
-    <div className="w-[90%] m-auto flex justify-center pt-5 bg-white h-[550px]">
-      <div
-        className={`w-[90%] flex justify-center flex-wrap m-auto gap-6 mt-10 ${className}`}
-      >
-        {products.slice(0, numberOfItems).map((product) => (
+    <div className="bg-white h-[510px] w-[90%] m-auto">
+      <div className=" flex justify-center flex-wrap gap-6 mt-10 pt-10">
+        {products.slice(0, 6).map((product) => (
           <ProductItems
             key={product.id}
-            type={itemType}
             id={product.id}
             name={product.name.slice(0, 20)}
+            type="side"
             category={product.category}
             processor={product.processor}
             screen_size={product.screen_size}
